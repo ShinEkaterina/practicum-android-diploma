@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.domain.impl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.domain.api.FavoriteInteractor
-import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.Details
 import ru.practicum.android.diploma.domain.model.VacancyModel
 

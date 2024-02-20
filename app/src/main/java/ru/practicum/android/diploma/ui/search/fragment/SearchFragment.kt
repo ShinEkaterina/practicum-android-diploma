@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.fragment.app.Fragment
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -66,7 +67,7 @@ class SearchFragment : Fragment() {
         when (state) {
             is SearchRenderState.NothingFound -> {}
             is SearchRenderState.NoInternet -> {}
-            is SearchRenderState.Loading -> {}
+            is SearchRenderState.Loading -> binding?.progressBar?.isVisible = true
             is SearchRenderState.Success -> {
 
             }

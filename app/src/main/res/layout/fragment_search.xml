@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="@dimen/margin_16"
-            android:contentDescription="@string/todo"
+            android:contentDescription="@string/search_button"
             android:padding="@dimen/margin_16"
             android:src="@drawable/ic_search"
             android:visibility="visible"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="@dimen/margin_16"
-            android:contentDescription="@string/todo"
+            android:contentDescription="@string/clear_button"
             android:padding="@dimen/margin_16"
             android:src="@drawable/ic_clear"
             android:visibility="gone"
@@ -85,7 +85,7 @@
         android:id="@+id/toast_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_not_faund"
+        android:background="@drawable/ic_not_found"
         android:contentDescription="@string/todo"
         android:text="@string/not_vacancy"
         android:visibility="gone"
@@ -111,7 +111,7 @@
 
     <ImageView
         android:visibility="visible"
-        android:id="@+id/placeholder_Image"
+        android:id="@+id/placeholder_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -122,6 +122,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/no_internet_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_not_internet" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/TextStyleMedium22_500"
+            android:text="@string/vacancy_no_internet"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/nothing_found_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_not_found" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/TextStyleMedium22_500"
+            android:text="@string/vacancy_nothing_found"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_error"
@@ -134,11 +193,11 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/placeholder_Image"
+        app:layout_constraintTop_toBottomOf="@+id/placeholder_image"
         tools:text="@string/error_search" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar"
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_gravity="center"
