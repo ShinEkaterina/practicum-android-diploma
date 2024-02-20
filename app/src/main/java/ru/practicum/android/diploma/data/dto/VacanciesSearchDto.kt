@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class VacanciesSearchDto(
     val pages: Long,
+    val found: Long,
     @SerializedName("items") val vacancies: ArrayList<Vacancies>
 )
 
