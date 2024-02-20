@@ -1,24 +1,38 @@
 package ru.practicum.android.diploma.ui.search.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.domain.model.VacancyModel
+import ru.practicum.android.diploma.ui.search.adapter.VacanciesAdapter
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.ui.search.view_model.SearchViewModel
+import ru.practicum.android.diploma.util.Constant
+import ru.practicum.android.diploma.util.debounce
 
 class SearchFragment : Fragment() {
 
-    /*override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {}
-    }*/
+    private val clickDebounce = debounce<VacancyModel>(
+        delayInMillis = Constant.VACANCY_ITEM_CLICK_DEBOUNCE,
+        coroutineScope = lifecycleScope,
+        useLastParam = false
+    ) { vacancy ->
+        startVacancyActivity(vacancy.id.toLong())
+    }
+
+    private var vacanciesAdapter: VacanciesAdapter? = null
 
     private var binding: FragmentSearchBinding? = null
 
@@ -43,6 +57,15 @@ class SearchFragment : Fragment() {
             render(state)
         }
 
+        vacanciesAdapter = VacanciesAdapter(ArrayList()) { vacancy ->
+            clickDebounce(vacancy)
+        }
+
+        binding?.rvSearch?.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = vacanciesAdapter
+        }
+
         binding?.inputSearchForm?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(str: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(str: Editable?) {}
@@ -54,22 +77,41 @@ class SearchFragment : Fragment() {
                 count: Int
             ) {
                 if (!searchText.isNullOrEmpty()) {
-
+                    hideAllComponents()
+                    binding?.placeholderImage?.isVisible = true
                 }
                 viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
             }
         })
     }
 
+    private fun hideAllComponents() {
+        binding?.rvSearch?.isVisible = false
+        binding?.placeholderImage?.isVisible = false
+        binding?.noInternetImage?.isVisible = false
+        binding?.progressBar?.isVisible = false
+        binding?.nothingFoundImage?.isVisible = false
+    }
+
+    private fun startVacancyActivity(
+        id: Long
+    ) {
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     private fun render(
         state: SearchRenderState
     ) {
+        hideAllComponents()
         when (state) {
-            is SearchRenderState.NothingFound -> {}
-            is SearchRenderState.NoInternet -> {}
+            is SearchRenderState.NothingFound -> binding?.nothingFoundImage?.isVisible = true
+            is SearchRenderState.NoInternet -> binding?.noInternetImage?.isVisible = true
             is SearchRenderState.Loading -> binding?.progressBar?.isVisible = true
             is SearchRenderState.Success -> {
-
+                vacanciesAdapter?.vacancies?.clear()
+                vacanciesAdapter?.vacancies?.addAll(state.vacancies.vacancies)
+                vacanciesAdapter?.notifyDataSetChanged()
             }
         }
     }

@@ -30,6 +30,7 @@ class FavoritesFragment : Fragment() {
     private var onTrackClickDebounce: (VacancyModel) -> Unit = {}
 
     private val adapter = VacanciesAdapter(
+        vacancies = arrayListOf(),
         itemClickListener = { vacancy: VacancyModel -> onTrackClickDebounce(vacancy) }
     )
 
