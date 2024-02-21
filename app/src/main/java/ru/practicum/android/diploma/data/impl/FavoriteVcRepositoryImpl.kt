@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.data.impl
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.covertors.VacancyDbConvertor
@@ -20,10 +22,22 @@ class FavoriteVcRepositoryImpl(
         appDatabase.vacancyDao().deleteVacancy(vacancyId)
     }
 
-    override fun getAll(): Flow<List<VacancyModel>> {
+    override suspend fun getAll(): Flow<List<VacancyModel>> {
         val vacancies = appDatabase.vacancyDao().getVacancyList()
         val vacanciesModel = converter.map(vacancies)
         return vacanciesModel
+    }
+
+    override suspend fun getDetailVacancy(id: String): Flow<DetailVacancy?> {
+        return flow {
+            val vac = appDatabase.vacancyDao().getVacancyById(id).first()
+            if (vac == null) emit(null) else {
+                vac?.let {
+                    emit(converter.map(it))
+                }
+            }
+
+        }
     }
 
 

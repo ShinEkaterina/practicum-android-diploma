@@ -50,8 +50,12 @@ class FavoriteInteractorImpl(
        favoriteRepository.delete(vacancyId)
     }
 
-    override fun getAll(): Flow<List<VacancyModel>> {
+    override suspend fun getAll(): Flow<List<VacancyModel>> {
        return favoriteRepository.getAll()
+    }
+
+    override suspend fun getDetailVacancy(vacancyId: String): Flow<DetailVacancy?> {
+        return favoriteRepository.getDetailVacancy(vacancyId)
     }
 
     override fun checkFavorite(vacancyId: String): Flow<Boolean> {
