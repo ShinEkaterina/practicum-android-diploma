@@ -33,7 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/margin_16"
-        android:paddingVertical="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/similar_toolbars">
@@ -100,9 +99,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginTop="3dp"
         app:cardCornerRadius="@dimen/radius_12"
         app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
-        app:layout_constraintBottom_toTopOf="@id/rv_search"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -123,13 +123,15 @@
         android:id="@+id/rv_search"
         style="@style/TextStyleRegular12_400"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_16"
-        android:visibility="visible"
+        android:layout_height="match_parent"
+        android:layout_marginTop="193dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_found_vacancies_wrapper"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/vacancy_item" />
 
     <ImageView

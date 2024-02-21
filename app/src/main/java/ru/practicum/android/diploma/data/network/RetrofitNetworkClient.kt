@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.util.Constant.BAD_REQUEST_RESULT_CODE
 import ru.practicum.android.diploma.util.Constant.NO_CONNECTIVITY_MESSAGE
+import ru.practicum.android.diploma.util.Constant.SERVER_ERROR
 import ru.practicum.android.diploma.util.Constant.SUCCESS_RESULT_CODE
 import ru.practicum.android.diploma.util.isConnected
 
@@ -43,9 +44,10 @@ class RetrofitNetworkClient(
                         }
                     }
                 }
-            } catch (exception: HttpException) {
+                // падает, если вместо Throwable стоит HttpException при тестировании поиска без интернета
+            } catch (exception: Throwable) {
                 Response().apply {
-                    responseCode = exception.code()
+                    responseCode = SERVER_ERROR
                 }
             }
         }
@@ -63,8 +65,9 @@ class RetrofitNetworkClient(
                 headHunterService.searchConcreteVacancy(dto.id).apply {
                     responseCode = SUCCESS_RESULT_CODE
                 }
-            } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
+                // подозреваю, что тут тоже надо поменять
+            } catch (exception: Throwable) {
+                Response().apply { responseCode = SERVER_ERROR }
             }
         }
     }

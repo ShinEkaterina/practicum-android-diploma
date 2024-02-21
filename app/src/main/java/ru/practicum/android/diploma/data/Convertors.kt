@@ -62,7 +62,6 @@ class Convertors {
                     salaryAsString += "до " + formatNumber(salary.to.toLong()) + " "
                 }
                 if (salary.currency != null) {
-                    salaryAsString += if (salary.currency == "RUR") "₽" else Currency.getInstance(salary.currency).symbol
                     salaryAsString += when (salary.currency) {
                         "RUR", "RUB" -> "₽"
                         "BYR", "BIN" -> "p."
