@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.data.dto.respone
 
-import ru.practicum.android.diploma.data.dto.VacanciesSearchDto
+import ru.practicum.android.diploma.data.dto.VacanciesSearchDtoResponse
 
 class VacanciesSearchResponse(
-    val results: VacanciesSearchDto
+    val results: VacanciesSearchDtoResponse
 ) : Response()

@@ -16,7 +16,7 @@ class SearchViewModel(
     private val renderStateLiveDate = MutableLiveData<SearchRenderState>()
     fun observeRenderState():LiveData<SearchRenderState> = renderStateLiveDate
 
-    private var currentPage = 1L
+    private var currentPage = 0L
 
     val searchDebounce = debounce<String?>(
         delayInMillis = Constant.SEARCH_DEBOUNCE_WAIT,

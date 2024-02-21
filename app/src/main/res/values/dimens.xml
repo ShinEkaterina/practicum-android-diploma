@@ -10,4 +10,9 @@
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_18">18dp</dimen>
     <dimen name="corner_radius_card_company_12">12dp</dimen>
+    <dimen name="icon_size_48">48dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="radius_12">12dp</dimen>
+    <dimen name="margin_3">12dp</dimen>
 </resources>

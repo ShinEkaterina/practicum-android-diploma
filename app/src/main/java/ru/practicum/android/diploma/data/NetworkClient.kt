@@ -9,5 +9,8 @@ interface NetworkClient {
         dto: Any
     ): Response
 
-    suspend fun getDetailVacancy(dto: VacancyDetailedRequest): Response
+    suspend fun getDetailVacancy(
+        dto: VacancyDetailedRequest
+    ): Response
+
 }

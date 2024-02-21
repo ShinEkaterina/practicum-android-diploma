@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.Convertors
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.dto.VacanciesSearchDtoResponse
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
-import ru.practicum.android.diploma.data.dto.respone.VacanciesSearchResponse
 import ru.practicum.android.diploma.domain.api.SearchRepository
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.util.Constant
@@ -23,7 +23,7 @@ class SearchRepositoryImpl(
         if (response.responseCode == 200) {
             emit(
                 Pair(
-                    Convertors.convertorToVacanciesModel((response as VacanciesSearchResponse).results),
+                    Convertors.convertorToVacanciesModel(response as VacanciesSearchDtoResponse),
                     response.responseCode
                 )
             )

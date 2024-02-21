@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.network
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -43,14 +44,17 @@ class RetrofitNetworkClient(
                     }
                 }
             } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
-
+                Response().apply {
+                    responseCode = exception.code()
+                }
             }
         }
     }
 
     // с doRequest через When красивее было, что ревьюру не понравилось?
-    override suspend fun getDetailVacancy(dto: VacancyDetailedRequest): Response {
+    override suspend fun getDetailVacancy(
+        dto: VacancyDetailedRequest
+    ): Response {
         if (isConnected(context)) {
             return Response().apply { responseCode = NO_CONNECTIVITY_MESSAGE }
         }

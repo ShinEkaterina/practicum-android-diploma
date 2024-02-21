@@ -19,12 +19,18 @@ class VacanciesViewHolder(
         binding.companyName.text = model.companyName
         binding.companySalary.text = model.salary
 
-        Glide.with(itemView)
-            .load(model.logoUrls[0])
-            .centerCrop()
-            .transform(RoundedCorners(Constant.COMPANY_LOGO_RADIUS_12_PX))
-            .placeholder(R.drawable.ic_logo)
-            .into(binding.companyLogo)
+        binding.companyName.isSelected = true
+
+        if (model.logoUrls.isNotEmpty()) {
+            Glide.with(itemView)
+                .load(model.logoUrls[0])
+                .centerCrop()
+                .transform(RoundedCorners(Constant.COMPANY_LOGO_RADIUS_12_PX))
+                .placeholder(R.drawable.ic_logo)
+                .into(binding.companyLogo)
+        } else {
+            binding.companyLogo.setImageResource(R.drawable.ic_logo)
+        }
     }
 
 }

@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/company_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/icon_size_48"
+        android:layout_height="@dimen/icon_size_48"
         tools:src="@drawable/ic_logo"
         android:contentDescription="@string/search_description_of_company_logo" />
 
@@ -37,6 +37,8 @@
             android:textColor="@color/black"
             android:fontFamily="@font/ys_display_regular"
             android:textSize="@dimen/font_size_16"
+            android:ellipsize="end"
+            android:singleLine="true"
             tools:text="Городской парк"/>
 
         <TextView

@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.ui.search.fragment
 
 import android.annotation.SuppressLint
+import android.icu.text.DecimalFormat
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.adapter.VacanciesAdapter
@@ -21,6 +24,7 @@ import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.ui.search.view_model.SearchViewModel
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.debounce
+import java.util.Locale
 
 class SearchFragment : Fragment() {
 
@@ -76,7 +80,7 @@ class SearchFragment : Fragment() {
                 before: Int,
                 count: Int
             ) {
-                if (!searchText.isNullOrEmpty()) {
+                if (searchText.isNullOrEmpty()) {
                     hideAllComponents()
                     binding?.placeholderImage?.isVisible = true
                 }
@@ -91,6 +95,7 @@ class SearchFragment : Fragment() {
         binding?.noInternetImage?.isVisible = false
         binding?.progressBar?.isVisible = false
         binding?.nothingFoundImage?.isVisible = false
+        binding?.searchFoundVacanciesWrapper?.isVisible = false
     }
 
     private fun startVacancyActivity(
@@ -112,7 +117,24 @@ class SearchFragment : Fragment() {
                 vacanciesAdapter?.vacancies?.clear()
                 vacanciesAdapter?.vacancies?.addAll(state.vacancies.vacancies)
                 vacanciesAdapter?.notifyDataSetChanged()
+                binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, state.vacancies.found.toInt(), formatNumber(state.vacancies.found))
+                binding?.rvSearch?.isVisible = true
+                binding?.searchFoundVacanciesWrapper?.isVisible = true
             }
         }
     }
+
+    private fun formatNumber(
+        x: Long
+    ): String {
+        val formatter = NumberFormat.getNumberInstance() as DecimalFormat
+
+        val symbols = formatter.decimalFormatSymbols
+        symbols.groupingSeparator = ' '
+
+        formatter.decimalFormatSymbols = symbols
+
+        return formatter.format(x)
+    }
+
 }

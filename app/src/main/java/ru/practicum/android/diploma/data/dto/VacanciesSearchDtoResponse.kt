@@ -1,12 +1,13 @@
 package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
+import ru.practicum.android.diploma.data.dto.respone.Response
 
-data class VacanciesSearchDto(
+class VacanciesSearchDtoResponse(
     val pages: Long,
     val found: Long,
     @SerializedName("items") val vacancies: ArrayList<Vacancies>
-)
+) : Response()
 
 data class Vacancies(
     val id: String,

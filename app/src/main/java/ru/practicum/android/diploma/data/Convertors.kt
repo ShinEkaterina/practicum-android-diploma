@@ -1,21 +1,23 @@
 package ru.practicum.android.diploma.data
 
 import ru.practicum.android.diploma.data.dto.Salary
-import ru.practicum.android.diploma.data.dto.VacanciesSearchDto
+import ru.practicum.android.diploma.data.dto.VacanciesSearchDtoResponse
 import ru.practicum.android.diploma.data.dto.VacancyDetailedDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
+import java.text.NumberFormat
 import java.util.Currency
+import java.util.Locale
 
 class Convertors {
 
     companion object {
 
         fun convertorToVacanciesModel(
-            vacanciesDto: VacanciesSearchDto
+            vacanciesDto: VacanciesSearchDtoResponse
         ): VacanciesModel {
             val vacancies = vacanciesDto.vacancies
             val domainVacancies = arrayListOf<VacancyModel>()
@@ -40,13 +42,13 @@ class Convertors {
             var salaryAsString = ""
             if (salary?.from != null || salary?.to != null) {
                 if (salary.from != null) {
-                    salaryAsString += "от" + salary.from + " "
+                    salaryAsString += "от " + salary.from + " "
                 }
                 if (salary.to != null) {
-                    salaryAsString += "до" + salary.to + " "
+                    salaryAsString += "до " + salary.to + " "
                 }
                 if (salary.currency != null) {
-                    salaryAsString += Currency.getInstance(salary.currency).symbol
+                    salaryAsString += if (salary.currency == "RUR") "₽" else Currency.getInstance(salary.currency).symbol
                 }
             }
             return salaryAsString
