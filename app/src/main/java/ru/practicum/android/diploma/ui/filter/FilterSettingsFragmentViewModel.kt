@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.filter
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,7 @@ import ru.practicum.android.diploma.domain.api.FiltrationInteractor
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.FilterParametersState
 
-class FilterSettingsFragmentViewModel(private val filtrationInteractor: FiltrationInteractor): ViewModel() {
+class FilterSettingsFragmentViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {
     private val _filterParametersState = MutableLiveData<FilterParametersState>()
     val filterParametersState: LiveData<FilterParametersState> = _filterParametersState
 
@@ -34,11 +33,9 @@ class FilterSettingsFragmentViewModel(private val filtrationInteractor: Filtrati
                     if (isSet) {
                         filtrationInteractor
                             .getFilterParametersFromStorage()
-                            .collect{ filterParams ->
+                            .collect { filterParams ->
                                 _filterParametersState.postValue(FilterParametersState.Content(filterParams))
                             }
-                    } else {
-                        Log.i("TEST_REY", "ошибка сохранения фильтров")
                     }
                 }
         }

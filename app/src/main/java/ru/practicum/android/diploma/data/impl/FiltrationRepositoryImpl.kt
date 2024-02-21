@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.data.storage.FilterStorage
 import ru.practicum.android.diploma.domain.api.FiltrationRepository
 import ru.practicum.android.diploma.domain.model.FilterParameters
 
-class FiltrationRepositoryImpl(private val filterStorage: FilterStorage): FiltrationRepository {
+class FiltrationRepositoryImpl(private val filterStorage: FilterStorage) : FiltrationRepository {
     override fun getFilterParametersFromStorage(): Flow<FilterParameters> {
         return filterStorage.getFilterParameters()
     }

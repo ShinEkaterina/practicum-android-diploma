@@ -65,14 +65,12 @@ class SearchFragment : Fragment() {
         recyclerView = binding.rvSearch
         recyclerView!!.adapter = vacancyAdapter
 
-        ////для теста
+        // для теста
         binding.filterButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_searchFragment2_to_filterSettingsFragment
             )
         }
-        ////
-
     }
 
     private fun initInputSearchForm() {

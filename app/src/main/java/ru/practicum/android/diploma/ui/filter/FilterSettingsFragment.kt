@@ -25,7 +25,7 @@ class FilterSettingsFragment : Fragment() {
     ): View {
         _binding = FragmentFilterSettingsBinding.inflate(
             inflater,
-            container, 
+            container,
             false
         )
         return binding.root
@@ -53,7 +53,7 @@ class FilterSettingsFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        //тест
+        // тест
 //        viewModel.setFilterParameters(
 //            FilterParameters(
 //                idCountry = "13",

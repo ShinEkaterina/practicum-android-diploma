@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.util.Constant.FILTRATION_KEY
 class FilterStorageImpl(
     private val sharedPrefs: SharedPreferences,
     private val gson: Gson
-): FilterStorage {
+) : FilterStorage {
     override fun getFilterParameters(): Flow<FilterParameters> = flow {
         val json = sharedPrefs.getString(FILTRATION_KEY, null)
         if (json == null) {
