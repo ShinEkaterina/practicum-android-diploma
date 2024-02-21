@@ -7,15 +7,15 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.data.NetworkClient
-import ru.practicum.android.diploma.data.impl.FiltrationRepositoryImpl
-import ru.practicum.android.diploma.domain.api.FiltrationRepository
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.covertors.VacancyDbConvertor
 import ru.practicum.android.diploma.data.impl.FavoriteVcRepositoryImpl
+import ru.practicum.android.diploma.data.impl.FiltrationRepositoryImpl
 import ru.practicum.android.diploma.data.impl.VacanciesRepositoryImpl
 import ru.practicum.android.diploma.data.network.HeadHunterServiceApi
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.domain.api.FavoriteVcRepository
+import ru.practicum.android.diploma.domain.api.FiltrationRepository
 import ru.practicum.android.diploma.domain.api.VacanciesRepository
 import ru.practicum.android.diploma.util.Constant
 
@@ -45,6 +45,8 @@ val repositoryModule = module {
 
     factory<FiltrationRepository> {
         FiltrationRepositoryImpl(filterStorage = get())
+    }
+
     single<FavoriteVcRepository> {
         FavoriteVcRepositoryImpl(
             appDatabase = get(),
