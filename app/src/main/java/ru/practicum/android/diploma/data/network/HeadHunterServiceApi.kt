@@ -23,9 +23,9 @@ interface HeadHunterServiceApi {
         @Query("per_page") amount: Long
     ): VacanciesSearchResponse
 
-    @GET("/vacancies/{id}")
+    @GET("/vacancies/{vacancy_id}")
     suspend fun searchConcreteVacancy(
-        @Path("id") id: String
+        @Path("vacancy_id") vacancyId: String
     ): VacancyDetailedResponse
 
 }
