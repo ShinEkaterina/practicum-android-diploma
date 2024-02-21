@@ -4,14 +4,12 @@ import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
-interface FavoriteInteractor {
-    fun getMockResults(): Flow<ArrayList<VacancyModel>>
-
+interface FavoriteVcRepository {
     suspend fun add(vacancy: DetailVacancy)
     suspend fun delete(vacancyId: String)
     suspend fun getAll(): Flow<List<VacancyModel>>
 
-    suspend fun getDetailVacancy(vacancyId: String): Flow<DetailVacancy?>
-
+    suspend fun getDetailVacancy(id: String): Flow<DetailVacancy?>
     fun checkFavorite(vacancyId: String): Flow<Boolean>
+
 }
