@@ -46,8 +46,6 @@ val repositoryModule = module {
             androidContext(),
             AppDatabase::class.java,
             "database.db"
-        ).addMigrations(
-
-        ).build()
+        ).addMigrations().build()
     }
 }

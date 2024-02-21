@@ -14,7 +14,7 @@ data class VacancyEntity(
     val contactsName: String,
     val contactsPhones: List<String>,
     val description: String,
-    val employerName: String ,
+    val employerName: String,
     val employmentName: String,
     val experienceName: String,
     val keySkillsNames: List<String>,

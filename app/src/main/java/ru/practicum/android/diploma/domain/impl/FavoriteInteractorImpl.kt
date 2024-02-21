@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.domain.model.VacancyModel
 class FavoriteInteractorImpl(
     private val favoriteRepository: FavoriteVcRepository,
 
-    ) : FavoriteInteractor {
+) : FavoriteInteractor {
 
     override fun getMockResults(): Flow<ArrayList<VacancyModel>> {
         val vacancies = arrayListOf<VacancyModel>(
@@ -44,14 +44,14 @@ class FavoriteInteractorImpl(
     }
 
     override suspend fun add(vacancy: DetailVacancy) {
-        favoriteRepository.add(vacancy)    }
+        favoriteRepository.add(vacancy) }
 
     override suspend fun delete(vacancyId: String) {
-       favoriteRepository.delete(vacancyId)
+        favoriteRepository.delete(vacancyId)
     }
 
     override suspend fun getAll(): Flow<List<VacancyModel>> {
-       return favoriteRepository.getAll()
+        return favoriteRepository.getAll()
     }
 
     override suspend fun getDetailVacancy(vacancyId: String): Flow<DetailVacancy?> {

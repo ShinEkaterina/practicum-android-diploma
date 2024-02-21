@@ -51,7 +51,6 @@ class VacancyDbConvertor {
         )
     }
 
-
     private fun mapToModel(vacancy: VacancyEntity): VacancyModel {
         return VacancyModel(
             id = vacancy.id,

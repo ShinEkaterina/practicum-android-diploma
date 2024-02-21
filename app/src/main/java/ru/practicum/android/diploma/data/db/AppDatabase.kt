@@ -13,7 +13,6 @@ import ru.practicum.android.diploma.data.db.entity.VacancyEntity
     exportSchema = false
 )
 @TypeConverters(ListOfStringsConverter::class)
-
 abstract class AppDatabase : RoomDatabase() {
-     abstract fun vacancyDao(): VacancyDao
+    abstract fun vacancyDao(): VacancyDao
 }
