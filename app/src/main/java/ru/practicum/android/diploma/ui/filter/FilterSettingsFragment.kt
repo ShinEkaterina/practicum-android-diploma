@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFilterSettingsBinding
 import ru.practicum.android.diploma.domain.model.FilterParameters
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.domain.model.FilterParametersState
 
 class FilterSettingsFragment : Fragment() {
