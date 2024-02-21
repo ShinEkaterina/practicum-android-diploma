@@ -18,6 +18,5 @@ data class DetailVacancy(
     val salaryFrom: Int?,
     val salaryGross: Boolean?,
     val salaryTo: Int?,
-    val scheduleId: String?,
     val scheduleName: String?
 )

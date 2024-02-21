@@ -20,7 +20,7 @@ class VacanciesViewHolder(
         binding.companySalary.text = model.salary
 
         Glide.with(itemView)
-            .load(model.logoUrls[0])
+            .load(model.logoUrls)
             .centerCrop()
             .transform(RoundedCorners(Constant.COMPANY_LOGO_RADIUS_12_PX))
             .placeholder(R.drawable.ic_logo)
