@@ -16,7 +16,7 @@ class FavoriteInteractorImpl : FavoriteInteractor {
                 city = "San Francisco",
                 salary = "$100,000 - $120,000",
                 companyName = "Tech Co.",
-                logoUrls = arrayListOf("https://example.com/logo1.png"),
+                logoUrls = "",
                 details = Details(
                     experience = "3+ years",
                     employment = "Full-time",
