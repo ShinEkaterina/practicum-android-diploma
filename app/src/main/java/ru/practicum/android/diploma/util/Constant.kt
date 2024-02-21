@@ -10,4 +10,5 @@ object Constant {
     const val NOT_FOUND = 404
     const val PER_PAGE_ITEMS = 20L
     const val COMPANY_LOGO_RADIUS_12_PX = 12
+
 }

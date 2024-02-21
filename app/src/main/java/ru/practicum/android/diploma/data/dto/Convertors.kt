@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.data.dto
 
+import ru.practicum.android.diploma.data.dto.field.ContactsDto
+import ru.practicum.android.diploma.data.dto.field.EmployerDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
@@ -8,26 +10,41 @@ import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
 class Convertors {
-    fun convertorToDetailVacancy(vacancy: VacancyDetailedDto): DetailVacancy {
+
+    private fun getContactsEmail(contacts: ContactsDto?): String =
+        contacts?.email ?: ""
+
+    private fun getContactsName(contacts: ContactsDto?): String =
+        contacts?.name ?: ""
+
+    private fun getContactsPhones(contacts: ContactsDto?): List<String> =
+        contacts?.phones?.map { createPhone(it) } ?: listOf()
+
+    private fun getEmployerName(employer: EmployerDto?): String =
+        employer?.name ?: ""
+
+    private fun getEmployerLogoUrl(employer: EmployerDto?): String =
+        employer?.logoUrls?.logoUrl240 ?: ""
+
+    fun convertorToDetailVacancy(vacancyDto: VacancyDetailedDto): DetailVacancy {
         return DetailVacancy(
-            id = vacancy.id,
-            areaName = vacancy.area?.name,
-            areaUrl = vacancy.employer?.logoUrls?.logoUrl240,
-            contactsEmail = vacancy.contacts?.email,
-            contactsName = vacancy.contacts?.name,
-            contactsPhones = vacancy.contacts?.phones.let { list -> list?.map { createPhone(it) } },
-            comment = null,
-            description = vacancy.description,
-            employerName = vacancy.employer?.name,
-            employmentName = vacancy.employment.name,
-            experienceName = vacancy.experience.name,
-            keySkillsNames = createKeySkills(vacancy.keySkills),
-            name = vacancy.name,
-            salaryCurrency = vacancy.salary?.currency,
-            salaryFrom = vacancy.salary?.from,
+            id = vacancyDto.id,
+            areaName = vacancyDto.area.name,
+            areaUrl = getEmployerLogoUrl(vacancyDto.employer),
+            contactsEmail = getContactsEmail(vacancyDto.contacts),
+            contactsName = getContactsName(vacancyDto.contacts),
+            contactsPhones = getContactsPhones(vacancyDto.contacts),
+            description = vacancyDto.description,
+            employerName = getEmployerName(vacancyDto.employer),
+            employmentName = vacancyDto.employment?.name ?: "",
+            experienceName = vacancyDto.experience.name ?: "",
+            keySkillsNames = createKeySkills(vacancyDto.keySkills),
+            name = vacancyDto.name,
+            salaryCurrency = vacancyDto.salary?.currency ?: "",
+            salaryFrom = vacancyDto.salary?.from,
+            salaryTo = vacancyDto.salary?.to,
             salaryGross = false,
-            salaryTo = vacancy.salary?.to,
-            scheduleName = vacancy.schedule?.name,
+            scheduleName = vacancyDto.schedule?.name ?: ""
         )
     }
 
@@ -35,7 +52,7 @@ class Convertors {
         return VacancyModel(
             id = vacancy.id,
             vacancyName = vacancy.name,
-            city = vacancy.area?.name,
+            city = vacancy.area.name,
             salary = "100",
             companyName = null,
             logoUrls = vacancy.employer?.logoUrls?.logoUrl240,
@@ -56,7 +73,8 @@ class Convertors {
         return "+${phone.country}" + " (${phone.city})" + " ${phone.number}"
     }
 
-    private fun createKeySkills(keySkills: List<KeySkillsDto>?): List<String?> {
-        return keySkills?.map { it.name } ?: emptyList()
+    private fun createKeySkills(keySkills: List<KeySkillsDto>): List<String> {
+        //  return keySkills.map { it.name } ?: emptyList()
+        return keySkills.mapNotNull { it.name }.filter { it.isNotEmpty() } ?: emptyList()
     }
 }
