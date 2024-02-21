@@ -42,7 +42,6 @@ class VacancyViewModel(
                             processResult(resource)
                         }
                 }
-
             }
         }
     }
@@ -50,6 +49,7 @@ class VacancyViewModel(
     private fun processResult(result: Resource<DetailVacancy>) {
         if (result.data != null) {
             vacancy = result.data
+            renderState(VacancyState.Content(vacancy!!))
         } else {
             renderState(VacancyState.Error)
         }
