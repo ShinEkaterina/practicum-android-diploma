@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.domain.impl.SearchInteractorImpl
 val interactorModule = module {
 
     single<FavoriteInteractor> {
-        FavoriteInteractorImpl()
+        FavoriteInteractorImpl(favoriteRepository = get())
     }
 
     factory<SearchInteractor> {
