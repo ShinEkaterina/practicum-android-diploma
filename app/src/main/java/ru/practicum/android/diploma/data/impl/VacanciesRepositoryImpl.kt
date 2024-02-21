@@ -1,9 +1,10 @@
 package ru.practicum.android.diploma.data.impl
 
+import android.content.Context
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.Convertors
+import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.api.VacanciesRepository
@@ -11,7 +12,8 @@ import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.util.Constant.SUCCESS_RESULT_CODE
 
 class VacanciesRepositoryImpl(
-    private val networkClient: NetworkClient
+    private val networkClient: NetworkClient,
+    private val context: Context
 ) : VacanciesRepository {
 
     override fun getDetailVacancy(
@@ -22,7 +24,7 @@ class VacanciesRepositoryImpl(
             val information = (response as VacancyDetailedResponse).information
             emit(
                 Pair(
-                    Convertors.convertorToDetailVacancy(information),
+                    Convertors(context).convertorToDetailVacancy(information),
                     response.responseCode
                 )
             )

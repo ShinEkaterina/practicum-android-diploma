@@ -1,21 +1,19 @@
 package ru.practicum.android.diploma.ui.search.fragment
 
 import android.annotation.SuppressLint
-import android.icu.text.DecimalFormat
-import android.icu.text.NumberFormat
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.model.VacancyModel
@@ -24,7 +22,6 @@ import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.ui.search.view_model.SearchViewModel
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.debounce
-import java.util.Locale
 
 class SearchFragment : Fragment() {
 
@@ -82,7 +79,12 @@ class SearchFragment : Fragment() {
             ) {
                 if (searchText.isNullOrEmpty()) {
                     hideAllComponents()
+                    binding?.searchImage?.isVisible = true
+                    binding?.clearButton?.isVisible = false
                     binding?.placeholderImage?.isVisible = true
+                } else {
+                    binding?.searchImage?.isVisible = false
+                    binding?.clearButton?.isVisible = true
                 }
                 viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
             }
@@ -104,13 +106,23 @@ class SearchFragment : Fragment() {
 
     }
 
+    private fun hideKeyboard() {
+        val service = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager
+        service?.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun render(
         state: SearchRenderState
     ) {
+        hideKeyboard()
         hideAllComponents()
         when (state) {
-            is SearchRenderState.NothingFound -> binding?.nothingFoundImage?.isVisible = true
+            is SearchRenderState.NothingFound -> {
+                binding?.searchFoundVacancies?.text = getString(R.string.no_vacancies_found)
+                binding?.searchFoundVacanciesWrapper?.isVisible = true
+                binding?.nothingFoundImage?.isVisible = true
+            }
             is SearchRenderState.NoInternet -> binding?.noInternetImage?.isVisible = true
             is SearchRenderState.Loading -> binding?.progressBar?.isVisible = true
             is SearchRenderState.Success -> {

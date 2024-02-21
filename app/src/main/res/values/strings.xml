@@ -41,6 +41,19 @@
     <string name="vacancy_no_internet">Нет интернета</string>
     <string name="vacancy_nothing_found">Не удалось получить\nсписок вакансий</string>
     <string name="salary_not_specified">Зарплата не указана</string>
+    <string name="salary_from">от</string>
+    <string name="salary_to">до</string>
+    <string name="currency_rur_rub">₽</string>
+    <string name="currency_byr_bin">p.</string>
+    <string name="currency_usd">$</string>
+    <string name="currency_eur">€</string>
+    <string name="currency_kzt">₸</string>
+    <string name="currency_uah">₴</string>
+    <string name="currency_azn">₼</string>
+    <string name="currency_uzs">лв</string>
+    <string name="currency_gel">₾</string>
+    <string name="currency_kgt">⃀</string>
+    <string name="currency_unknown">\?</string>
     <plurals name="vacancies">
         <item quantity="zero">Найдено %1$s вакансий</item>
         <item quantity="one">Найдена %1$s вакансия</item>
@@ -49,6 +62,7 @@
         <item quantity="many">Найдено %1$s вакансий</item>
         <item quantity="other">Найдено %1$s вакансий</item>
     </plurals>
+    <string name="no_vacancies_found">Таких вакансий нет</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_list">Список пуст</string>

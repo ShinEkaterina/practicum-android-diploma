@@ -1,10 +1,8 @@
 package ru.practicum.android.diploma.data.network
 
 import android.content.Context
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
