@@ -26,7 +26,6 @@ class Convertors {
     private fun getEmployerLogoUrl(employer: EmployerDto?): String =
         employer?.logoUrls?.logoUrl240 ?: ""
 
-
     fun convertorToDetailVacancy(vacancyDto: VacancyDetailedDto): DetailVacancy {
         return DetailVacancy(
             id = vacancyDto.id,
