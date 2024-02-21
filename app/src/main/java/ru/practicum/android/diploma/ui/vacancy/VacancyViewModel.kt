@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.api.DetailVacancyInteractor
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.domain.model.ErrorNetwork
 
 class VacancyViewModel(
     val vacancyInteractor: DetailVacancyInteractor,
@@ -20,24 +20,34 @@ class VacancyViewModel(
     private fun renderState(state: VacancyState) {
         _vacancyState.postValue(state)
     }
-
     fun getVacancyDetail(id: String) {
+
         if (id.isNotEmpty()) {
             renderState(VacancyState.Loading)
             viewModelScope.launch {
                 vacancyInteractor
                     .getDetailVacancy(id)
-                    .collect { resource ->
-                        processResult(resource)
+                    .collect { result ->
+                        processResult(result.data, result.message)
                     }
             }
         }
     }
-    private fun processResult(result: Resource<DetailVacancy>) {
-        if (result.data != null) {
-            vacancy = result.data
-        } else {
-            renderState(VacancyState.Error)
+    private fun processResult(detailVacancy: DetailVacancy?, errorMessage: ErrorNetwork?) {
+        if (detailVacancy != null) {
+            vacancy = detailVacancy
+        }
+        when {
+            errorMessage != null -> {
+                renderState(VacancyState.Error)
+            }
+            vacancy==null -> {
+                renderState(VacancyState.Error)
+            }
+            else -> {
+                renderState(VacancyState.Content(vacancy!!))
+            }
         }
     }
+
 }
