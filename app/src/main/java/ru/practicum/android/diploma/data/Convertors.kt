@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data
 
+import android.icu.text.DecimalFormat
 import ru.practicum.android.diploma.data.dto.Salary
 import ru.practicum.android.diploma.data.dto.VacanciesSearchDtoResponse
 import ru.practicum.android.diploma.data.dto.VacancyDetailedDto
@@ -33,7 +34,20 @@ class Convertors {
                 ))
             }
 
-            return VacanciesModel(vacanciesDto.pages, vacanciesDto.found, domainVacancies)
+            return VacanciesModel(vacanciesDto.pages, vacanciesDto.found, formatNumber(vacanciesDto.found), domainVacancies)
+        }
+
+        private fun formatNumber(
+            x: Long
+        ): String {
+            val formatter = android.icu.text.NumberFormat.getNumberInstance() as DecimalFormat
+
+            val symbols = formatter.decimalFormatSymbols
+            symbols.groupingSeparator = ' '
+
+            formatter.decimalFormatSymbols = symbols
+
+            return formatter.format(x)
         }
 
         private fun salaryToString(
@@ -42,13 +56,26 @@ class Convertors {
             var salaryAsString = ""
             if (salary?.from != null || salary?.to != null) {
                 if (salary.from != null) {
-                    salaryAsString += "от " + salary.from + " "
+                    salaryAsString += "от " + formatNumber(salary.from.toLong()) + " "
                 }
                 if (salary.to != null) {
-                    salaryAsString += "до " + salary.to + " "
+                    salaryAsString += "до " + formatNumber(salary.to.toLong()) + " "
                 }
                 if (salary.currency != null) {
                     salaryAsString += if (salary.currency == "RUR") "₽" else Currency.getInstance(salary.currency).symbol
+                    salaryAsString += when (salary.currency) {
+                        "RUR", "RUB" -> "₽"
+                        "BYR", "BIN" -> "p."
+                        "USD" -> "\$"
+                        "EUR" -> "€"
+                        "KZT" -> "₸"
+                        "UAH" -> "₴"
+                        "AZN" -> "₼"
+                        "UZS" -> "лв"
+                        "GEL" -> "₾"
+                        "KGT" -> "\u20C0"
+                        else -> "?"
+                    }
                 }
             }
             return salaryAsString

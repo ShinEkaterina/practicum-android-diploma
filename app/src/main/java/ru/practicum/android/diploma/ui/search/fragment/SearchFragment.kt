@@ -117,24 +117,11 @@ class SearchFragment : Fragment() {
                 vacanciesAdapter?.vacancies?.clear()
                 vacanciesAdapter?.vacancies?.addAll(state.vacancies.vacancies)
                 vacanciesAdapter?.notifyDataSetChanged()
-                binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, state.vacancies.found.toInt(), formatNumber(state.vacancies.found))
+                binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, state.vacancies.foundAsNumber.toInt(), state.vacancies.foundAsString)
                 binding?.rvSearch?.isVisible = true
                 binding?.searchFoundVacanciesWrapper?.isVisible = true
             }
         }
-    }
-
-    private fun formatNumber(
-        x: Long
-    ): String {
-        val formatter = NumberFormat.getNumberInstance() as DecimalFormat
-
-        val symbols = formatter.decimalFormatSymbols
-        symbols.groupingSeparator = ' '
-
-        formatter.decimalFormatSymbols = symbols
-
-        return formatter.format(x)
     }
 
 }

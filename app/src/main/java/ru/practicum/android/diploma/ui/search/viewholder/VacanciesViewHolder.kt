@@ -17,7 +17,7 @@ class VacanciesViewHolder(
     ) {
         binding.vacancyName.text = model.vacancyName
         binding.companyName.text = model.companyName
-        binding.companySalary.text = model.salary
+        binding.companySalary.text = model.salary.ifEmpty { itemView.context.getString(R.string.salary_not_specified) }
 
         binding.companyName.isSelected = true
 

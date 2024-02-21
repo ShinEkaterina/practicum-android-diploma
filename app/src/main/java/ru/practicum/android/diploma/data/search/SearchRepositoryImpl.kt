@@ -30,7 +30,7 @@ class SearchRepositoryImpl(
         } else {
             emit(
                 Pair(
-                    VacanciesModel(-1, -1, arrayListOf()),
+                    VacanciesModel(-1, -1, "", arrayListOf()),
                     Constant.SERVER_ERROR
                 )
             )

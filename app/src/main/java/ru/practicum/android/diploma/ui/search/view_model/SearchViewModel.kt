@@ -28,7 +28,7 @@ class SearchViewModel(
                 val responseCode = response.second
                 if (responseCode == Constant.SUCCESS_RESULT_CODE) {
                     val foundVacancies = response.first
-                    if (foundVacancies.found > 0) {
+                    if (foundVacancies.foundAsNumber > 0) {
                         renderStateLiveDate.postValue(
                             SearchRenderState.Success(
                                 vacancies = foundVacancies

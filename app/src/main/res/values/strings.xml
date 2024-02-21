@@ -40,6 +40,7 @@
     <string name="search_button">Кнопка поиска вакансий</string>
     <string name="vacancy_no_internet">Нет интернета</string>
     <string name="vacancy_nothing_found">Не удалось получить\nсписок вакансий</string>
+    <string name="salary_not_specified">Зарплата не указана</string>
     <plurals name="vacancies">
         <item quantity="zero">Найдено %1$s вакансий</item>
         <item quantity="one">Найдена %1$s вакансия</item>
