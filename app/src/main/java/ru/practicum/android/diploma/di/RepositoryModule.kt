@@ -45,6 +45,8 @@ val repositoryModule = module {
 
     factory<FiltrationRepository> {
         FiltrationRepositoryImpl(filterStorage = get())
+    }
+    
     single<FavoriteVcRepository> {
         FavoriteVcRepositoryImpl(
             appDatabase = get(),
