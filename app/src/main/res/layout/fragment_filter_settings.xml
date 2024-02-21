@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.practicum.android.diploma.ui.filter.FilterFragment">
+    android:background="?attr/colorPrimaryVariant"
+    tools:context="ru.practicum.android.diploma.ui.filter.FilterSettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Настройки фильтрации" />
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/filter_settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,14 @@
 package ru.practicum.android.diploma.di
 
+import android.content.Context
 import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.impl.FiltrationRepositoryImpl
+import ru.practicum.android.diploma.domain.api.FiltrationRepository
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.covertors.VacancyDbConvertor
 import ru.practicum.android.diploma.data.impl.FavoriteVcRepositoryImpl
@@ -31,6 +34,17 @@ val repositoryModule = module {
     single<NetworkClient> {
         RetrofitNetworkClient(get(), context = get())
     }
+
+    single {
+        androidContext()
+            .getSharedPreferences(
+                Constant.FILTRATION_PREFERENCES,
+                Context.MODE_PRIVATE
+            )
+    }
+
+    factory<FiltrationRepository> {
+        FiltrationRepositoryImpl(filterStorage = get())
     single<FavoriteVcRepository> {
         FavoriteVcRepositoryImpl(
             appDatabase = get(),
