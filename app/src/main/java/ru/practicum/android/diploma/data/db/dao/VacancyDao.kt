@@ -21,4 +21,7 @@ interface VacancyDao {
 
     @Update
     suspend fun updateVacancy(entity: VacancyEntity)
+
+    @Query("SELECT * FROM favourites_table where id = :vacancyId")
+    suspend fun isVacancyFavorite(vacancyId: String): VacancyEntity?
 }
