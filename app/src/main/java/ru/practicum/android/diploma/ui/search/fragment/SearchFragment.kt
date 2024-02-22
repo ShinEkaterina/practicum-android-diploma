@@ -129,7 +129,6 @@ class SearchFragment : Fragment() {
     private fun render(
         state: SearchRenderState
     ) {
-        Toast.makeText(requireContext(), state.toString(), Toast.LENGTH_LONG).show()
         hideKeyboard()
         hideAllComponents()
         binding?.clearButton?.isVisible = true
