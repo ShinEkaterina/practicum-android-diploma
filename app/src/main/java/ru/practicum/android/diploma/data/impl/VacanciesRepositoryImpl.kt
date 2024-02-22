@@ -38,7 +38,7 @@ class VacanciesRepositoryImpl(
     ): Flow<Resource<DetailVacancy>> = flow {
         val response = networkClient.getDetailVacancy(VacancyDetailedRequest(id))
         if (response.responseCode == SUCCESS_RESULT_CODE) {
-            val information = Convertors().responseToDetailModel((response as VacancyDetailedResponse))
+            val information = Convertors().responseToDetailModel(response as VacancyDetailedResponse)
             emit(Resource.Success(information))
         } else {
             emit(Resource.Error(ErrorNetwork.SERVER_ERROR_MESSAGE))
