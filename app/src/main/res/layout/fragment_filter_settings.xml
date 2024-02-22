@@ -8,14 +8,99 @@
     tools:context="ru.practicum.android.diploma.ui.filter.FilterSettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/filterSettingsToolbar"
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/filter_settings" />
+
+    <FrameLayout
+        android:id="@+id/flPlaceToJob"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/margin_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterSettingsToolbar">
+
+        <TextView
+            android:id="@+id/tvPlaceToJob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="20.5dp"
+            android:text="@string/place_to_job"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/flIndustry"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flPlaceToJob">
+
+        <TextView
+            android:id="@+id/tvIndustry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="20.5dp"
+            android:text="@string/industry"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/flExpectedSalary"
+        android:layout_width="match_parent"
+        android:layout_height="99dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flIndustry">
+
+        <EditText
+            android:id="@+id/etExpectedSalary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:inputType="number"
+            android:hint="@string/enter_salary"
+            android:maxLength="9"
+            android:lines="1"
+            android:paddingStart="@dimen/margin_16"
+            tools:ignore="RtlSymmetry"
+            android:importantForAutofill="no" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flExpectedSalary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="20.5dp"
+            android:text="@string/do_not_show_without_salary"/>
+
+        <ImageView
+            android:id="@+id/ivDoNotShowWithoutSalary"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="@dimen/margin_18"
+            android:layout_marginEnd="@dimen/margin_18"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_check_box_unchecked"
+            android:contentDescription="@string/image_status_checkbox" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
