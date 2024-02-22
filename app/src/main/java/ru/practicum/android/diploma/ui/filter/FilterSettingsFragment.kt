@@ -159,13 +159,12 @@ class FilterSettingsFragment : Fragment() {
     ) {
         with(binding) {
             etExpectedSalary.addTextChangedListener(simpleTextWatcher)
-            etExpectedSalary.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+            etExpectedSalary.setOnKeyListener { _, i, keyEvent ->
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
                     etExpectedSalary.clearFocus()
-                    return@OnKeyListener true
                 }
-               return@OnKeyListener false
-            })
+                false
+            }
             etExpectedSalary.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     inputMethodManager?.hideSoftInputFromWindow(
