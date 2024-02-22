@@ -20,38 +20,114 @@ class VacancyViewModel(
     private val _vacancyState = MutableLiveData<VacancyState>()
     val vacancyState: LiveData<VacancyState> = _vacancyState
     private var vacancy: DetailVacancy? = null
+    private var isFavoriteState: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var currentVacancy: DetailVacancy? = null
+
+    fun getIsFavorite(): LiveData<Boolean> = isFavoriteState
 
     private fun renderState(state: VacancyState) {
         _vacancyState.postValue(state)
     }
 
-    fun getVacancyDetail(id: String) {
+    /*    fun getVacancyDetail(id: String):DetailVacancy {
+            if (id.isNotEmpty()) {
+                viewModelScope.launch {
+                    val isFavorite = favoriteInteractor.checkFavorite(id).firstOrNull() ?: false
+                    if (isFavorite) {
+                        when (val vacancyFromNetwork = vacancyInteractor.getDetailVacancy(id).first()) {
+                            is Resource.Success -> {
+                                vacancyFromNetwork.data?.let {
+                                    favoriteInteractor.update(it)
+                                }
+                                processResult(vacancyFromNetwork)
+                            }
+
+                            is Resource.Error -> {
+                                val vacFavorite = favoriteInteractor.getDetailVacancy(id).first()
+                                if (vacFavorite != null) {
+                                    renderState(VacancyState.Content(vacFavorite))
+                                }
+                            }
+                        }
+                    } else {
+                        vacancyInteractor
+                            .getDetailVacancy(id)
+                            .collect { resource ->
+                                processResult(resource)
+                            }
+                    }
+                }
+            }
+        }*/
+
+    fun showVacancyDetail(id: String) {
         if (id.isNotEmpty()) {
             renderState(VacancyState.Loading)
             viewModelScope.launch {
                 val isFavorite = favoriteInteractor.checkFavorite(id).firstOrNull() ?: false
                 if (isFavorite) {
-                    val vacFavorite = favoriteInteractor.getDetailVacancy(id).first()
-                    if (vacFavorite != null) {
-                        renderState(VacancyState.Content(vacFavorite))
+                    isFavoriteState.postValue(isFavorite)
+                    when (val vacancyFromNetwork = vacancyInteractor.getDetailVacancy(id).first()) {
+                        is Resource.Success -> {
+                            currentVacancy = vacancyFromNetwork.data
+                            vacancyFromNetwork.data?.let {
+                                favoriteInteractor.update(it)
+                            }
+                            processResult(vacancyFromNetwork)
+                        }
+
+                        is Resource.Error -> {
+                            val vacFavorite = favoriteInteractor.getDetailVacancy(id).first()
+                            currentVacancy = vacFavorite
+                            if (vacFavorite != null) {
+                                renderState(VacancyState.Content(vacFavorite))
+                            }
+                        }
                     }
                 } else {
-                    vacancyInteractor
-                        .getDetailVacancy(id)
-                        .collect { resource ->
-                            processResult(resource)
-                        }
+                    val vacancy = vacancyInteractor.getDetailVacancy(id).first()
+                    currentVacancy = vacancy.data
+                    processResult(vacancy)
+
                 }
             }
         }
     }
 
+    fun onFavoriteClicked() {
+        viewModelScope.launch {
+            val favorite = isFavoriteState.value ?: false
+
+            if (favorite) {
+                currentVacancy?.let {
+                    favoriteInteractor.delete(it.id)
+                    isFavoriteState.postValue(it.isFavorite)
+                }
+            } else {
+                currentVacancy?.let {
+                    favoriteInteractor.add(it)
+                    isFavoriteState.postValue(it.isFavorite)
+                }
+            }
+            renderFavorite(!favorite)
+        }
+    }
+
+    private fun renderFavorite(favorite: Boolean) {
+        isFavoriteState.postValue(favorite)
+    }
+
     private fun processResult(result: Resource<DetailVacancy>) {
-        if (result.data != null) {
-            vacancy = result.data
-            renderState(VacancyState.Content(vacancy!!))
-        } else {
-            renderState(VacancyState.Error)
+        when (result) {
+            is Resource.Success -> {
+                vacancy = result.data
+                renderState(VacancyState.Content(vacancy!!))
+            }
+
+            is Resource.Error -> {
+                renderState(VacancyState.Error)
+
+            }
         }
     }
 }

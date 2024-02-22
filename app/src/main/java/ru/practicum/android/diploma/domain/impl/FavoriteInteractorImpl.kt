@@ -1,17 +1,15 @@
 package ru.practicum.android.diploma.domain.impl
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.domain.api.interactor.FavoriteInteractor
 import ru.practicum.android.diploma.domain.api.repository.FavoriteVcRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
-import ru.practicum.android.diploma.domain.model.Details
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
 class FavoriteInteractorImpl(
     private val favoriteRepository: FavoriteVcRepository,
 
-    ) : FavoriteInteractor {
+) : FavoriteInteractor {
 
 /*    override fun getMockResults(): Flow<ArrayList<VacancyModel>> {
         val vacancies = arrayListOf<VacancyModel>(
@@ -45,6 +43,10 @@ class FavoriteInteractorImpl(
 
     override suspend fun add(vacancy: DetailVacancy) {
         favoriteRepository.add(vacancy) }
+
+    override suspend fun update(vacancy: DetailVacancy) {
+        favoriteRepository.update(vacancy)
+    }
 
     override suspend fun delete(vacancyId: String) {
         favoriteRepository.delete(vacancyId)

@@ -6,6 +6,9 @@ import ru.practicum.android.diploma.domain.model.VacancyModel
 
 interface FavoriteVcRepository {
     suspend fun add(vacancy: DetailVacancy)
+
+    suspend fun update(vacancy: DetailVacancy)
+
     suspend fun delete(vacancyId: String)
     suspend fun getAll(): Flow<List<VacancyModel>>
 

@@ -17,6 +17,10 @@ class FavoriteVcRepositoryImpl(
         appDatabase.vacancyDao().saveVacancy(converter.map(vacancy))
     }
 
+    override suspend fun update(vacancy: DetailVacancy) {
+        appDatabase.vacancyDao().updateVacancy(converter.map(vacancy))
+    }
+
     override suspend fun delete(vacancyId: String) {
         appDatabase.vacancyDao().deleteVacancy(vacancyId)
     }
