@@ -62,7 +62,9 @@ class FilterSettingsFragment : Fragment() {
                 start: Int,
                 count: Int,
                 after: Int
-            ) {}
+            ) {
+                // Обязательный метод интерфейса
+            }
 
             override fun onTextChanged(
                 s: CharSequence?,
@@ -73,7 +75,9 @@ class FilterSettingsFragment : Fragment() {
                 onTextChangedAction(s)
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                // Обязательный метод интерфейса
+            }
         }
 
         expectedSalaryEditTextListeners(
@@ -159,8 +163,9 @@ class FilterSettingsFragment : Fragment() {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     etExpectedSalary.clearFocus()
                     return@OnKeyListener true
+                } else {
+                    return@OnKeyListener false
                 }
-                false
             })
             etExpectedSalary.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
