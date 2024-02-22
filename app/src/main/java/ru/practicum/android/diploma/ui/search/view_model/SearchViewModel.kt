@@ -13,8 +13,8 @@ class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ): ViewModel() {
 
-    private val renderStateLiveDate = MutableLiveData<SearchRenderState>()
-    fun observeRenderState():LiveData<SearchRenderState> = renderStateLiveDate
+    private val renderStateLiveDate = MutableLiveData<SearchRenderState>(SearchRenderState.Placeholder)
+    fun observeRenderState(): LiveData<SearchRenderState> = renderStateLiveDate
 
     private var currentPage = 0L
 
@@ -42,6 +42,10 @@ class SearchViewModel(
                 }
             }
         }
+    }
+
+    fun clearAllInput() {
+        renderStateLiveDate.postValue(SearchRenderState.Placeholder)
     }
 
     fun startVacanciesSearch(

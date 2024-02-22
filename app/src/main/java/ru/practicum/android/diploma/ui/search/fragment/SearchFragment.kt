@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -39,6 +40,8 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
+    private var watcher: TextWatcher? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,7 +70,15 @@ class SearchFragment : Fragment() {
             adapter = vacanciesAdapter
         }
 
-        binding?.inputSearchForm?.addTextChangedListener(object : TextWatcher {
+        binding?.clearButton?.setOnClickListener {
+            hideKeyboard()
+            binding?.inputSearchForm?.setText("")
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        watcher = object : TextWatcher {
             override fun beforeTextChanged(str: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(str: Editable?) {}
 
@@ -78,17 +89,20 @@ class SearchFragment : Fragment() {
                 count: Int
             ) {
                 if (searchText.isNullOrEmpty()) {
-                    hideAllComponents()
-                    binding?.searchImage?.isVisible = true
-                    binding?.clearButton?.isVisible = false
-                    binding?.placeholderImage?.isVisible = true
+                    viewModel.clearAllInput()
                 } else {
                     binding?.searchImage?.isVisible = false
                     binding?.clearButton?.isVisible = true
                 }
                 viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
             }
-        })
+        }
+        binding?.inputSearchForm?.addTextChangedListener(watcher)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding?.inputSearchForm?.removeTextChangedListener(watcher)
     }
 
     private fun hideAllComponents() {
@@ -115,8 +129,11 @@ class SearchFragment : Fragment() {
     private fun render(
         state: SearchRenderState
     ) {
+        Toast.makeText(requireContext(), state.toString(), Toast.LENGTH_LONG).show()
         hideKeyboard()
         hideAllComponents()
+        binding?.clearButton?.isVisible = true
+        binding?.searchImage?.isVisible = false
         when (state) {
             is SearchRenderState.NothingFound -> {
                 binding?.searchFoundVacancies?.text = getString(R.string.no_vacancies_found)
@@ -132,6 +149,11 @@ class SearchFragment : Fragment() {
                 binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, state.vacancies.foundAsNumber.toInt(), state.vacancies.foundAsString)
                 binding?.rvSearch?.isVisible = true
                 binding?.searchFoundVacanciesWrapper?.isVisible = true
+            }
+            is SearchRenderState.Placeholder -> {
+                binding?.clearButton?.isVisible = false
+                binding?.searchImage?.isVisible = true
+                binding?.placeholderImage?.isVisible = true
             }
         }
     }
