@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.api.FiltrationInteractor
+import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.FilterParametersState
 

@@ -40,7 +40,7 @@ class VacancyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         vacancyId = requireArguments().getString(ARGS_VACANCY)
-        viewModel.getVacancyDetail(vacancyId!!)
+        viewModel.showVacancyDetail(vacancyId!!)
         viewModel.vacancyState.observe(viewLifecycleOwner) { state ->
             render(state)
         }
@@ -50,6 +50,22 @@ class VacancyFragment : Fragment() {
                 R.id.action_vacancyFragment3_to_similarVacancy,
                 // SimilarVacanciesFragment.createArgs(vacancyId)
             )
+        }
+        binding.buttonAddToFavorites.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+
+        viewModel.getIsFavorite().observe(viewLifecycleOwner) { isFavorite ->
+            changeLikeButton(isFavorite)
+
+        }
+    }
+
+    private fun changeLikeButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.buttonAddToFavorites.setImageResource(R.drawable.ic_favorite_on)
+        } else {
+            binding.buttonAddToFavorites.setImageResource(R.drawable.ic_favorite)
         }
     }
 
@@ -85,7 +101,7 @@ class VacancyFragment : Fragment() {
             companyName.text = vacancy.employerName
             companyCity.text = vacancy.areaName
             jobTime.text = vacancy.scheduleName
-            if (vacancy.experienceName == null) {
+            if (vacancy.experienceName.isEmpty()) {
                 neededExperience.visibility = GONE
                 yearsOfExperience.visibility = GONE
             } else {
@@ -103,9 +119,9 @@ class VacancyFragment : Fragment() {
     fun createContacts(vacancy: DetailVacancy) {
         with(binding) {
             if (
-                vacancy.contactsName == null ||
-                vacancy.contactsEmail == null ||
-                vacancy.contactsPhones == null
+                vacancy.contactsName.isEmpty() ||
+                vacancy.contactsEmail.isEmpty() ||
+                vacancy.contactsPhones.isEmpty()
             ) {
                 contactInformation.visibility = GONE
                 contactPerson.visibility = GONE
@@ -113,13 +129,13 @@ class VacancyFragment : Fragment() {
                 contactPersonEmail.visibility = GONE
                 contactPersonPhone.visibility = GONE
             }
-            if (vacancy.contactsName != null) {
+            if (vacancy.contactsName.isNotEmpty()) {
                 contactPersonData.text = vacancy.contactsName
             }
-            if (vacancy.contactsEmail != null) {
+            if (vacancy.contactsEmail.isNotEmpty()) {
                 contactPersonEmailData.text = vacancy.contactsEmail
             }
-            if (vacancy.contactsPhones != null) {
+            if (vacancy.contactsPhones.isNotEmpty()) {
                 var phones = ""
                 vacancy.contactsPhones.forEach { phone ->
                     phones += " ${phone}\n"

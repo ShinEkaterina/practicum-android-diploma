@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.api.SearchInteractor
-import ru.practicum.android.diploma.domain.model.ErrorNetwork
+import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
+import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.SearchState
 import ru.practicum.android.diploma.util.debounce
@@ -45,7 +45,7 @@ class SearchViewModel(
             }
         }
     }
-    private fun processResult(searchVacancys: List<VacancyModel>?, errorMessage: ErrorNetwork?) {
+    private fun processResult(searchVacancys: List<VacancyModel>?, errorMessage: ErrorMessage?) {
         if (searchVacancys != null) {
             vacancys.addAll(searchVacancys)
         }
