@@ -30,7 +30,7 @@ class Convertors {
     fun responseToDetailModel(response: VacancyDetailedResponse): DetailVacancy {
         return DetailVacancy(
             id = response.id,
-            areaName = response.area!!.name,
+            areaName = response.area.name,
             areaUrl = getEmployerLogoUrl(response.employer),
             contactsEmail = getContactsEmail(response.contacts),
             contactsName = getContactsName(response.contacts),
@@ -38,7 +38,7 @@ class Convertors {
             description = response.description,
             employerName = getEmployerName(response.employer),
             employmentName = response.employment?.name ?: "",
-            experienceName = response.experience!!.name ?: "",
+            experienceName = response.experience.name ?: "",
             keySkillsNames = createKeySkills(response.keySkills),
             name = response.name,
             salaryCurrency = response.salary?.currency ?: "",
@@ -51,7 +51,7 @@ class Convertors {
     fun dtoToDetailModel(vacancyDto: VacancyDetailedDto): DetailVacancy {
         return DetailVacancy(
             id = vacancyDto.id,
-            areaName = vacancyDto.area!!.name,
+            areaName = vacancyDto.area.name,
             areaUrl = getEmployerLogoUrl(vacancyDto.employer),
             contactsEmail = getContactsEmail(vacancyDto.contacts),
             contactsName = getContactsName(vacancyDto.contacts),
@@ -59,7 +59,7 @@ class Convertors {
             description = vacancyDto.description,
             employerName = getEmployerName(vacancyDto.employer),
             employmentName = vacancyDto.employment?.name ?: "",
-            experienceName = vacancyDto.experience!!.name ?: "",
+            experienceName = vacancyDto.experience.name ?: "",
             keySkillsNames = createKeySkills(vacancyDto.keySkills),
             name = vacancyDto.name,
             salaryCurrency = vacancyDto.salary?.currency ?: "",

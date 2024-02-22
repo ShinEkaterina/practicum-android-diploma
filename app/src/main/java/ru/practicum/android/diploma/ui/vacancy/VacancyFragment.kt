@@ -59,6 +59,11 @@ class VacancyFragment : Fragment() {
             changeLikeButton(isFavorite)
 
         }
+            binding.contactInformation.visibility = GONE
+        binding.contactPerson.visibility = GONE
+        binding.contactInformation.visibility = GONE
+        binding.contactPersonEmail.visibility = GONE
+        binding.contactPersonPhone.visibility = GONE
     }
 
     private fun changeLikeButton(isFavorite: Boolean) {
@@ -118,22 +123,21 @@ class VacancyFragment : Fragment() {
 
     fun createContacts(vacancy: DetailVacancy) {
         with(binding) {
-            if (
-                vacancy.contactsName.isEmpty() ||
-                vacancy.contactsEmail.isEmpty() ||
-                vacancy.contactsPhones.isEmpty()
-            ) {
-                contactInformation.visibility = GONE
-                contactPerson.visibility = GONE
-                contactInformation.visibility = GONE
-                contactPersonEmail.visibility = GONE
-                contactPersonPhone.visibility = GONE
-            }
+
             if (vacancy.contactsName.isNotEmpty()) {
                 contactPersonData.text = vacancy.contactsName
+                contactInformation.visibility = VISIBLE
+                contactPerson.visibility = VISIBLE
+                contactPersonData.visibility = VISIBLE
             }
             if (vacancy.contactsEmail.isNotEmpty()) {
                 contactPersonEmailData.text = vacancy.contactsEmail
+                contactInformation.visibility = VISIBLE
+                contactPersonEmail.visibility = VISIBLE
+                contactPersonEmailData.visibility = VISIBLE
+                contactPersonEmailData.setOnClickListener {
+                   // viewModel.email(vacancy.contactsEmail)
+                }
             }
             if (vacancy.contactsPhones.isNotEmpty()) {
                 var phones = ""
@@ -141,6 +145,19 @@ class VacancyFragment : Fragment() {
                     phones += " ${phone}\n"
                 }
                 contactPersonPhoneData.text = phones
+                contactInformation.visibility = VISIBLE
+                contactPersonPhone.visibility = VISIBLE
+                contactPersonPhoneData.visibility = VISIBLE
+            }
+            if (vacancy.contactsPhones.isNotEmpty()) {
+                var phones = ""
+                vacancy.contactsPhones.forEach { phone ->
+                    phones += " ${phone}\n"
+                }
+                contactPersonPhoneData.text = phones
+                contactInformation.visibility = VISIBLE
+                contactPersonPhone.visibility = VISIBLE
+                contactPersonPhoneData.visibility = VISIBLE
             }
         }
     }
