@@ -8,9 +8,9 @@ import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
-import ru.practicum.android.diploma.util.Constant.BAD_REQUEST_RESULT_CODE
-import ru.practicum.android.diploma.util.Constant.NO_CONNECTIVITY_MESSAGE
-import ru.practicum.android.diploma.util.Constant.SUCCESS_RESULT_CODE
+import ru.practicum.android.diploma.data.dto.respone.Response.Companion.BAD_REQUEST_RESULT_CODE
+import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NO_INTERNET_RESULT_CODE
+import ru.practicum.android.diploma.data.dto.respone.Response.Companion.SUCCESS_RESULT_CODE
 import ru.practicum.android.diploma.util.isConnected
 
 class RetrofitNetworkClient(
@@ -51,8 +51,8 @@ class RetrofitNetworkClient(
 
     // с doRequest через When красивее было, что ревьюру не понравилось?
     override suspend fun getDetailVacancy(dto: VacancyDetailedRequest): Response {
-        if (isConnected(context)) {
-            return Response().apply { responseCode = NO_CONNECTIVITY_MESSAGE }
+        if (isConnected(context) == false) {
+            return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
         }
         return withContext(Dispatchers.IO) {
             try {

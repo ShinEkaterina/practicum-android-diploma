@@ -5,6 +5,7 @@ import ru.practicum.android.diploma.data.dto.field.EmployerDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
+import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
@@ -26,10 +27,31 @@ class Convertors {
     private fun getEmployerLogoUrl(employer: EmployerDto?): String =
         employer?.logoUrls?.logoUrl240 ?: ""
 
-    fun convertorToDetailVacancy(vacancyDto: VacancyDetailedDto): DetailVacancy {
+    fun responseToDetailModel(response: VacancyDetailedResponse): DetailVacancy {
+        return DetailVacancy(
+            id = response.id,
+            areaName = response.area!!.name,
+            areaUrl = getEmployerLogoUrl(response.employer),
+            contactsEmail = getContactsEmail(response.contacts),
+            contactsName = getContactsName(response.contacts),
+            contactsPhones = getContactsPhones(response.contacts),
+            description = response.description,
+            employerName = getEmployerName(response.employer),
+            employmentName = response.employment?.name ?: "",
+            experienceName = response.experience!!.name ?: "",
+            keySkillsNames = createKeySkills(response.keySkills),
+            name = response.name,
+            salaryCurrency = response.salary?.currency ?: "",
+            salaryFrom = response.salary?.from,
+            salaryTo = response.salary?.to,
+            salaryGross = false,
+            scheduleName = response.schedule?.name ?: ""
+        )
+    }
+    fun dtoToDetailModel(vacancyDto: VacancyDetailedDto): DetailVacancy {
         return DetailVacancy(
             id = vacancyDto.id,
-            areaName = vacancyDto.area.name,
+            areaName = vacancyDto.area!!.name,
             areaUrl = getEmployerLogoUrl(vacancyDto.employer),
             contactsEmail = getContactsEmail(vacancyDto.contacts),
             contactsName = getContactsName(vacancyDto.contacts),
@@ -37,7 +59,7 @@ class Convertors {
             description = vacancyDto.description,
             employerName = getEmployerName(vacancyDto.employer),
             employmentName = vacancyDto.employment?.name ?: "",
-            experienceName = vacancyDto.experience.name ?: "",
+            experienceName = vacancyDto.experience!!.name ?: "",
             keySkillsNames = createKeySkills(vacancyDto.keySkills),
             name = vacancyDto.name,
             salaryCurrency = vacancyDto.salary?.currency ?: "",
@@ -48,14 +70,14 @@ class Convertors {
         )
     }
 
-    private fun convertorToVacancy(vacancy: VacancyDetailedDto): VacancyModel {
+    private fun dtoToModel(vacancyDto: VacancyDetailedDto): VacancyModel {
         return VacancyModel(
-            id = vacancy.id,
-            vacancyName = vacancy.name,
-            city = vacancy.area.name,
+            id = vacancyDto.id,
+            vacancyName = vacancyDto.name,
+            city = vacancyDto.area.name,
             salary = "100",
             companyName = null,
-            logoUrls = vacancy.employer?.logoUrls?.logoUrl240,
+            logoUrls = vacancyDto.employer?.logoUrls?.logoUrl240,
             details = null,
         )
     }
@@ -65,7 +87,7 @@ class Convertors {
             found = searchList.found,
             maxPages = searchList.pages,
             currentPages = searchList.page,
-            listVacancy = searchList.items?.map { vacancyDto -> convertorToVacancy(vacancyDto) },
+            listVacancy = searchList.items?.map { vacancyDto -> dtoToModel(vacancyDto) },
         )
     }
 

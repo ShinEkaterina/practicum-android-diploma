@@ -7,13 +7,13 @@ import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Convertors
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
+import ru.practicum.android.diploma.data.dto.respone.Response.Companion.SUCCESS_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.api.VacanciesRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.ErrorNetwork
 import ru.practicum.android.diploma.domain.model.VacanciesModel
-import ru.practicum.android.diploma.util.Constant.SUCCESS_RESULT_CODE
 
 class VacanciesRepositoryImpl(
     private val networkClient: NetworkClient
@@ -32,13 +32,14 @@ class VacanciesRepositoryImpl(
         }
 
     }
+
     override fun getDetailVacancy(
         id: String
     ): Flow<Resource<DetailVacancy>> = flow {
-        val response = networkClient.doRequest(VacancyDetailedRequest(id))
+        val response = networkClient.getDetailVacancy(VacancyDetailedRequest(id))
         if (response.responseCode == SUCCESS_RESULT_CODE) {
-            val information = (response as VacancyDetailedResponse).information
-            emit(Resource.Success(Convertors().convertorToDetailVacancy(information)))
+            val information = Convertors().responseToDetailModel(response as VacancyDetailedResponse)
+            emit(Resource.Success(information))
         } else {
             emit(Resource.Error(ErrorNetwork.SERVER_ERROR_MESSAGE))
         }
