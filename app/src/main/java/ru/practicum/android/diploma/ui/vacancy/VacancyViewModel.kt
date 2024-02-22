@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.Resource
-import ru.practicum.android.diploma.domain.api.DetailVacancyInteractor
-import ru.practicum.android.diploma.domain.api.FavoriteInteractor
+import ru.practicum.android.diploma.domain.api.interactor.DetailVacancyInteractor
+import ru.practicum.android.diploma.domain.api.interactor.FavoriteInteractor
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 
 class VacancyViewModel(

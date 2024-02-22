@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.covertors.VacancyDbConvertor
-import ru.practicum.android.diploma.domain.api.FavoriteVcRepository
+import ru.practicum.android.diploma.domain.api.repository.FavoriteVcRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
