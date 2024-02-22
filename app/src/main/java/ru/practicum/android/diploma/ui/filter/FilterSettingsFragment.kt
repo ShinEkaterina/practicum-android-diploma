@@ -163,9 +163,8 @@ class FilterSettingsFragment : Fragment() {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     etExpectedSalary.clearFocus()
                     return@OnKeyListener true
-                } else {
-                    return@OnKeyListener false
                 }
+               return@OnKeyListener false
             })
             etExpectedSalary.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
