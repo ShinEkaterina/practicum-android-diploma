@@ -2,6 +2,8 @@ package ru.practicum.android.diploma.di
 
 import android.content.Context
 import androidx.room.Room
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -20,9 +22,15 @@ import ru.practicum.android.diploma.domain.api.VacanciesRepository
 import ru.practicum.android.diploma.util.Constant
 
 val repositoryModule = module {
+
+    val interceptor = HttpLoggingInterceptor()
+    interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
     single<HeadHunterServiceApi> {
         Retrofit.Builder()
             .baseUrl(Constant.HH_BASE_URL)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(HeadHunterServiceApi::class.java)

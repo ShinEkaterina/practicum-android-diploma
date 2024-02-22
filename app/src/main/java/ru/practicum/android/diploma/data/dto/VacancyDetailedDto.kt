@@ -18,7 +18,6 @@ data class VacancyDetailedDto(
     val description: String,
     val employer: EmployerDto?,
     val employment: EmploymentDto?,
-    val experienceId: String?,
     val experience: ExperienceDto,
     @SerializedName("key_skills")
     val keySkills: List<KeySkillsDto> = listOf(),
