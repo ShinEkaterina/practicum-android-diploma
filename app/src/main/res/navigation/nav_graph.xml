@@ -9,7 +9,7 @@
         android:id="@+id/searchFragment2"
         android:name="ru.practicum.android.diploma.ui.search.fragment.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search_bad" >
         <action
             android:id="@+id/action_searchFragment2_to_vacancyFragment3"
             app:destination="@id/vacancyFragment3" />

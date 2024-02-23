@@ -99,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="visible"
+        tools:visibility="gone"
         android:layout_marginTop="3dp"
         app:cardCornerRadius="@dimen/radius_12"
         app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
@@ -123,16 +123,18 @@
         android:id="@+id/rv_search"
         style="@style/TextStyleRegular12_400"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="193dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="17dp"
+        android:clipToPadding="false"
+        android:paddingBottom="76dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_found_vacancies_wrapper"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/vacancy_item" />
+        tools:listitem="@layout/vacancy_item"
+        tools:visibility="visible" />
 
     <ImageView
         android:visibility="visible"
@@ -225,12 +227,11 @@
         android:id="@+id/progress_bar"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_gravity="center"
         android:indeterminateTint="@color/blue"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/rv_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

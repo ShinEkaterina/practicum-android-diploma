@@ -8,12 +8,16 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -42,6 +46,8 @@ class SearchFragment : Fragment() {
 
     private var watcher: TextWatcher? = null
 
+    private var scrollListener: OnScrollListener? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,7 +67,7 @@ class SearchFragment : Fragment() {
             render(state)
         }
 
-        vacanciesAdapter = VacanciesAdapter(ArrayList()) { vacancy ->
+        vacanciesAdapter = VacanciesAdapter(viewModel.loadedVacancies) { vacancy ->
             clickDebounce(vacancy)
         }
 
@@ -78,6 +84,28 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        scrollListener = object : OnScrollListener() {
+
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding?.rvSearch?.layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()
+                    val itemsCount = vacanciesAdapter?.itemCount
+
+                    if (pos != null && itemsCount != null && pos >= itemsCount - 1) {
+                        viewModel.onLastItemReached(binding?.inputSearchForm?.text.toString())
+                    }
+                }
+            }
+
+        }
+        scrollListener?.let { binding?.rvSearch?.addOnScrollListener(it) }
+
         watcher = object : TextWatcher {
             override fun beforeTextChanged(str: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(str: Editable?) {}
@@ -94,6 +122,7 @@ class SearchFragment : Fragment() {
                     binding?.searchImage?.isVisible = false
                     binding?.clearButton?.isVisible = true
                 }
+                viewModel.loadedVacancies.clear()
                 viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
             }
         }
@@ -102,10 +131,16 @@ class SearchFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+
         binding?.inputSearchForm?.removeTextChangedListener(watcher)
+        scrollListener?.let { binding?.rvSearch?.removeOnScrollListener(it) }
     }
 
     private fun hideAllComponents() {
+        val marginParams = binding?.progressBar?.layoutParams as? MarginLayoutParams
+        marginParams?.bottomMargin = 0
+        binding?.progressBar?.layoutParams = marginParams
+
         binding?.rvSearch?.isVisible = false
         binding?.placeholderImage?.isVisible = false
         binding?.noInternetImage?.isVisible = false
@@ -139,11 +174,31 @@ class SearchFragment : Fragment() {
                 binding?.searchFoundVacanciesWrapper?.isVisible = true
                 binding?.nothingFoundImage?.isVisible = true
             }
-            is SearchRenderState.NoInternet -> binding?.noInternetImage?.isVisible = true
-            is SearchRenderState.Loading -> binding?.progressBar?.isVisible = true
+            is SearchRenderState.NoInternet -> {
+                if (state.isPagination) {
+                    if (viewModel.showToast) {
+                        viewModel.showToast = false
+                        Toast.makeText(requireContext(), getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show()
+                    }
+                    binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, viewModel.vacanciesAmount.toInt(), viewModel.vacanciesAmountAsString)
+                    binding?.rvSearch?.isVisible = true
+                    binding?.searchFoundVacanciesWrapper?.isVisible = true
+                } else {
+                    binding?.noInternetImage?.isVisible = true
+                }
+            }
+            is SearchRenderState.Loading -> {
+                binding?.progressBar?.isVisible = true
+                if (state.isPagination) {
+                    val marginParams = binding?.progressBar?.layoutParams as? MarginLayoutParams
+                    marginParams?.bottomMargin = (16 * resources.displayMetrics.density + 0.5f).toInt()
+                    binding?.progressBar?.layoutParams = marginParams
+                    binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, viewModel.vacanciesAmount.toInt(), viewModel.vacanciesAmountAsString)
+                    binding?.rvSearch?.isVisible = true
+                    binding?.searchFoundVacanciesWrapper?.isVisible = true
+                }
+            }
             is SearchRenderState.Success -> {
-                vacanciesAdapter?.vacancies?.clear()
-                vacanciesAdapter?.vacancies?.addAll(state.vacancies.vacancies)
                 vacanciesAdapter?.notifyDataSetChanged()
                 binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, state.vacancies.foundAsNumber.toInt(), state.vacancies.foundAsString)
                 binding?.rvSearch?.isVisible = true
