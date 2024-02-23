@@ -55,6 +55,7 @@
     <string name="currency_kgt">⃀</string>
     <string name="currency_unknown">\?</string>
     <string name="no_internet_connection">Проверьте подключение к интернету</string>
+    <string name="placeholder_description">Изображение-заглушка, находящееся на экране до тех пор, пока не будет осуществлен успешный поиск вакансий</string>
     <plurals name="vacancies">
         <item quantity="zero">Найдено %1$s вакансий</item>
         <item quantity="one">Найдена %1$s вакансия</item>

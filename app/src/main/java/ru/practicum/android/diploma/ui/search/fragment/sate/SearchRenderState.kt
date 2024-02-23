@@ -6,18 +6,16 @@ sealed interface SearchRenderState {
 
     data object Placeholder : SearchRenderState
 
-    data class Loading(
-        val isPagination: Boolean
-    ) : SearchRenderState
+    data object Loading : SearchRenderState
 
-    data class NoInternet(
-        val isPagination: Boolean
-    ) : SearchRenderState
+    data object NoInternet : SearchRenderState
 
     data object NothingFound : SearchRenderState
 
-    data class Success(
-        val vacancies: VacanciesModel
-    ) : SearchRenderState
+    data object PaginationLoading : SearchRenderState
+
+    data object PaginationNoInternet : SearchRenderState
+
+    data object Success : SearchRenderState
 
 }
