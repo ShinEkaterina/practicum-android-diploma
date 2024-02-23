@@ -42,12 +42,21 @@
     </fragment>
     <fragment
         android:id="@+id/filterSettingsFragment"
-        android:name="ru.practicum.android.diploma.ui.filter.FilterSettingsFragment"
+        android:name="ru.practicum.android.diploma.ui.filter.filterSettings.FilterSettingsFragment"
         android:label="fragment_filter_settings"
-        tools:layout="@layout/fragment_filter_settings" />
+        tools:layout="@layout/fragment_filter_settings" >
+        <action
+            android:id="@+id/action_filterSettingsFragment_to_industrySelectionFragment"
+            app:destination="@id/industrySelectionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/similarVacancy"
         android:name="ru.practicum.android.diploma.ui.similar.SimilarVacancy"
         android:label="fragment_similar_vacancy"
         tools:layout="@layout/fragment_similar_vacancy" />
+    <fragment
+        android:id="@+id/industrySelectionFragment"
+        android:name="ru.practicum.android.diploma.ui.filter.industrySelection.IndustrySelectionFragment"
+        android:label="fragment_industry_selection"
+        tools:layout="@layout/fragment_industry_selection" />
 </navigation>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimaryVariant"
+    tools:context="ru.practicum.android.diploma.ui.filter.industrySelection.IndustrySelectionFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/industrySelectionToolbar"
+        style="@style/TextStyleToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/industry_selection" />
+
+    <FrameLayout
+        android:id="@+id/flSearchIndustry"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/industrySelectionToolbar" >
+
+        <EditText
+            android:id="@+id/etIndustrySelection"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:inputType="text"
+            android:hint="@string/input_industry"
+            android:lines="1"
+            android:maxLength="25"
+            android:paddingStart="@dimen/margin_16"
+            android:importantForAutofill="no"
+            tools:ignore="RtlSymmetry" />
+
+        <Button
+            android:id="@+id/btSearchAndClearInputIndustry"
+            style="@style/ButtonInsideEditText"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_marginBottom="@dimen/margin_12"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="end"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:icon="@drawable/ic_search_edittext"/>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
