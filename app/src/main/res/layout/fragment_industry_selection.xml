@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="?attr/colorPrimaryVariant"
     tools:context="ru.practicum.android.diploma.ui.filter.industrySelection.IndustrySelectionFragment">
 
@@ -59,5 +60,48 @@
             app:icon="@drawable/ic_search_edittext"/>
     </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/flRecycleViewIndustries"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_8">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIndustries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            tools:listitem="@layout/industry_item"
+            tools:itemCount="5"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/ivNotListIndustries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="122dp"
+                android:src="@drawable/ic_not_list"
+                app:layout_constraintTop_toBottomOf="@+id/flSearchIndustry"
+                android:visibility="gone"
+                android:contentDescription="@string/image_not_list" />
+
+            <TextView
+                android:id="@+id/tvNotListIndustries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:text="@string/failed_to_get_list" />
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>
 
