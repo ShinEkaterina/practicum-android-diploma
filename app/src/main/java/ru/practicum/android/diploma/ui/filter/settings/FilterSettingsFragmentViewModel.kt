@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.filter.filterSettings
+package ru.practicum.android.diploma.ui.filter.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

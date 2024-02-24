@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.filter.industrySelection
+package ru.practicum.android.diploma.ui.filter.industry
 
 import android.util.Log
 import androidx.lifecycle.LiveData

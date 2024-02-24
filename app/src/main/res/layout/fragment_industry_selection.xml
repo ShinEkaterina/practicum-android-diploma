@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?attr/colorPrimaryVariant"
-    tools:context="ru.practicum.android.diploma.ui.filter.industrySelection.IndustrySelectionFragment">
+    tools:context="ru.practicum.android.diploma.ui.filter.industry.IndustrySelectionFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/industrySelectionToolbar"
