@@ -28,9 +28,7 @@ class VacanciesRepositoryImpl(
             else -> {
                 emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
             }
-
         }
-
     }
 
     override fun getDetailVacancy(
@@ -44,4 +42,20 @@ class VacanciesRepositoryImpl(
             emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
         }
     }
+
+    override fun getSimilarVacancies(id: String): Flow<Resource<VacanciesModel>> =
+        flow {
+            val response = networkClient.doRequest(getSimilarVacancies(id))
+            when (response.responseCode) {
+                SUCCESS_RESULT_CODE -> {
+                    emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
+                }
+
+                else -> {
+                    emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+                }
+
+            }
+
+        }
 }

@@ -16,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.ui.similar.SimilarFragment
 
 class VacancyFragment : Fragment() {
 
@@ -48,7 +49,7 @@ class VacancyFragment : Fragment() {
             val vacancyId = it.id.toString()
             findNavController().navigate(
                 R.id.action_vacancyFragment3_to_similarVacancy,
-                // SimilarVacanciesFragment.createArgs(vacancyId)
+                SimilarFragment.createArgs(vacancyId)
             )
         }
         binding.buttonAddToFavorites.setOnClickListener {
@@ -59,7 +60,7 @@ class VacancyFragment : Fragment() {
             changeLikeButton(isFavorite)
 
         }
-            binding.contactInformation.visibility = GONE
+        binding.contactInformation.visibility = GONE
         binding.contactPerson.visibility = GONE
         binding.contactInformation.visibility = GONE
         binding.contactPersonEmail.visibility = GONE
@@ -123,7 +124,6 @@ class VacancyFragment : Fragment() {
 
     fun createContacts(vacancy: DetailVacancy) {
         with(binding) {
-
             if (vacancy.contactsName.isNotEmpty()) {
                 contactPersonData.text = vacancy.contactsName
                 contactInformation.visibility = VISIBLE
@@ -136,7 +136,7 @@ class VacancyFragment : Fragment() {
                 contactPersonEmail.visibility = VISIBLE
                 contactPersonEmailData.visibility = VISIBLE
                 contactPersonEmailData.setOnClickListener {
-                   // viewModel.email(vacancy.contactsEmail)
+                    // viewModel.email(vacancy.contactsEmail)
                 }
             }
             if (vacancy.contactsPhones.isNotEmpty()) {

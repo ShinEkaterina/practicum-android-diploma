@@ -131,6 +131,4 @@ class VacancyViewModel(
         }
     }
 
-
-
 }

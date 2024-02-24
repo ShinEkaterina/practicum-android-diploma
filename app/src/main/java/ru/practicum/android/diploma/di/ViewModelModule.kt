@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.ui.favorites.FavoritesViewModel
 import ru.practicum.android.diploma.ui.filter.FilterSettingsFragmentViewModel
 import ru.practicum.android.diploma.ui.search.viewholder.SearchViewModel
+import ru.practicum.android.diploma.ui.similar.SimilarViewModel
 import ru.practicum.android.diploma.ui.vacancy.VacancyViewModel
 
 val viewModelModule = module {
@@ -29,5 +30,8 @@ val viewModelModule = module {
         FilterSettingsFragmentViewModel(
             filtrationInteractor = get()
         )
+    }
+    viewModel {
+        SimilarViewModel(similarInteractor = get())
     }
 }

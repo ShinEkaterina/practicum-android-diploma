@@ -5,7 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.dto.VacancyDetailedDto
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
+import ru.practicum.android.diploma.data.dto.request.VacanciesSearchSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.BAD_REQUEST_RESULT_CODE
@@ -30,8 +32,8 @@ class RetrofitNetworkClient(
                         }
                     }
 
-                    is VacancyDetailedRequest -> {
-                        headHunterService.searchConcreteVacancy(dto.id).apply {
+                    is VacanciesSearchSimilarRequest -> {
+                        headHunterService.searchSimilarVacancies(dto.id).apply {
                             responseCode = SUCCESS_RESULT_CODE
                         }
                     }
@@ -63,5 +65,9 @@ class RetrofitNetworkClient(
                 Response().apply { responseCode = exception.code() }
             }
         }
+    }
+
+    override suspend fun getSimilarVacancies(dto: VacancyDetailedDto): Response {
+        TODO("Not yet implemented")
     }
 }
