@@ -19,14 +19,15 @@ interface HeadHunterServiceApi {
     ): SearchResponse
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Practicum HHit/1.0 ()"
+        "HH-User-Agent: Practicum HHit/1.0 (krinova258@mail.ru)"
     )
     @GET("/vacancies/{id}/similar_vacancies")
     suspend fun searchSimilarVacancies(
         @Path("id") id: String,
     ): SearchResponse
     @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
+        "HH-User-Agent: Practicum HHit/1.0 (krinova258@mail.ru)"
     )
     @GET("/vacancies/{vacancy_id}")
     suspend fun searchConcreteVacancy(
