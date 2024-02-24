@@ -1,16 +1,11 @@
 package ru.practicum.android.diploma.data.impl
 
-import android.animation.BidirectionalTypeConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
-import ru.practicum.android.diploma.data.dto.Convertors
-import ru.practicum.android.diploma.data.dto.respone.IndustriesResponse
-import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.data.storage.FilterStorage
 import ru.practicum.android.diploma.domain.api.repository.FiltrationRepository
-import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 
