@@ -14,14 +14,13 @@ class SimilarViewModel(
 ) : ViewModel() {
 
     private val _vacancyState = MutableLiveData<SimilarState>()
-    val vacancyState: LiveData<SimilarState> = _vacancyState
-    val page = 0
-    private val vacancys = mutableListOf<VacancyModel>()
+    val similarState: LiveData<SimilarState> = _vacancyState
+    private val vacanciesList = mutableListOf<VacancyModel>()
     private fun renderState(state: SimilarState) {
         _vacancyState.postValue(state)
     }
 
-    fun getSimilarDetail(id: String) {
+    fun getSimilarVacancies(id: String) {
         if (id.isNotEmpty()) {
             renderState(SimilarState.Loading)
             viewModelScope.launch {
@@ -35,7 +34,8 @@ class SimilarViewModel(
     }
     private fun processResult(vacancyies: List<VacancyModel>?, errorMessage: ErrorMessage?) {
         if (vacancyies != null) {
-            vacancys.addAll(vacancyies)
+            vacanciesList.addAll(vacancyies)
+            renderState(SimilarState.Content(vacanciesList))
         }
         when (errorMessage) {
             ErrorMessage.SERVER_ERROR_MESSAGE -> {
@@ -48,7 +48,7 @@ class SimilarViewModel(
                 renderState(SimilarState.NotInternet)
             }
             else -> {
-                renderState(SimilarState.Content(vacancyies!!))
+                renderState(SimilarState.Content(vacanciesList))
             }
         }
     }

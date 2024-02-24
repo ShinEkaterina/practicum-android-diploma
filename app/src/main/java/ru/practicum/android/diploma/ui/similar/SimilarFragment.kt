@@ -34,19 +34,19 @@ class SimilarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSimilarVacancyBinding.inflate(inflater, container, false)
-
+        binding.similarToolbars.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.similarToolbars.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+
         vacancyId = requireArguments().getString(ARGS_VACANCY)
         initialAdapter()
-        viewModel.getSimilarDetail(vacancyId!!)
-        viewModel.vacancyState.observe(viewLifecycleOwner) { state ->
+        viewModel.getSimilarVacancies(vacancyId!!)
+        viewModel.similarState.observe(viewLifecycleOwner) { state ->
             render(state)
         }
     }

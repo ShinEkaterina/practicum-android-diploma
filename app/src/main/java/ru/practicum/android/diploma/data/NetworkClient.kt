@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data
 
-import ru.practicum.android.diploma.data.dto.VacancyDetailedDto
+import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
 
@@ -11,5 +11,5 @@ interface NetworkClient {
     ): Response
 
     suspend fun getDetailVacancy(dto: VacancyDetailedRequest): Response
-    suspend fun getSimilarVacancies(dto: VacancyDetailedDto): Response
+    suspend fun getSimilarVacancies(dto: VacanciesSimilarRequest): Response
 }

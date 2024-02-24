@@ -5,9 +5,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
-import ru.practicum.android.diploma.data.dto.VacancyDetailedDto
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
-import ru.practicum.android.diploma.data.dto.request.VacanciesSearchSimilarRequest
+import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.BAD_REQUEST_RESULT_CODE
@@ -32,12 +31,6 @@ class RetrofitNetworkClient(
                         }
                     }
 
-                    is VacanciesSearchSimilarRequest -> {
-                        headHunterService.searchSimilarVacancies(dto.id).apply {
-                            responseCode = SUCCESS_RESULT_CODE
-                        }
-                    }
-
                     else -> {
                         Response().apply {
                             responseCode = BAD_REQUEST_RESULT_CODE
@@ -50,10 +43,8 @@ class RetrofitNetworkClient(
             }
         }
     }
-
-    // с doRequest через When красивее было, что ревьюру не понравилось?
     override suspend fun getDetailVacancy(dto: VacancyDetailedRequest): Response {
-        if (isConnected(context) == false) {
+        if (!isConnected(context)) {
             return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
         }
         return withContext(Dispatchers.IO) {
@@ -66,8 +57,18 @@ class RetrofitNetworkClient(
             }
         }
     }
-
-    override suspend fun getSimilarVacancies(dto: VacancyDetailedDto): Response {
-        TODO("Not yet implemented")
+    override suspend fun getSimilarVacancies(dto: VacanciesSimilarRequest): Response {
+        if (!isConnected(context)) {
+            return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                headHunterService.searchSimilarVacancies(dto.id).apply {
+                    responseCode = SUCCESS_RESULT_CODE
+                }
+            } catch (exception: HttpException) {
+                Response().apply { responseCode = exception.code() }
+            }
+        }
     }
 }
