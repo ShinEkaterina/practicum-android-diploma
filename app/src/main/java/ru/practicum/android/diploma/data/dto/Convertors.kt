@@ -4,9 +4,11 @@ import ru.practicum.android.diploma.data.dto.field.ContactsDto
 import ru.practicum.android.diploma.data.dto.field.EmployerDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
+import ru.practicum.android.diploma.data.dto.respone.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
@@ -91,6 +93,21 @@ class Convertors {
         )
     }
 
+    fun converterIndustriesResponseToIndustriesModelList(response: List<IndustriesResponse>): List<IndustriesModel> {
+        val listIndustriesModel = mutableListOf<IndustriesModel>()
+        response.forEach {
+            listIndustriesModel.add(
+                IndustriesModel(
+                    id = it.id,
+                    name = it.name,
+                    industries = null
+                )
+            )
+            listIndustriesModel.addAll(createIndustriesList(it.industries))
+        }
+        return listIndustriesModel.sortedBy { it.name }
+    }
+
     private fun createPhone(phone: PhonesDto): String {
         return "+${phone.country}" + " (${phone.city})" + " ${phone.number}"
     }
@@ -98,5 +115,19 @@ class Convertors {
     private fun createKeySkills(keySkills: List<KeySkillsDto>): List<String> {
         //  return keySkills.map { it.name } ?: emptyList()
         return keySkills.mapNotNull { it.name }.filter { it.isNotEmpty() } ?: emptyList()
+    }
+
+    private fun createIndustriesList(nestedIndustriesList: List<IndustriesModel>?): List<IndustriesModel> {
+        val listIndustriesModel = mutableListOf<IndustriesModel>()
+        nestedIndustriesList?.forEach {
+            listIndustriesModel.add(
+                IndustriesModel(
+                    id = it.id,
+                    name = it.name,
+                    industries = null
+                )
+            )
+        }
+        return listIndustriesModel
     }
 }
