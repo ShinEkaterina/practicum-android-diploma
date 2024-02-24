@@ -17,7 +17,8 @@ interface HeadHunterServiceApi {
         @Query("per_page") amount: Long
     ): SearchResponse
     @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
+        "HH-User-Agent: Practicum HHit/1.0 ()"
     )
     @GET("/vacancies/{id}/similar_vacancies")
     suspend fun searchSimilarVacancies(

@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnSecondary"
+    tools:context=".ui.similar.SimilarFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/similar_toolbars"
@@ -29,7 +31,7 @@
         android:text="@string/not_internet"
         android:textAlignment="center"
         android:visibility="gone"
-        app:drawableTopCompat="@drawable/placeholder_sad"
+        app:drawableTopCompat="@drawable/placeholder_skull"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +47,7 @@
         android:text="@string/server_error"
         android:textAlignment="center"
         android:visibility="gone"
-        app:drawableTopCompat="@drawable/placeholder_skull"
+        app:drawableTopCompat="@drawable/placeholder_sad"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:background="?attr/colorOnSecondary">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -79,6 +80,8 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/ys_display_bold"
                     android:text="@string/company_name_text"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="24sp" />
 
@@ -270,6 +273,7 @@
                 android:fontFamily="@font/ys_display_bold"
                 android:text="@string/contact_comment_text"
                 android:textSize="@dimen/font_size_16"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_person_phone_data" />
 
@@ -280,6 +284,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:lines="2"
+                android:visibility="gone"
                 android:paddingEnd="@dimen/margin_16"
                 android:text="@string/contact_comment_data_text"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
@@ -299,7 +304,6 @@
                 android:text="@string/similar_vacancies_button_text"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:cornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
