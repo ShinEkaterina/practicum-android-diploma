@@ -4,13 +4,17 @@ import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.dto.Convertors
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.BAD_REQUEST_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NO_INTERNET_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.SUCCESS_RESULT_CODE
+import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.util.isConnected
 
 class RetrofitNetworkClient(
@@ -61,6 +65,24 @@ class RetrofitNetworkClient(
                 }
             } catch (exception: HttpException) {
                 Response().apply { responseCode = exception.code() }
+            }
+        }
+    }
+
+    override suspend fun getIndustries(): Resource<List<IndustriesModel>> {
+        if (!isConnected(context)) {
+            return Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE)
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                Resource.Success(
+                    Convertors()
+                        .converterIndustriesResponseToIndustriesModelList(
+                            headHunterService.getIndustries()
+                        )
+                )
+            } catch (exception: HttpException) {
+                Resource.Error(ErrorMessage.getErrorMessage(exception.message.toString()))
             }
         }
     }

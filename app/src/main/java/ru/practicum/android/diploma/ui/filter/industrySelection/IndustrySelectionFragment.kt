@@ -39,6 +39,8 @@ class IndustrySelectionFragment : Fragment() {
         binding.industrySelectionToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+
+        viewModel.getIndustries()
     }
 
     override fun onDestroyView() {

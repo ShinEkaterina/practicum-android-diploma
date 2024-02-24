@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.di
 
 import com.google.gson.Gson
 import org.koin.dsl.module
+import ru.practicum.android.diploma.data.dto.Convertors
 import ru.practicum.android.diploma.data.impl.FilterStorageImpl
 import ru.practicum.android.diploma.data.storage.FilterStorage
 
