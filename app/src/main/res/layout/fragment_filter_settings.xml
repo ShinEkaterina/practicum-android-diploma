@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimaryVariant"
-    tools:context="ru.practicum.android.diploma.ui.filter.FilterSettingsFragment">
+    tools:context="ru.practicum.android.diploma.ui.filter.settings.FilterSettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/filterSettingsToolbar"
@@ -76,6 +76,23 @@
             android:paddingStart="@dimen/margin_16"
             tools:ignore="RtlSymmetry"
             android:importantForAutofill="no" />
+
+        <Button
+            android:id="@+id/btClearInputExpectedSalary"
+            style="@style/ButtonInsideEditText"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="38dp"
+            android:layout_marginBottom="38dp"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="end"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:visibility="gone"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:icon="@drawable/ic_clear_edittext"/>
     </FrameLayout>
 
     <FrameLayout

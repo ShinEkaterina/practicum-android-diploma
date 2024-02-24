@@ -1,9 +1,10 @@
 package ru.practicum.android.diploma.di
 
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import org.koin.androidx.viewmodel.dsl.viewModel
 import ru.practicum.android.diploma.ui.favorites.FavoritesViewModel
-import ru.practicum.android.diploma.ui.filter.FilterSettingsFragmentViewModel
+import ru.practicum.android.diploma.ui.filter.industry.IndustrySelectionFragmentViewModel
+import ru.practicum.android.diploma.ui.filter.settings.FilterSettingsFragmentViewModel
 import ru.practicum.android.diploma.ui.search.viewholder.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancy.VacancyViewModel
 
@@ -26,8 +27,10 @@ val viewModelModule = module {
     }
 
     viewModel {
-        FilterSettingsFragmentViewModel(
-            filtrationInteractor = get()
-        )
+        FilterSettingsFragmentViewModel(filtrationInteractor = get())
+    }
+
+    viewModel {
+        IndustrySelectionFragmentViewModel(filtrationInteractor = get())
     }
 }

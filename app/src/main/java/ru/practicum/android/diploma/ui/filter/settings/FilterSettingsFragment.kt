@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.filter
+package ru.practicum.android.diploma.ui.filter.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -116,8 +117,7 @@ class FilterSettingsFragment : Fragment() {
             }
 
             if (filterParameters.expectedSalary != null) {
-                etExpectedSalary.text =
-                    Editable.Factory.getInstance().newEditable(filterParameters.expectedSalary.toString())
+                etExpectedSalary.setText(filterParameters.expectedSalary.toString())
             }
 
             if (filterParameters.isDoNotShowWithoutSalary) {
@@ -139,7 +139,9 @@ class FilterSettingsFragment : Fragment() {
             }
 
             flIndustry.setOnClickListener {
-                Log.i("TEST_REY", "segue to industry")
+                findNavController().navigate(
+                    R.id.action_filterSettingsFragment_to_industrySelectionFragment
+                )
             }
 
             ivDoNotShowWithoutSalary.setOnClickListener {
@@ -149,6 +151,10 @@ class FilterSettingsFragment : Fragment() {
                     filterParameters.copy(isDoNotShowWithoutSalary = true)
                 }
                 viewModel.setFilterParameters(filterParameters)
+            }
+
+            btClearInputExpectedSalary.setOnClickListener {
+                etExpectedSalary.setText("")
             }
         }
     }
@@ -172,16 +178,21 @@ class FilterSettingsFragment : Fragment() {
                         0
                     )
                     viewModel.setFilterParameters(filterParameters)
+                } else {
+                    btClearInputExpectedSalary.isVisible = filterParameters.expectedSalary != null
                 }
             }
         }
     }
 
     private fun onTextChangedAction(s: CharSequence?) {
-        filterParameters = if (s.isNullOrEmpty()) {
-            filterParameters.copy(expectedSalary = null)
-        } else {
-            filterParameters.copy(expectedSalary = s.toString().toInt())
+        with(binding) {
+            btClearInputExpectedSalary.isVisible = etExpectedSalary.hasFocus() && s?.isEmpty() == false
+            filterParameters = if (s.isNullOrEmpty()) {
+                filterParameters.copy(expectedSalary = null)
+            } else {
+                filterParameters.copy(expectedSalary = s.toString().toInt())
+            }
         }
     }
 }
