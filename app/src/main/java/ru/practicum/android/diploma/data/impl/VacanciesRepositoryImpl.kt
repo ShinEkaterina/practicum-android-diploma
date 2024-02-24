@@ -6,7 +6,10 @@ import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Convertors
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
+import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
+import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NOT_FOUND_RESULT_CODE
+import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NO_INTERNET_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.SUCCESS_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
@@ -28,9 +31,7 @@ class VacanciesRepositoryImpl(
             else -> {
                 emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
             }
-
         }
-
     }
 
     override fun getDetailVacancy(
@@ -44,4 +45,22 @@ class VacanciesRepositoryImpl(
             emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
         }
     }
+
+    override fun getSimilarVacancies(id: String): Flow<Resource<VacanciesModel>> =
+        flow {
+            val response = networkClient.getSimilarVacancies(VacanciesSimilarRequest(id))
+            when (response.responseCode) {
+                SUCCESS_RESULT_CODE -> {
+                    emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
+                }
+                NO_INTERNET_RESULT_CODE -> { emit(Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE)) }
+                NOT_FOUND_RESULT_CODE -> { emit(Resource.Error(ErrorMessage.NOT_FOUND)) }
+
+                else -> {
+                    emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+                }
+
+            }
+
+        }
 }

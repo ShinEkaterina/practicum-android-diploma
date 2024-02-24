@@ -10,4 +10,5 @@ interface VacanciesRepository {
     fun getDetailVacancy(
         id: String
     ): Flow<Resource<DetailVacancy>>
+    fun getSimilarVacancies(id: String): Flow<Resource<VacanciesModel>>
 }
