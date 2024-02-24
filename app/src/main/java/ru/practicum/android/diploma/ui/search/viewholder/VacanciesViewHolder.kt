@@ -22,6 +22,7 @@ class VacanciesViewHolder(
         Glide.with(itemView)
             .load(model.logoUrls)
             .centerCrop()
+            .fitCenter()
             .transform(RoundedCorners(Constant.COMPANY_LOGO_RADIUS_12_PX))
             .placeholder(R.drawable.ic_logo)
             .into(binding.companyLogo)
