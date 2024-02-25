@@ -17,9 +17,8 @@ import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.VacanciesModel
-
 class VacanciesRepositoryImpl(
-    private val networkClient: NetworkClient
+    private val networkClient: NetworkClient,
 ) : VacanciesRepository {
     override fun search(expression: String, page: Int): Flow<Resource<VacanciesModel>> = flow {
         val response = networkClient.doRequest(VacanciesSearchByNameRequest(expression, page))

@@ -39,6 +39,7 @@ val repositoryModule = module {
     single<VacanciesRepository> {
         VacanciesRepositoryImpl(networkClient = get())
     }
+
     single<NetworkClient> {
         RetrofitNetworkClient(get(), context = get())
     }

@@ -24,7 +24,7 @@ class Convertors {
     private fun getContactsName(contacts: ContactsDto?): String =
         contacts?.name ?: ""
 
-    private fun getContactsPhones(contacts: ContactsDto?): List<String> =
+    private fun getContactsPhones(contacts: ContactsDto?): List<Pair<String, String>> =
         contacts?.phones?.map { createPhone(it) } ?: listOf()
 
     private fun getEmployerName(employer: EmployerDto?): String =
@@ -63,20 +63,20 @@ class Convertors {
 
         }*/
 
-/*    private fun getSalaryString(salaryDto: SalaryDto?): String {
-        val currency = Currency.toCurrency(salaryDto?.currency ?: "")
+    /*    private fun getSalaryString(salaryDto: SalaryDto?): String {
+            val currency = Currency.toCurrency(salaryDto?.currency ?: "")
 
-        if (salaryDto == null || currency == Currency.NONE) {
-            return NO_SALARY
-        }
+            if (salaryDto == null || currency == Currency.NONE) {
+                return NO_SALARY
+            }
 
-        val from = salaryDto.from?.let { "От ${getReadableNumber(it)}" } ?: ""
-        val to = salaryDto.to?.let { "до ${getReadableNumber(it)}" } ?: ""
-        val salaryRange =
-            if (from.isNotBlank() || to.isNotBlank()) "$from $to".trim() else NO_SALARY
+            val from = salaryDto.from?.let { "От ${getReadableNumber(it)}" } ?: ""
+            val to = salaryDto.to?.let { "до ${getReadableNumber(it)}" } ?: ""
+            val salaryRange =
+                if (from.isNotBlank() || to.isNotBlank()) "$from $to".trim() else NO_SALARY
 
-        return if (salaryRange != NO_SALARY) "$salaryRange ${currency.symbol}" else salaryRange
-    }*/
+            return if (salaryRange != NO_SALARY) "$salaryRange ${currency.symbol}" else salaryRange
+        }*/
 
     private fun getSalaryString(salaryDto: SalaryDto?): String {
         val currency = Currency.toCurrency(salaryDto?.currency ?: "")
@@ -144,8 +144,17 @@ class Convertors {
         return listIndustriesModel.sortedBy { it.name }
     }
 
-    private fun createPhone(phone: PhonesDto): String {
-        return "+${phone.country}" + " (${phone.city})" + " ${phone.number}"
+    private fun createPhone(phone: PhonesDto): Pair<String, String> {
+        val phoneNumber = "+${phone.country}" +
+            " (${phone.city})" +
+            " ${phone.number?.dropLast(4)}" +
+            "-${phone.number?.drop(3)?.dropLast(2)}" +
+            "-${phone.number?.drop(5)}"
+        return if (phone.comment != null) { Pair(phoneNumber, phone.comment)
+
+        } else {
+            Pair(phoneNumber, "")
+        }
     }
 
     private fun createKeySkills(keySkills: List<KeySkillsDto>): List<String> {

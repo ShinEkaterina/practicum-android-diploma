@@ -7,7 +7,7 @@ data class DetailVacancy(
     val areaUrl: String,
     val contactsEmail: String = "",
     val contactsName: String = "",
-    val contactsPhones: List<String> = listOf(),
+    val contactsPhones: List<Pair<String, String>> = listOf(),
     val description: String,
     val employerName: String = "",
     val employmentName: String = "",
