@@ -147,10 +147,11 @@ class Convertors {
     private fun createPhone(phone: PhonesDto): Pair<String, String> {
         val phoneNumber = "+${phone.country}" +
             " (${phone.city})" +
-            " ${phone.number?.dropLast(4)}" +
-            "-${phone.number?.drop(3)?.dropLast(2)}" +
-            "-${phone.number?.drop(5)}"
-        return if (phone.comment != null) { Pair(phoneNumber, phone.comment)
+            " ${phone.number?.dropLast(FOUR)}" +
+            "-${phone.number?.drop(THREE)?.dropLast(TWO)}" +
+            "-${phone.number?.drop(FIVE)}"
+        return if (phone.comment != null) {
+            Pair(phoneNumber, phone.comment)
 
         } else {
             Pair(phoneNumber, "")
@@ -178,5 +179,9 @@ class Convertors {
 
     companion object {
         const val NO_SALARY = "Зарплата не указана"
+        const val TWO = 2
+        const val THREE = 3
+        const val FOUR = 4
+        const val FIVE = 5
     }
 }

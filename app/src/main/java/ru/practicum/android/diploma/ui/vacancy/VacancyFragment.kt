@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.ui.vacancy
 
 import android.os.Bundle
 import android.text.Spannable
-import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -135,9 +134,9 @@ class VacancyFragment : Fragment() {
                     phones += " ${phone.first}\n\n" +
                         "${getString(R.string.contact_comment_text)}\n" +
                         phone.second
+
                 }
-                SpannableString("${getString(R.string.contact_comment_text)}\n")
-                contactPersonPhoneData.setText(phones)
+                contactPersonPhoneData.text = phones
                 contactInformation.visibility = VISIBLE
                 contactPersonPhone.visibility = VISIBLE
                 contactPersonPhoneData.visibility = VISIBLE
@@ -208,6 +207,7 @@ class VacancyFragment : Fragment() {
 
     }
 }
+
 class MySpannableFactory : Spannable.Factory() {
     override fun newSpannable(source: CharSequence): Spannable {
         return source as? Spannable ?: super.newSpannable(source)
