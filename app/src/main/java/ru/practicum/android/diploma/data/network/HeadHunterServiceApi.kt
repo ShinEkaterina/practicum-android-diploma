@@ -19,7 +19,7 @@ interface HeadHunterServiceApi {
     ): SearchResponse
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Practicum HHit/1.0 (krinova258@mail.ru)"
+        "HH-User-Agent: Practicum HHit (krinova258@mail.ru)"
     )
     @GET("/vacancies/{id}/similar_vacancies")
     suspend fun searchSimilarVacancies(
