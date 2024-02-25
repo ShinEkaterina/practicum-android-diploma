@@ -15,7 +15,7 @@ class VacancyDbConvertor {
             areaUrl = vacancy.areaUrl,
             contactsEmail = vacancy.contactsEmail,
             contactsName = vacancy.contactsName,
-            contactsPhones = vacancy.contactsPhones,
+            contactsPhones = vacancy.contactsPhones.map { createPhoneString(it) },
             description = vacancy.description,
             employerName = vacancy.employerName,
             employmentName = vacancy.employmentName,
@@ -34,7 +34,7 @@ class VacancyDbConvertor {
             areaUrl = vacancy.areaUrl,
             contactsEmail = vacancy.contactsEmail,
             contactsName = vacancy.contactsName,
-            contactsPhones = vacancy.contactsPhones,
+            contactsPhones = vacancy.contactsPhones.map { createPhonePair(it) },
             description = vacancy.description,
             employerName = vacancy.employerName,
             employmentName = vacancy.employmentName,
@@ -67,5 +67,12 @@ class VacancyDbConvertor {
                 mapToModel(vacancyEntity)
             }
         }
+    fun createPhoneString(pair: Pair<String, String>): String {
+        return "${pair.first}\n" + pair.second
+    }
+    fun createPhonePair(string: String): Pair<String, String> {
+        val list = string.split("\n")
+        return Pair(list[0], list[1])
+    }
 
 }

@@ -8,7 +8,7 @@
     tools:context=".ui.search.fragment.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/similar_toolbars"
+        android:id="@+id/search_toolbars"
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -35,7 +35,7 @@
         android:paddingVertical="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/similar_toolbars">
+        app:layout_constraintTop_toBottomOf="@+id/search_toolbars">
 
         <EditText
             android:id="@+id/input_search_form"

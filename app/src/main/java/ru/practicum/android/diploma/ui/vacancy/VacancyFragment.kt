@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.ui.vacancy
 
 import android.os.Bundle
+import android.text.Spannable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -39,7 +40,7 @@ class VacancyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.contactPersonPhoneData.setSpannableFactory(MySpannableFactory())
         vacancyId = requireArguments().getString(ARGS_VACANCY)
         if (vacancyId != null) viewModel.showVacancyDetail(vacancyId!!)
         viewModel.vacancyState.observe(viewLifecycleOwner) { state ->
@@ -130,23 +131,17 @@ class VacancyFragment : Fragment() {
             if (vacancy.contactsPhones.isNotEmpty()) {
                 var phones = ""
                 vacancy.contactsPhones.forEach { phone ->
-                    phones += " ${phone}\n"
+                    phones += " ${phone.first}\n\n" +
+                        "${getString(R.string.contact_comment_text)}\n" +
+                        phone.second
+
                 }
                 contactPersonPhoneData.text = phones
                 contactInformation.visibility = VISIBLE
                 contactPersonPhone.visibility = VISIBLE
                 contactPersonPhoneData.visibility = VISIBLE
             }
-            if (vacancy.contactsPhones.isNotEmpty()) {
-                var phones = ""
-                vacancy.contactsPhones.forEach { phone ->
-                    phones += " ${phone}\n"
-                }
-                contactPersonPhoneData.text = phones
-                contactInformation.visibility = VISIBLE
-                contactPersonPhone.visibility = VISIBLE
-                contactPersonPhoneData.visibility = VISIBLE
-            }
+
         }
     }
 
@@ -210,5 +205,11 @@ class VacancyFragment : Fragment() {
         fun createArgs(vacancyId: String): Bundle =
             bundleOf(ARGS_VACANCY to vacancyId)
 
+    }
+}
+
+class MySpannableFactory : Spannable.Factory() {
+    override fun newSpannable(source: CharSequence): Spannable {
+        return source as? Spannable ?: super.newSpannable(source)
     }
 }

@@ -19,7 +19,7 @@ import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 class VacanciesRepositoryImpl(
-    private val networkClient: NetworkClient
+    private val networkClient: NetworkClient,
 ) : VacanciesRepository {
     override fun search(expression: String, page: Int): Flow<Resource<VacanciesModel>> = flow {
         val response = networkClient.doRequest(VacanciesSearchByNameRequest(expression, page))
@@ -53,8 +53,14 @@ class VacanciesRepositoryImpl(
                 SUCCESS_RESULT_CODE -> {
                     emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
                 }
-                NO_INTERNET_RESULT_CODE -> { emit(Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE)) }
-                NOT_FOUND_RESULT_CODE -> { emit(Resource.Error(ErrorMessage.NOT_FOUND)) }
+
+                NO_INTERNET_RESULT_CODE -> {
+                    emit(Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE))
+                }
+
+                NOT_FOUND_RESULT_CODE -> {
+                    emit(Resource.Error(ErrorMessage.NOT_FOUND))
+                }
 
                 else -> {
                     emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
