@@ -44,6 +44,7 @@ class Convertors {
         return formatter.format(number)
     }
 
+
     private fun getSalaryString(salaryDto: SalaryDto?): String {
         salaryDto?.let {
             val currency = Currency.toCurrency(it.currency ?: "")
