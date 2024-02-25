@@ -46,8 +46,7 @@ class Convertors {
         return formatter.format(number)
     }
 
-
-    private fun getSalaryString(salaryDto: SalaryDto?): String {
+/*    private fun getSalaryString(salaryDto: SalaryDto?): String {
         salaryDto?.let {
             val currency = Currency.toCurrency(it.currency ?: "")
             if (currency == Currency.NONE) {
@@ -63,6 +62,24 @@ class Convertors {
         }
         return "Зарплата не указана"
 
+    }*/
+
+    private fun getSalaryString(salaryDto: SalaryDto?): String {
+        if (salaryDto == null) {
+            return "Зарплата не указана"
+        }
+
+        val currency = Currency.toCurrency(salaryDto.currency ?: "")
+        if (currency == Currency.NONE) {
+            Log.d("INFO", "Unknown currency")
+            return "Зарплата не указана"
+        }
+
+        val from = salaryDto.from?.let { "От ${getReadableNumber(it)}" } ?: ""
+        val to = salaryDto.to?.let { "до ${getReadableNumber(it)}" } ?: ""
+        val salaryRange = if (from.isNotBlank() || to.isNotBlank()) "$from $to".trim() else "Зарплата не указана"
+
+        return if (salaryRange != "Зарплата не указана") "$salaryRange ${currency.symbol}" else salaryRange
     }
 
     fun responseToDetailModel(response: VacancyDetailedResponse): DetailVacancy {
@@ -81,28 +98,6 @@ class Convertors {
             name = response.name,
             salary = getSalaryString(response.salary),
             scheduleName = response.schedule?.name ?: ""
-        )
-    }
-    
-      fun dtoToDetailModel(vacancyDto: VacancyDetailedDto): DetailVacancy {
-        return DetailVacancy(
-            id = vacancyDto.id,
-            areaName = vacancyDto.area.name,
-            areaUrl = getEmployerLogoUrl(vacancyDto.employer),
-            contactsEmail = getContactsEmail(vacancyDto.contacts),
-            contactsName = getContactsName(vacancyDto.contacts),
-            contactsPhones = getContactsPhones(vacancyDto.contacts),
-            description = vacancyDto.description,
-            employerName = getEmployerName(vacancyDto.employer),
-            employmentName = vacancyDto.employment?.name ?: "",
-            experienceName = vacancyDto.experience.name ?: "",
-            keySkillsNames = createKeySkills(vacancyDto.keySkills),
-            name = vacancyDto.name,
-            salaryCurrency = vacancyDto.salary?.currency ?: "",
-            salaryFrom = vacancyDto.salary?.from,
-            salaryTo = vacancyDto.salary?.to,
-            salaryGross = false,
-            scheduleName = vacancyDto.schedule?.name ?: ""
         )
     }
 
