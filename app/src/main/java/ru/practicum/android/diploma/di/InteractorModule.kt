@@ -5,10 +5,12 @@ import ru.practicum.android.diploma.domain.api.interactor.DetailVacancyInteracto
 import ru.practicum.android.diploma.domain.api.interactor.FavoriteInteractor
 import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
+import ru.practicum.android.diploma.domain.api.interactor.SimilarInteractor
 import ru.practicum.android.diploma.domain.impl.DetailVacancyInteractorImpl
 import ru.practicum.android.diploma.domain.impl.FavoriteInteractorImpl
 import ru.practicum.android.diploma.domain.impl.FiltrationInteractorImpl
 import ru.practicum.android.diploma.domain.impl.SearchInteractorImpl
+import ru.practicum.android.diploma.domain.impl.SimilarInteractorImpl
 
 val interactorModule = module {
 
@@ -26,4 +28,6 @@ val interactorModule = module {
     factory<FiltrationInteractor> {
         FiltrationInteractorImpl(repository = get())
     }
-}
+    factory<SimilarInteractor> {
+        SimilarInteractorImpl(repository = get())
+    } }

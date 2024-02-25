@@ -52,7 +52,10 @@ val repositoryModule = module {
     }
 
     factory<FiltrationRepository> {
-        FiltrationRepositoryImpl(filterStorage = get())
+        FiltrationRepositoryImpl(
+            networkClient = get(),
+            filterStorage = get()
+        )
     }
 
     single<FavoriteVcRepository> {

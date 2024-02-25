@@ -8,9 +8,11 @@ import ru.practicum.android.diploma.data.dto.field.EmployerDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
 import ru.practicum.android.diploma.data.dto.field.SalaryDto
+import ru.practicum.android.diploma.data.dto.respone.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import java.util.Locale
@@ -81,6 +83,28 @@ class Convertors {
             scheduleName = response.schedule?.name ?: ""
         )
     }
+    
+      fun dtoToDetailModel(vacancyDto: VacancyDetailedDto): DetailVacancy {
+        return DetailVacancy(
+            id = vacancyDto.id,
+            areaName = vacancyDto.area.name,
+            areaUrl = getEmployerLogoUrl(vacancyDto.employer),
+            contactsEmail = getContactsEmail(vacancyDto.contacts),
+            contactsName = getContactsName(vacancyDto.contacts),
+            contactsPhones = getContactsPhones(vacancyDto.contacts),
+            description = vacancyDto.description,
+            employerName = getEmployerName(vacancyDto.employer),
+            employmentName = vacancyDto.employment?.name ?: "",
+            experienceName = vacancyDto.experience.name ?: "",
+            keySkillsNames = createKeySkills(vacancyDto.keySkills),
+            name = vacancyDto.name,
+            salaryCurrency = vacancyDto.salary?.currency ?: "",
+            salaryFrom = vacancyDto.salary?.from,
+            salaryTo = vacancyDto.salary?.to,
+            salaryGross = false,
+            scheduleName = vacancyDto.schedule?.name ?: ""
+        )
+    }
 
     private fun dtoToModel(vacancyDto: VacancyDetailedDto): VacancyModel {
         return VacancyModel(
@@ -103,6 +127,21 @@ class Convertors {
         )
     }
 
+    fun converterIndustriesResponseToIndustriesModelList(response: List<IndustriesResponse>): List<IndustriesModel> {
+        val listIndustriesModel = mutableListOf<IndustriesModel>()
+        response.forEach {
+            listIndustriesModel.add(
+                IndustriesModel(
+                    id = it.id,
+                    name = it.name,
+                    industries = null
+                )
+            )
+            listIndustriesModel.addAll(createIndustriesList(it.industries))
+        }
+        return listIndustriesModel.sortedBy { it.name }
+    }
+
     private fun createPhone(phone: PhonesDto): String {
         return "+${phone.country}" + " (${phone.city})" + " ${phone.number}"
     }
@@ -110,5 +149,19 @@ class Convertors {
     private fun createKeySkills(keySkills: List<KeySkillsDto>): List<String> {
         //  return keySkills.map { it.name } ?: emptyList()
         return keySkills.map { it.name }.filter { it.isNotEmpty() }
+    }
+
+    private fun createIndustriesList(nestedIndustriesList: List<IndustriesModel>?): List<IndustriesModel> {
+        val listIndustriesModel = mutableListOf<IndustriesModel>()
+        nestedIndustriesList?.forEach {
+            listIndustriesModel.add(
+                IndustriesModel(
+                    id = it.id,
+                    name = it.name,
+                    industries = null
+                )
+            )
+        }
+        return listIndustriesModel
     }
 }
