@@ -1,14 +1,19 @@
 package ru.practicum.android.diploma.data.dto
 
+import android.icu.text.DecimalFormat
+import android.icu.text.NumberFormat
+import android.util.Log
 import ru.practicum.android.diploma.data.dto.field.ContactsDto
 import ru.practicum.android.diploma.data.dto.field.EmployerDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
+import ru.practicum.android.diploma.data.dto.field.SalaryDto
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
+import java.util.Locale
 
 class Convertors {
 
@@ -27,10 +32,40 @@ class Convertors {
     private fun getEmployerLogoUrl(employer: EmployerDto?): String =
         employer?.logoUrls?.logoUrl240 ?: ""
 
+    private fun getReadableNumber(number: Int): String {
+        // Создаем экземпляр DecimalFormat, явно приводя NumberFormat к нужному типу
+        val formatter = NumberFormat.getNumberInstance(Locale.US) as DecimalFormat
+        val symbols = formatter.decimalFormatSymbols // Получаем текущие символы форматирования
+
+        symbols.groupingSeparator = ' ' // Устанавливаем пробел в качестве разделителя групп
+        formatter.decimalFormatSymbols =
+            symbols // Применяем обновленные символы форматирования обратно к форматтеру
+
+        return formatter.format(number)
+    }
+
+    private fun getSalaryString(salaryDto: SalaryDto?): String {
+        salaryDto?.let {
+            val currency = Currency.toCurrency(it.currency ?: "")
+            if (currency == Currency.NONE) {
+                Log.d("INFO", "Unknown currency")
+                return "Зарплата не указана"
+            } else if (it.from != null && it.to != null) {
+                return "От ${getReadableNumber(it.from)} до ${getReadableNumber(it.to)} ${currency.symbol}"
+            } else if (it.from == null && it.to != null) {
+                return "До ${getReadableNumber(it.to)} ${currency.symbol}"
+            } else if (it.from != null) {
+                return "От ${getReadableNumber(it.from)} ${currency.symbol}"
+            }
+        }
+        return "Зарплата не указана"
+
+    }
+
     fun responseToDetailModel(response: VacancyDetailedResponse): DetailVacancy {
         return DetailVacancy(
             id = response.id,
-            areaName = response.area!!.name,
+            areaName = response.area.name,
             areaUrl = getEmployerLogoUrl(response.employer),
             contactsEmail = getContactsEmail(response.contacts),
             contactsName = getContactsName(response.contacts),
@@ -38,35 +73,11 @@ class Convertors {
             description = response.description,
             employerName = getEmployerName(response.employer),
             employmentName = response.employment?.name ?: "",
-            experienceName = response.experience!!.name ?: "",
+            experienceName = response.experience.name ?: "",
             keySkillsNames = createKeySkills(response.keySkills),
             name = response.name,
-            salaryCurrency = response.salary?.currency ?: "",
-            salaryFrom = response.salary?.from,
-            salaryTo = response.salary?.to,
-            salaryGross = false,
+            salary = getSalaryString(response.salary),
             scheduleName = response.schedule?.name ?: ""
-        )
-    }
-    fun dtoToDetailModel(vacancyDto: VacancyDetailedDto): DetailVacancy {
-        return DetailVacancy(
-            id = vacancyDto.id,
-            areaName = vacancyDto.area!!.name,
-            areaUrl = getEmployerLogoUrl(vacancyDto.employer),
-            contactsEmail = getContactsEmail(vacancyDto.contacts),
-            contactsName = getContactsName(vacancyDto.contacts),
-            contactsPhones = getContactsPhones(vacancyDto.contacts),
-            description = vacancyDto.description,
-            employerName = getEmployerName(vacancyDto.employer),
-            employmentName = vacancyDto.employment?.name ?: "",
-            experienceName = vacancyDto.experience!!.name ?: "",
-            keySkillsNames = createKeySkills(vacancyDto.keySkills),
-            name = vacancyDto.name,
-            salaryCurrency = vacancyDto.salary?.currency ?: "",
-            salaryFrom = vacancyDto.salary?.from,
-            salaryTo = vacancyDto.salary?.to,
-            salaryGross = false,
-            scheduleName = vacancyDto.schedule?.name ?: ""
         )
     }
 
@@ -75,7 +86,7 @@ class Convertors {
             id = vacancyDto.id,
             vacancyName = vacancyDto.name,
             city = vacancyDto.area.name,
-            salary = "100",
+            salary = getSalaryString(vacancyDto.salary),
             companyName = null,
             logoUrls = vacancyDto.employer?.logoUrls?.logoUrl240,
             details = null,
@@ -97,6 +108,6 @@ class Convertors {
 
     private fun createKeySkills(keySkills: List<KeySkillsDto>): List<String> {
         //  return keySkills.map { it.name } ?: emptyList()
-        return keySkills.mapNotNull { it.name }.filter { it.isNotEmpty() } ?: emptyList()
+        return keySkills.map { it.name }.filter { it.isNotEmpty() }
     }
 }

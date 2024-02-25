@@ -69,7 +69,7 @@ val repositoryModule = module {
         Room.databaseBuilder(
             androidContext(),
             AppDatabase::class.java,
-            "database.db"
+            "database_2.db"
         ).addMigrations().build()
     }
 }

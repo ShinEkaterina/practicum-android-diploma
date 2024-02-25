@@ -18,9 +18,10 @@ data class VacancyEntity(
     val employmentName: String,
     val experienceName: String,
     val keySkillsNames: List<String>,
-    val salaryCurrency: String,
-    val salaryFrom: Int?,
-    val salaryTo: Int?,
-    val salaryGross: Boolean,
+    val salary: String = ",",
+    /*    val salaryCurrency: String,
+        val salaryFrom: Int?,
+        val salaryTo: Int?,
+        val salaryGross: Boolean,*/
     val scheduleName: String
 )
