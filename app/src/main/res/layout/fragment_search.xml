@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/search_toolbar"
+        style="@style/TextStyleToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/search_vacancy">
+
+        <ImageView
+            android:id="@+id/filter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:background="@drawable/ic_filter"
+            android:contentDescription="@string/todo" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!--- Search area -->
+    <FrameLayout
+        android:id="@+id/frame_layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/margin_16">
+
+        <EditText
+            android:id="@+id/input_search_form"
+            style="@style/TextStyleMedium16_500"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:background="@drawable/search_field"
+            android:drawablePadding="4dp"
+            android:hint="@string/input_text"
+            android:padding="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textCursorDrawable="@drawable/cursor" />
+
+        <ImageView
+            android:id="@+id/search_field_search_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/margin_16"
+            android:contentDescription="@string/search_button"
+            android:padding="@dimen/margin_16"
+            android:src="@drawable/ic_search"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/search_field_clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/margin_16"
+            android:contentDescription="@string/clear_button"
+            android:padding="@dimen/margin_16"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone"
+            app:tint="@color/black" />
+
+    </FrameLayout>
+
+    <!--- Amount of vacancies found -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/search_found_vacancies_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_gravity="center"
+        android:layout_marginTop="3dp"
+        app:cardCornerRadius="@dimen/radius_12"
+        app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/search_found_vacancies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Найдено 286 вакансий"
+            style="@style/TextStyleRegular16_400"
+            android:paddingVertical="@dimen/padding_4"
+            android:paddingHorizontal="@dimen/padding_12"
+            android:background="@color/blue"
+            android:textColor="@color/white"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <!--- Recycler view with progress bar for pagination as one of items -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/found_vacancies_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="17dp"
+        android:visibility="gone"
+        style="@style/TextStyleRegular12_400"
+        tools:listitem="@layout/vacancy_pagination_loading"/>
+
+    <!--- Placeholders + ProgressBar -->
+    <FrameLayout
+        tools:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/default_placeholder_image"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/placeholder_description"
+            android:src="@drawable/ic_placeholder" />
+
+        <TextView
+            android:id="@+id/search_nothing_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            style="@style/TextStyleMedium22_500"
+            android:text="@string/vacancy_nothing_found"
+            app:drawableTopCompat="@drawable/ic_not_found" />
+
+        <TextView
+            android:id="@+id/search_no_internet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            style="@style/TextStyleMedium22_500"
+            android:text="@string/vacancy_no_internet"
+            app:drawableTopCompat="@drawable/ic_not_internet"/>
+
+        <!--- Loading progressbar -->
+        <ProgressBar
+            android:id="@+id/search_progress_bar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/blue"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+</LinearLayout>
