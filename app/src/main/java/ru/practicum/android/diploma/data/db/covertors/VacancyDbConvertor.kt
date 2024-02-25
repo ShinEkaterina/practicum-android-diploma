@@ -21,10 +21,7 @@ class VacancyDbConvertor {
             employmentName = vacancy.employmentName,
             experienceName = vacancy.experienceName,
             keySkillsNames = vacancy.keySkillsNames,
-            salaryCurrency = vacancy.salaryCurrency,
-            salaryFrom = vacancy.salaryFrom,
-            salaryTo = vacancy.salaryTo,
-            salaryGross = vacancy.salaryGross,
+            salary = vacancy.salary,
             scheduleName = vacancy.scheduleName
         )
     }
@@ -43,10 +40,11 @@ class VacancyDbConvertor {
             employmentName = vacancy.employmentName,
             experienceName = vacancy.experienceName,
             keySkillsNames = vacancy.keySkillsNames,
-            salaryCurrency = vacancy.salaryCurrency,
-            salaryFrom = vacancy.salaryFrom,
-            salaryTo = vacancy.salaryTo,
-            salaryGross = vacancy.salaryGross,
+            /*            salaryCurrency = vacancy.salaryCurrency,
+                        salaryFrom = vacancy.salaryFrom,
+                        salaryTo = vacancy.salaryTo,
+                        salaryGross = vacancy.salaryGross,*/
+            salary = vacancy.salary,
             scheduleName = vacancy.scheduleName
         )
     }
@@ -56,7 +54,7 @@ class VacancyDbConvertor {
             id = vacancy.id,
             vacancyName = vacancy.name,
             city = vacancy.areaName,
-            salary = "Какая то зп",
+            salary = vacancy.salary,
             companyName = vacancy.employerName,
             logoUrls = null,
             details = null

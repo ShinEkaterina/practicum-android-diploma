@@ -13,10 +13,11 @@ data class DetailVacancy(
     val employmentName: String = "",
     val experienceName: String = "",
     val keySkillsNames: List<String> = listOf(),
-    val salaryCurrency: String = "",
-    val salaryFrom: Int?,
-    val salaryTo: Int?,
-    val salaryGross: Boolean = false,
+    val salary: String = "",
+    // val salaryCurrency: String = "",
+    //  val salaryFrom: Int?,
+    // val salaryTo: Int?,
+    //  val salaryGross: Boolean = false,
     val scheduleName: String = "",
     val isFavorite: Boolean = false
 
