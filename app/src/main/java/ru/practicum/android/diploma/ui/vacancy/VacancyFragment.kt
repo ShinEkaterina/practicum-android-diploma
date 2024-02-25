@@ -41,16 +41,17 @@ class VacancyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         vacancyId = requireArguments().getString(ARGS_VACANCY)
-        viewModel.showVacancyDetail(vacancyId!!)
+        if (vacancyId != null) viewModel.showVacancyDetail(vacancyId!!)
         viewModel.vacancyState.observe(viewLifecycleOwner) { state ->
             render(state)
         }
         binding.buttonSimilarVacancy.setOnClickListener {
-            val vacancyId = it.id.toString()
-            findNavController().navigate(
-                R.id.action_vacancyFragment3_to_similarVacancy,
-                SimilarFragment.createArgs(vacancyId)
-            )
+            if (vacancyId != null) {
+                findNavController().navigate(
+                    R.id.action_vacancyFragment3_to_similarVacancy,
+                    SimilarFragment.createArgs(vacancyId!!)
+                )
+            }
         }
         binding.buttonAddToFavorites.setOnClickListener {
             viewModel.onFavoriteClicked()
@@ -60,11 +61,6 @@ class VacancyFragment : Fragment() {
             changeLikeButton(isFavorite)
 
         }
-        binding.contactInformation.visibility = GONE
-        binding.contactPerson.visibility = GONE
-        binding.contactInformation.visibility = GONE
-        binding.contactPersonEmail.visibility = GONE
-        binding.contactPersonPhone.visibility = GONE
     }
 
     private fun changeLikeButton(isFavorite: Boolean) {
@@ -88,15 +84,7 @@ class VacancyFragment : Fragment() {
         with(binding) {
             jobName.text = vacancy.name
             jobSalary.text = ""
-            /*
-            ConvertSalary().formatSalaryWithCurrency(
-                vacancy.salaryFrom,
-                vacancy.salaryTo,
-                vacancy.salaryCurrency
-            )
 
-
-             */
             Glide.with(requireContext())
                 .load(vacancy.areaUrl)
                 .placeholder(R.drawable.ic_logo)
