@@ -133,7 +133,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_found_vacancies_wrapper"
-        tools:listitem="@layout/vacancy_item"
+        tools:listitem="@layout/vacancy_pagination_loading"
         tools:visibility="visible" />
 
     <ImageView

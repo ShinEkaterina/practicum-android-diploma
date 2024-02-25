@@ -2,6 +2,8 @@ package ru.practicum.android.diploma.ui.search.fragment
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -9,11 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -23,6 +27,7 @@ import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.ui.search.view_model.SearchViewModel
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.debounce
+
 
 class SearchFragment : Fragment() {
 
@@ -75,17 +80,30 @@ class SearchFragment : Fragment() {
             binding?.inputSearchForm?.setText("")
         }
 
-        binding?.foundVacanciesContainer?.setOnScrollChangeListener { v, _, scrollY, _, _ ->
-            val nestedScrollView = v as NestedScrollView
-            if (viewModel.isScrollableDown && scrollY == nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight) {
-                viewModel.onLastItemReached()
-            } else {
-                viewModel.isScrollableDown = true
+        binding?.foundVacanciesList?.addOnScrollListener(object : OnScrollListener() {
+
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding?.foundVacanciesList?.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = vacanciesAdapter?.itemCount
+                    if (itemsCount != null && pos >= itemsCount - 1) {
+                        viewModel.onLastItemReached()
+                    }
+                }
             }
-        }
+
+        })
 
         binding?.foundVacanciesList?.itemAnimator = null
     }
+
+    // если все ваакансии агружены удалять progresspar у pagination
 
     override fun onResume() {
         super.onResume()
@@ -120,8 +138,7 @@ class SearchFragment : Fragment() {
 
     private fun hideAllComponents() {
         binding?.searchFoundVacanciesWrapper?.isVisible = false
-        binding?.foundVacanciesContainer?.isVisible = false
-        binding?.foundVacanciesProgressBarPagination?.isVisible = false
+        binding?.foundVacanciesList?.isVisible = false
 
         // Hiding placeholders
         binding?.defaultPlaceholderImage?.isVisible = false
@@ -163,7 +180,7 @@ class SearchFragment : Fragment() {
 
         when (state) {
             is SearchRenderState.Loading -> {
-                binding?.foundVacanciesContainer?.scrollY = 0
+                binding?.foundVacanciesList?.scrollY = 0
                 binding?.searchProgressBar?.isVisible = true
             }
 
@@ -181,21 +198,25 @@ class SearchFragment : Fragment() {
                 binding?.searchFoundVacanciesWrapper?.isVisible = true
                 binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, viewModel.vacanciesAmount.toInt(), viewModel.vacanciesAmountAsString)
 
-                binding?.foundVacanciesContainer?.isVisible = true
+                binding?.foundVacanciesList?.isVisible = true
                 vacanciesAdapter?.notifyItemRangeChanged(viewModel.loadedVacancies.size, Constant.PER_PAGE_ITEMS.toInt())
             }
 
             is SearchRenderState.PaginationNoInternet -> {
                 Toast.makeText(requireContext(), getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show()
-                viewModel.toSuccessState()
+                viewModel.loadedVacancies.removeLast()
+                vacanciesAdapter?.notifyItemRemoved(viewModel.loadedVacancies.size)
+                Handler(Looper.getMainLooper()).postDelayed(1) {
+                    viewModel.loadedVacancies.add(null)
+                    viewModel.toSuccessState()
+                }
             }
 
             is SearchRenderState.PaginationLoading -> {
                 binding?.searchFoundVacanciesWrapper?.isVisible = true
                 binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, viewModel.vacanciesAmount.toInt(), viewModel.vacanciesAmountAsString)
 
-                binding?.foundVacanciesContainer?.isVisible = true
-                binding?.foundVacanciesProgressBarPagination?.isVisible = true
+                binding?.foundVacanciesList?.isVisible = true
             }
         }
     }

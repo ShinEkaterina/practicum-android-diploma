@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.model.VacancyModel
@@ -23,13 +24,11 @@ class SearchViewModel(
 
     private var foundPages = 0L
 
-    val loadedVacancies = arrayListOf<VacancyModel>()
+    val loadedVacancies = arrayListOf<VacancyModel?>()
 
     var vacanciesAmount = 0L
 
     var vacanciesAmountAsString = ""
-
-    var isScrollableDown = true
 
     private var paginationStringRequest = ""
 
@@ -56,6 +55,11 @@ class SearchViewModel(
                     if (vacanciesAmount > 0) {
                         loadedVacancies.clear()
                         loadedVacancies.addAll(response.first.vacancies)
+
+                        if (foundPages != 1L) {
+                            loadedVacancies.add(null)
+                        }
+
                         renderStateLiveDate.postValue(SearchRenderState.Success)
                     } else {
                         renderStateLiveDate.postValue(SearchRenderState.NothingFound)
@@ -69,11 +73,18 @@ class SearchViewModel(
 
     private fun paginationRequest() {
         loadingPaginationJob = viewModelScope.launch {
-            if (currentPage < foundPages && renderStateLiveDate.value !is SearchRenderState.Loading) {
+            delay(Constant.PAGINATION_AWAIT)
+            if (renderStateLiveDate.value !is SearchRenderState.Loading) {
                 renderStateLiveDate.postValue(SearchRenderState.PaginationLoading)
                 searchInteractor.searchVacancies(paginationStringRequest, ++currentPage, Constant.PER_PAGE_ITEMS).collect { response ->
                     if (response.second == Constant.SUCCESS_RESULT_CODE) {
+                        loadedVacancies.removeLast()
                         loadedVacancies.addAll(response.first.vacancies)
+
+                        if (currentPage < foundPages) {
+                            loadedVacancies.add(null)
+                        }
+
                         renderStateLiveDate.postValue(SearchRenderState.Success)
                     } else {
                         renderStateLiveDate.postValue(SearchRenderState.PaginationNoInternet)
@@ -92,8 +103,7 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        isScrollableDown = false
-        if (loadingPaginationJob?.isCompleted != false) {
+        if (currentPage < foundPages && loadingPaginationJob?.isCompleted != false) {
             paginationRequest()
         }
     }

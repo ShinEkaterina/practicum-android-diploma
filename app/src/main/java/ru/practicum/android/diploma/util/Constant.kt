@@ -12,4 +12,5 @@ object Constant {
     const val COMPANY_LOGO_RADIUS_12_PX = 12
     const val SEARCH_DEBOUNCE_WAIT = 2000L
     const val VACANCY_ITEM_CLICK_DEBOUNCE = 300L
+    const val PAGINATION_AWAIT = 200L
 }
