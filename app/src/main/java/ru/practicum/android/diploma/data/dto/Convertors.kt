@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.data.dto
 
 import android.icu.text.DecimalFormat
 import android.icu.text.NumberFormat
-import android.util.Log
 import ru.practicum.android.diploma.data.dto.field.ContactsDto
 import ru.practicum.android.diploma.data.dto.field.EmployerDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
@@ -46,40 +45,48 @@ class Convertors {
         return formatter.format(number)
     }
 
-/*    private fun getSalaryString(salaryDto: SalaryDto?): String {
-        salaryDto?.let {
-            val currency = Currency.toCurrency(it.currency ?: "")
-            if (currency == Currency.NONE) {
-                Log.d("INFO", "Unknown currency")
-                return "Зарплата не указана"
-            } else if (it.from != null && it.to != null) {
-                return "От ${getReadableNumber(it.from)} до ${getReadableNumber(it.to)} ${currency.symbol}"
-            } else if (it.from == null && it.to != null) {
-                return "До ${getReadableNumber(it.to)} ${currency.symbol}"
-            } else if (it.from != null) {
-                return "От ${getReadableNumber(it.from)} ${currency.symbol}"
+    /*    private fun getSalaryString(salaryDto: SalaryDto?): String {
+            salaryDto?.let {
+                val currency = Currency.toCurrency(it.currency ?: "")
+                if (currency == Currency.NONE) {
+                    Log.d("INFO", "Unknown currency")
+                    return "Зарплата не указана"
+                } else if (it.from != null && it.to != null) {
+                    return "От ${getReadableNumber(it.from)} до ${getReadableNumber(it.to)} ${currency.symbol}"
+                } else if (it.from == null && it.to != null) {
+                    return "До ${getReadableNumber(it.to)} ${currency.symbol}"
+                } else if (it.from != null) {
+                    return "От ${getReadableNumber(it.from)} ${currency.symbol}"
+                }
             }
-        }
-        return "Зарплата не указана"
-
-    }*/
-
-    private fun getSalaryString(salaryDto: SalaryDto?): String {
-        if (salaryDto == null) {
             return "Зарплата не указана"
-        }
 
-        val currency = Currency.toCurrency(salaryDto.currency ?: "")
-        if (currency == Currency.NONE) {
-            Log.d("INFO", "Unknown currency")
-            return "Зарплата не указана"
+        }*/
+
+/*    private fun getSalaryString(salaryDto: SalaryDto?): String {
+        val currency = Currency.toCurrency(salaryDto?.currency ?: "")
+
+        if (salaryDto == null || currency == Currency.NONE) {
+            return NO_SALARY
         }
 
         val from = salaryDto.from?.let { "От ${getReadableNumber(it)}" } ?: ""
         val to = salaryDto.to?.let { "до ${getReadableNumber(it)}" } ?: ""
-        val salaryRange = if (from.isNotBlank() || to.isNotBlank()) "$from $to".trim() else "Зарплата не указана"
+        val salaryRange =
+            if (from.isNotBlank() || to.isNotBlank()) "$from $to".trim() else NO_SALARY
 
-        return if (salaryRange != "Зарплата не указана") "$salaryRange ${currency.symbol}" else salaryRange
+        return if (salaryRange != NO_SALARY) "$salaryRange ${currency.symbol}" else salaryRange
+    }*/
+
+    private fun getSalaryString(salaryDto: SalaryDto?): String {
+        val currency = Currency.toCurrency(salaryDto?.currency ?: "")
+        if (salaryDto == null || currency == Currency.NONE) return NO_SALARY
+
+        val from = salaryDto.from?.let { "От ${getReadableNumber(it)}" }.orEmpty()
+        val to = salaryDto.to?.let { "до ${getReadableNumber(it)}" }.orEmpty()
+        val salaryRange = listOf(from, to).filter { it.isNotBlank() }.joinToString(" ").trim()
+
+        return if (salaryRange.isNotEmpty()) "$salaryRange ${currency.symbol}" else NO_SALARY
     }
 
     fun responseToDetailModel(response: VacancyDetailedResponse): DetailVacancy {
@@ -158,5 +165,9 @@ class Convertors {
             )
         }
         return listIndustriesModel
+    }
+
+    companion object {
+        const val NO_SALARY = "Зарплата не указана"
     }
 }
