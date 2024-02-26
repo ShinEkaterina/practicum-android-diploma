@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.ui.search.view_model
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.SearchInteractor
+import ru.practicum.android.diploma.domain.impl.SearchSuccess
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.util.Constant
@@ -39,7 +39,7 @@ class SearchViewModel(
     private var loadingPaginationJob: Job? = null
 
     val searchDebounce = debounce<String?>(
-        delayInMillis = Constant.SEARCH_DEBOUNCE_WAIT,
+        delayInMillis = Constant.SEARCH_DEBOUNCE_WAIT_MILLIS,
         coroutineScope = viewModelScope,
         useLastParam = true
     ) { searchString ->
@@ -50,15 +50,15 @@ class SearchViewModel(
             renderStateLiveDate.postValue(SearchRenderState.Loading)
             currentPage = 0
             searchInteractor.searchVacancies(searchString, 0L, Constant.PER_PAGE_ITEMS).collect { response ->
-                if (response.second == Constant.SUCCESS_RESULT_CODE) {
-                    foundPages = response.first.pages
-                    vacanciesAmount = response.first.foundAsNumber
-                    vacanciesAmountAsString = response.first.foundAsString
+                if (response is SearchSuccess) {
+                    foundPages = response.vacancies.pages
+                    vacanciesAmount = response.vacancies.foundAsNumber
+                    vacanciesAmountAsString = response.vacancies.foundAsString
                     paginationStringRequest = searchString
 
                     if (vacanciesAmount > 0) {
                         loadedVacancies.clear()
-                        loadedVacancies.addAll(response.first.vacancies)
+                        loadedVacancies.addAll(response.vacancies.vacancies)
 
                         if (foundPages != 1L) {
                             loadedVacancies.add(null)
@@ -84,9 +84,9 @@ class SearchViewModel(
             if (renderStateLiveDate.value !is SearchRenderState.Loading) {
                 renderStateLiveDate.postValue(SearchRenderState.PaginationLoading)
                 searchInteractor.searchVacancies(paginationStringRequest, ++currentPage, Constant.PER_PAGE_ITEMS).collect { response ->
-                    if (response.second == Constant.SUCCESS_RESULT_CODE) {
+                    if (response is SearchSuccess) {
                         loadedVacancies.removeLast()
-                        loadedVacancies.addAll(response.first.vacancies)
+                        loadedVacancies.addAll(response.vacancies.vacancies)
 
                         if (currentPage < foundPages) {
                             loadedVacancies.add(null)
@@ -106,7 +106,7 @@ class SearchViewModel(
     }
 
     fun clearAllInput() {
-        renderStateLiveDate.postValue(SearchRenderState.Placeholder)
+        renderStateLiveDate.postValue(SearchRenderState.Default)
     }
 
     fun onLastItemReached() {
@@ -124,7 +124,7 @@ class SearchViewModel(
         } else {
             loadingPaginationJob?.cancel()
             searchDebounce(null)
-            renderStateLiveDate.postValue(SearchRenderState.Placeholder)
+            renderStateLiveDate.postValue(SearchRenderState.Default)
         }
     }
 

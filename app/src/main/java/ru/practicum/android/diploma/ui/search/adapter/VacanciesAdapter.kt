@@ -1,14 +1,11 @@
 package ru.practicum.android.diploma.ui.search.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.databinding.VacancyPaginationLoadingBinding
-import ru.practicum.android.diploma.di.viewModelModule
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.viewholder.LoadingViewHolder
 import ru.practicum.android.diploma.ui.search.viewholder.VacanciesViewHolder

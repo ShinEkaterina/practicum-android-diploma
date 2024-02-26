@@ -172,7 +172,7 @@ class SearchFragment : Fragment() {
         } else {
             binding?.searchProgressBar?.isVisible = false
         }
-        if (state != SearchRenderState.Placeholder) {
+        if (state != SearchRenderState.Default) {
             hideKeyboard()
         }
 
@@ -190,7 +190,7 @@ class SearchFragment : Fragment() {
                 binding?.searchNothingFound?.isVisible = true
             }
 
-            is SearchRenderState.Placeholder -> {
+            is SearchRenderState.Default -> {
                 binding?.searchFieldSearchImage?.isVisible = true
                 binding?.searchFieldClearButton?.isVisible = false
                 binding?.defaultPlaceholderImage?.isVisible = true

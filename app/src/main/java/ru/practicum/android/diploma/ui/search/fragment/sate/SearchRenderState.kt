@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.ui.search.fragment.sate
 
 sealed interface SearchRenderState {
 
-    data object Placeholder : SearchRenderState
+    data object Default : SearchRenderState
 
     data object Loading : SearchRenderState
 

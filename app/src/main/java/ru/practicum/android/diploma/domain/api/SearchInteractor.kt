@@ -9,6 +9,6 @@ interface SearchInteractor {
         vacancyName: String,
         page: Long,
         amount: Long
-    ): Flow<Pair<VacanciesModel, Int>>
+    ): Flow<SearchResponse>
 
 }

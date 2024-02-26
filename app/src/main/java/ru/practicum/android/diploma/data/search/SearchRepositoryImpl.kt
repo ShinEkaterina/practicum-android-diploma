@@ -8,8 +8,9 @@ import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.VacanciesSearchDtoResponse
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.domain.api.SearchRepository
-import ru.practicum.android.diploma.domain.model.VacanciesModel
-import ru.practicum.android.diploma.util.Constant
+import ru.practicum.android.diploma.domain.api.SearchResponse
+import ru.practicum.android.diploma.domain.impl.SearchError
+import ru.practicum.android.diploma.domain.impl.SearchSuccess
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -20,22 +21,12 @@ class SearchRepositoryImpl(
         vacancyName: String,
         page: Long,
         amount: Long
-    ): Flow<Pair<VacanciesModel, Int>> = flow {
+    ): Flow<SearchResponse> = flow {
         val response = networkClient.doRequest(VacanciesSearchByNameRequest(vacancyName, page, amount))
         if (response.responseCode == 200) {
-            emit(
-                Pair(
-                    Convertors(context).convertorToVacanciesModel(response as VacanciesSearchDtoResponse),
-                    response.responseCode
-                )
-            )
+            emit(SearchSuccess(Convertors(context).convertorToVacanciesModel(response as VacanciesSearchDtoResponse)))
         } else {
-            emit(
-                Pair(
-                    VacanciesModel(-1, -1, "", arrayListOf()),
-                    Constant.SERVER_ERROR
-                )
-            )
+            emit(SearchError(response.responseCode))
         }
     }
 
