@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.ui.search.view_model
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,9 +14,11 @@ import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.debounce
+import ru.practicum.android.diploma.util.isConnected
 
 class SearchViewModel(
-    private val searchInteractor: SearchInteractor
+    private val searchInteractor: SearchInteractor,
+    private val application: Application
 ): ViewModel() {
 
     private val renderStateLiveDate = MutableLiveData<SearchRenderState>()
@@ -74,6 +78,9 @@ class SearchViewModel(
     private fun paginationRequest() {
         loadingPaginationJob = viewModelScope.launch {
             delay(Constant.PAGINATION_AWAIT)
+            if (!isConnected(application.applicationContext)) {
+                renderStateLiveDate.postValue(SearchRenderState.PaginationNoInternet)
+            }
             if (renderStateLiveDate.value !is SearchRenderState.Loading) {
                 renderStateLiveDate.postValue(SearchRenderState.PaginationLoading)
                 searchInteractor.searchVacancies(paginationStringRequest, ++currentPage, Constant.PER_PAGE_ITEMS).collect { response ->
