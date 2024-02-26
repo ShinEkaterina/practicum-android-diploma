@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.search.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
@@ -103,8 +104,6 @@ class SearchFragment : Fragment() {
         binding?.foundVacanciesList?.itemAnimator = null
     }
 
-    // если все ваакансии агружены удалять progresspar у pagination
-
     override fun onResume() {
         super.onResume()
 
@@ -164,6 +163,7 @@ class SearchFragment : Fragment() {
         service?.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun render(
         state: SearchRenderState
     ) {
@@ -184,7 +184,11 @@ class SearchFragment : Fragment() {
                 binding?.searchProgressBar?.isVisible = true
             }
 
-            is SearchRenderState.NothingFound -> binding?.searchNothingFound?.isVisible = true
+            is SearchRenderState.NothingFound -> {
+                binding?.searchFoundVacancies?.text = getString(R.string.no_vacancies_found)
+                binding?.searchFoundVacanciesWrapper?.isVisible = true
+                binding?.searchNothingFound?.isVisible = true
+            }
 
             is SearchRenderState.Placeholder -> {
                 binding?.searchFieldSearchImage?.isVisible = true
@@ -195,11 +199,15 @@ class SearchFragment : Fragment() {
             is SearchRenderState.NoInternet -> binding?.searchNoInternet?.isVisible = true
 
             is SearchRenderState.Success -> {
+                if (state.resetScroll) {
+                    binding?.foundVacanciesList?.scrollY = 0
+                }
+
                 binding?.searchFoundVacanciesWrapper?.isVisible = true
                 binding?.searchFoundVacancies?.text = resources.getQuantityString(R.plurals.vacancies, viewModel.vacanciesAmount.toInt(), viewModel.vacanciesAmountAsString)
 
                 binding?.foundVacanciesList?.isVisible = true
-                vacanciesAdapter?.notifyItemRangeChanged(viewModel.loadedVacancies.size, Constant.PER_PAGE_ITEMS.toInt())
+                vacanciesAdapter?.notifyDataSetChanged()
             }
 
             is SearchRenderState.PaginationNoInternet -> {

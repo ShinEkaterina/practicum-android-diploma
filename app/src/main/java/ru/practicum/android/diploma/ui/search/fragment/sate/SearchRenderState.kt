@@ -14,6 +14,8 @@ sealed interface SearchRenderState {
 
     data object PaginationNoInternet : SearchRenderState
 
-    data object Success : SearchRenderState
+    data class Success(
+        val resetScroll: Boolean
+    ) : SearchRenderState
 
 }

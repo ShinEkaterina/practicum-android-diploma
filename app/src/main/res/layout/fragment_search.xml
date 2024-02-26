@@ -43,6 +43,8 @@
             android:drawablePadding="4dp"
             android:hint="@string/input_text"
             android:padding="8dp"
+            android:maxLines="1"
+            android:inputType="text"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textCursorDrawable="@drawable/cursor" />
@@ -51,10 +53,11 @@
             android:id="@+id/search_field_search_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="@dimen/margin_16"
+            android:layout_gravity="end|center"
             android:contentDescription="@string/search_button"
             android:padding="@dimen/margin_16"
+            android:layout_marginEnd="2dp"
+            android:background="@color/light_gray"
             android:src="@drawable/ic_search"
             app:tint="@color/black" />
 
@@ -62,11 +65,12 @@
             android:id="@+id/search_field_clear_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="@dimen/margin_16"
+            android:layout_gravity="center|end"
             android:contentDescription="@string/clear_button"
             android:padding="@dimen/margin_16"
             android:src="@drawable/ic_clear"
+            android:layout_marginEnd="2dp"
+            android:background="@color/light_gray"
             android:visibility="gone"
             app:tint="@color/black" />
 
@@ -80,7 +84,7 @@
         android:visibility="gone"
         tools:visibility="visible"
         android:layout_gravity="center"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="11dp"
         app:cardCornerRadius="@dimen/radius_12"
         app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
         app:layout_constraintLeft_toLeftOf="parent"

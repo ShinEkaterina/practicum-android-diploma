@@ -60,7 +60,7 @@ class SearchViewModel(
                             loadedVacancies.add(null)
                         }
 
-                        renderStateLiveDate.postValue(SearchRenderState.Success)
+                        renderStateLiveDate.postValue(SearchRenderState.Success(true))
                     } else {
                         renderStateLiveDate.postValue(SearchRenderState.NothingFound)
                     }
@@ -85,7 +85,7 @@ class SearchViewModel(
                             loadedVacancies.add(null)
                         }
 
-                        renderStateLiveDate.postValue(SearchRenderState.Success)
+                        renderStateLiveDate.postValue(SearchRenderState.Success(false))
                     } else {
                         renderStateLiveDate.postValue(SearchRenderState.PaginationNoInternet)
                     }
@@ -95,7 +95,7 @@ class SearchViewModel(
     }
 
     fun toSuccessState() {
-        renderStateLiveDate.postValue(SearchRenderState.Success)
+        renderStateLiveDate.postValue(SearchRenderState.Success(false))
     }
 
     fun clearAllInput() {
