@@ -104,7 +104,9 @@ class Convertors {
             keySkillsNames = createKeySkills(response.keySkills),
             name = response.name,
             salary = getSalaryString(response.salary),
-            scheduleName = response.schedule?.name ?: ""
+            scheduleName = response.schedule?.name ?: "",
+            address = response.address?.raw ?: "",
+            urlVacancy = response.urlVacancies
         )
     }
 
