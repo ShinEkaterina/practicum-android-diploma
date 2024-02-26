@@ -117,6 +117,7 @@ class SearchFragment : Fragment() {
                 before: Int,
                 count: Int
             ) {
+                hideAllComponents()
                 if (searchText.isNullOrEmpty()) {
                     viewModel.clearAllInput()
                 } else {
@@ -167,9 +168,7 @@ class SearchFragment : Fragment() {
     private fun render(
         state: SearchRenderState
     ) {
-        if (state != SearchRenderState.PaginationNoInternet) {
-            hideAllComponents()
-        } else {
+        if (state is SearchRenderState.PaginationNoInternet) {
             binding?.searchProgressBar?.isVisible = false
         }
         if (state != SearchRenderState.Default) {
@@ -200,7 +199,7 @@ class SearchFragment : Fragment() {
 
             is SearchRenderState.Success -> {
                 if (state.resetScroll) {
-                    binding?.foundVacanciesList?.scrollY = 0
+                    binding?.foundVacanciesList?.scrollToPosition(0)
                 }
 
                 binding?.searchFoundVacanciesWrapper?.isVisible = true

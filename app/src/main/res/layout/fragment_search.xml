@@ -42,11 +42,9 @@
             android:background="@drawable/search_field"
             android:drawablePadding="4dp"
             android:hint="@string/input_text"
-            android:padding="8dp"
             android:maxLines="1"
             android:inputType="text"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
+            android:padding="8dp"
             android:textCursorDrawable="@drawable/cursor" />
 
         <ImageView

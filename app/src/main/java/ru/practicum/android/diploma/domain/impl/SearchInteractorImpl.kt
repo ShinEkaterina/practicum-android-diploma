@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.api.SearchRepository
 import ru.practicum.android.diploma.domain.api.SearchResponse
-import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 class SearchInteractorImpl(
     private val searchRepository: SearchRepository
