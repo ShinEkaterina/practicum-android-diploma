@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.ui.vacancy
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +53,22 @@ class VacancyFragment : Fragment() {
                 // SimilarVacanciesFragment.createArgs(vacancyId)
             )
         }
+        binding.contactPersonPhoneData.setOnClickListener {
+            val phoneNumber = binding.contactPersonPhoneData.text.toString()
+            val call = Intent(
+                Intent.ACTION_DIAL,
+                Uri.fromParts("tel", phoneNumber, null))
+            requireContext().startActivity(call)
+        }
+        binding.contactPersonEmailData.setOnClickListener {
+            val emailAddress = binding.contactPersonEmailData.text.toString()
+            val emailIntent = Intent(
+                Intent.ACTION_SENDTO,
+                Uri.parse("mailto:$emailAddress"))
+            requireContext().startActivity(emailIntent)
+        }
     }
+
 
     private fun render(stateLiveData: VacancyState) {
         when (stateLiveData) {
