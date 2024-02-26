@@ -49,7 +49,7 @@ class SearchViewModel(
             }
             renderStateLiveDate.postValue(SearchRenderState.Loading)
             currentPage = 0
-            searchInteractor.searchVacancies(searchString, 0L, Constant.PER_PAGE_ITEMS).collect { response ->
+            searchInteractor.searchVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS).collect { response ->
                 if (response is SearchSuccess) {
                     foundPages = response.vacancies.pages
                     vacanciesAmount = response.vacancies.foundAsNumber
@@ -83,7 +83,7 @@ class SearchViewModel(
             }
             if (renderStateLiveDate.value !is SearchRenderState.Loading) {
                 renderStateLiveDate.postValue(SearchRenderState.PaginationLoading)
-                searchInteractor.searchVacancies(paginationStringRequest, ++currentPage, Constant.PER_PAGE_ITEMS).collect { response ->
+                searchInteractor.searchVacancies(paginationStringRequest, currentPage++, Constant.PER_PAGE_ITEMS).collect { response ->
                     if (response is SearchSuccess) {
                         loadedVacancies.removeLast()
                         loadedVacancies.addAll(response.vacancies.vacancies)

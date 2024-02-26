@@ -168,7 +168,9 @@ class SearchFragment : Fragment() {
     private fun render(
         state: SearchRenderState
     ) {
-        if (state is SearchRenderState.PaginationNoInternet) {
+        if (state !is SearchRenderState.PaginationNoInternet) {
+            hideAllComponents()
+        } else {
             binding?.searchProgressBar?.isVisible = false
         }
         if (state != SearchRenderState.Default) {
