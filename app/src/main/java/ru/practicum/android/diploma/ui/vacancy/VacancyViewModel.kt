@@ -141,8 +141,22 @@ class VacancyViewModel(
                         renderState(VacancyState.Content(vacancy!!))
                     }
                 }
-
             }
+        }
+    }
+    fun call(number: String) {
+        viewModelScope.launch {
+            vacancyInteractor.call(number)
+        }
+    }
+    fun sendEmail(email: String, name: String) {
+        viewModelScope.launch {
+            vacancyInteractor.sendEmail(email, name)
+        }
+    }
+    fun shareVacancy(url: String) {
+        viewModelScope.launch {
+            vacancyInteractor.shareVacancy(url)
         }
     }
 
