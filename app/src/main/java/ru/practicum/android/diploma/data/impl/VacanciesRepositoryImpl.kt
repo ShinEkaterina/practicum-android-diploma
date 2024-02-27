@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.impl
 
-import android.app.Application
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.Resource
