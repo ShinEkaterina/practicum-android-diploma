@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.ui.vacancy
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Spannable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -42,7 +41,6 @@ class VacancyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.contactPersonPhoneData.setSpannableFactory(MySpannableFactory())
         vacancyId = requireArguments().getString(ARGS_VACANCY)
         if (vacancyId != null) viewModel.showVacancyDetail(vacancyId!!)
         viewModel.vacancyState.observe(viewLifecycleOwner) { state ->
@@ -74,34 +72,41 @@ class VacancyFragment : Fragment() {
         }
         binding.contactPersonPhoneData.setOnClickListener {
             val phoneNumber = binding.contactPersonPhoneData.text.toString()
-            val call = Intent(
-                Intent.ACTION_DIAL,
-                Uri.fromParts("tel", phoneNumber, null))
-            requireContext().startActivity(call)
+
+            if (binding.contactPersonPhoneData.selectionStart != -1 &&
+                binding.contactPersonPhoneData.selectionEnd != -1
+            ) {
+                val call = Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", phoneNumber, null)
+                )
+                requireContext().startActivity(call)
+            }
+
         }
         binding.contactPersonEmailData.setOnClickListener {
             val emailAddress = binding.contactPersonEmailData.text.toString()
             val emailIntent = Intent(
                 Intent.ACTION_SENDTO,
-                Uri.parse("mailto:$emailAddress"))
+                Uri.parse("mailto:$emailAddress")
+            )
             requireContext().startActivity(emailIntent)
         }
     }
-
 
     private fun render(stateLiveData: VacancyState) {
         when (stateLiveData) {
             is VacancyState.Loading -> loading()
             is VacancyState.Content -> content(stateLiveData.vacancy)
-            is VacancyState.Error -> connectionError()
-            is VacancyState.EmptyScreen -> defaultSearch()
+            is VacancyState.NotInternet -> connectionError()
+            is VacancyState.ErrorServer -> errorServer()
         }
     }
 
     private fun initViews(vacancy: DetailVacancy) {
         with(binding) {
             jobName.text = vacancy.name
-            jobSalary.text = ""
+            jobSalary.text = vacancy.salary
 
             Glide.with(requireContext())
                 .load(vacancy.areaUrl)
@@ -111,7 +116,12 @@ class VacancyFragment : Fragment() {
                 .into(ivCompany)
 
             companyName.text = vacancy.employerName
-            companyCity.text = vacancy.areaName
+            if (vacancy.address.isEmpty()) {
+                companyCity.text = vacancy.areaName
+            } else {
+                companyCity.text = vacancy.address
+            }
+
             jobTime.text = vacancy.scheduleName
             if (vacancy.experienceName.isEmpty()) {
                 neededExperience.visibility = GONE
@@ -141,24 +151,31 @@ class VacancyFragment : Fragment() {
                 contactInformation.visibility = VISIBLE
                 contactPersonEmail.visibility = VISIBLE
                 contactPersonEmailData.visibility = VISIBLE
-                contactPersonEmailData.setOnClickListener {
-                    // viewModel.email(vacancy.contactsEmail)
-                }
+
             }
             if (vacancy.contactsPhones.isNotEmpty()) {
                 var phones = ""
                 vacancy.contactsPhones.forEach { phone ->
-                    phones += " ${phone.first}\n\n" +
-                        "${getString(R.string.contact_comment_text)}\n" +
-                        phone.second
+                    phones += phone.first +
+                        isEmptyComment(phone.second)
 
                 }
-                contactPersonPhoneData.text = phones
+
+                contactPersonPhoneData.text =
+                    HtmlCompat.fromHtml(phones, HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM)
                 contactInformation.visibility = VISIBLE
                 contactPersonPhone.visibility = VISIBLE
                 contactPersonPhoneData.visibility = VISIBLE
             }
 
+        }
+    }
+
+    private fun isEmptyComment(comment: String?): String {
+        return if (comment.isNullOrEmpty()) {
+            ""
+        } else {
+            "<br><br><b>${getString(R.string.contact_comment_text)}</b><br>" + comment + "<br>"
         }
     }
 
@@ -186,29 +203,38 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loading() {
-        binding.progressBar.visibility = VISIBLE
-        binding.fragmentNotifications.visibility = GONE
-
+        with(binding) {
+            progressBar.visibility = VISIBLE
+            fragmentNotifications.visibility = GONE
+            placeholderServerError.visibility = GONE
+            noInternetPlaceholder.visibility = GONE
+        }
     }
 
     private fun content(data: DetailVacancy) {
-        binding.progressBar.visibility = GONE
         initViews(data)
-        binding.fragmentNotifications.visibility = VISIBLE
-
+        with(binding) {
+            progressBar.visibility = GONE
+            fragmentNotifications.visibility = VISIBLE
+            placeholderServerError.visibility = GONE
+            noInternetPlaceholder.visibility = GONE
+        }
     }
 
-    private fun defaultSearch() {
-        binding.progressBar.visibility = GONE
-        binding.fragmentNotifications.visibility = GONE
+    private fun errorServer() {
+        with(binding) {
+            progressBar.visibility = GONE
+            fragmentNotifications.visibility = GONE
+            placeholderServerError.visibility = VISIBLE
+            noInternetPlaceholder.visibility = GONE
+        }
     }
-
     private fun connectionError() {
         with(binding) {
             progressBar.visibility = GONE
             fragmentNotifications.visibility = GONE
-            tvServerError.visibility = VISIBLE
-            ivServerError.visibility = VISIBLE
+            placeholderServerError.visibility = GONE
+            noInternetPlaceholder.visibility = VISIBLE
         }
     }
 
@@ -222,11 +248,5 @@ class VacancyFragment : Fragment() {
         fun createArgs(vacancyId: String): Bundle =
             bundleOf(ARGS_VACANCY to vacancyId)
 
-    }
-}
-
-class MySpannableFactory : Spannable.Factory() {
-    override fun newSpannable(source: CharSequence): Spannable {
-        return source as? Spannable ?: super.newSpannable(source)
     }
 }
