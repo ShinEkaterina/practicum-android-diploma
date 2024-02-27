@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_search"
-    tools:context=".ui.search.fragment.SearchFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorPrimaryVariant"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/similar_toolbars"
+        android:id="@+id/region_toolbars"
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryVariant"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/search_vacancy">
-
-        <ImageView
-            android:id="@+id/filter_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/margin_8"
-            android:background="@drawable/ic_filter"
-            android:contentDescription="@string/todo" />
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/region_selection_text">
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/frame_layout_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryVariant"
         android:paddingHorizontal="@dimen/margin_16"
         android:paddingVertical="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/similar_toolbars">
+        app:layout_constraintTop_toBottomOf="@+id/region_toolbars">
 
         <EditText
-            android:id="@+id/input_search_salary"
+            android:id="@+id/input_search_region"
             style="@style/TextStyleMedium16_500"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -81,42 +75,28 @@
             app:tint="@color/black" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/toast_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_not_faund"
-        android:contentDescription="@string/todo"
-        android:text="@string/not_vacancy"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
-        tools:listitem="" />
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search"
         style="@style/TextStyleRegular12_400"
         android:layout_width="match_parent"
-        tools:visibility="gone"
+        tools:visibility="visible"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toast_search"
-        tools:listitem="@layout/vacancy_item" />
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
+        tools:listitem="@layout/region_item" />
 
     <ImageView
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/placeholder_Image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/todo"
-        android:src="@drawable/ic_placeholder"
+        android:src="@drawable/placeholder_cat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +115,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/placeholder_Image"
-        tools:text="@string/error_search" />
+        tools:text="@string/no_region_text" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -148,5 +128,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
