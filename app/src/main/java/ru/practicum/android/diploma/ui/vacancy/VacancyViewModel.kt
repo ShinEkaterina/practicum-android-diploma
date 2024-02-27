@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.api.interactor.DetailVacancyInteractor
 import ru.practicum.android.diploma.domain.api.interactor.FavoriteInteractor
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.domain.model.ErrorMessage
 
 class VacancyViewModel(
     val vacancyInteractor: DetailVacancyInteractor,
@@ -120,12 +121,26 @@ class VacancyViewModel(
     private fun processResult(result: Resource<DetailVacancy>) {
         when (result) {
             is Resource.Success -> {
-                vacancy = result.data
-                renderState(VacancyState.Content(vacancy!!))
+                if (result.data != null) {
+                    vacancy = result.data
+                    renderState(VacancyState.Content(vacancy!!))
+                }
             }
 
             is Resource.Error -> {
-                renderState(VacancyState.Error)
+                when (result.message) {
+                    ErrorMessage.SERVER_ERROR_MESSAGE -> {
+                        renderState(VacancyState.ErrorServer)
+                    }
+
+                    ErrorMessage.NO_CONNECTIVITY_MESSAGE -> {
+                        renderState(VacancyState.NotInternet)
+                    }
+
+                    else -> {
+                        renderState(VacancyState.Content(vacancy!!))
+                    }
+                }
 
             }
         }

@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.dto.respone
 
 import com.google.gson.annotations.SerializedName
+import ru.practicum.android.diploma.data.dto.field.Address
 import ru.practicum.android.diploma.data.dto.field.AreaDto
 import ru.practicum.android.diploma.data.dto.field.ContactsDto
 import ru.practicum.android.diploma.data.dto.field.EmployerDto
@@ -23,4 +24,7 @@ data class VacancyDetailedResponse(
     val keySkills: List<KeySkillsDto> = listOf(),
     val salary: SalaryDto?,
     val schedule: ScheduleDto?,
+    @SerializedName("alternate_url")
+    val urlVacancies: String,
+    val address: Address?
 ) : Response()
