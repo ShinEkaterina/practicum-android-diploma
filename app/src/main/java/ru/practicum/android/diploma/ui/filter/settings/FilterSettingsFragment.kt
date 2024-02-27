@@ -119,13 +119,12 @@ class FilterSettingsFragment : Fragment() {
                 inputSearchSalary.setText(filterParameters.expectedSalary.toString())
             }
 
-          //  if (filterParameters.isDoNotShowWithoutSalary) {
-          //      checkBoxShowSalary.setImageResource(R.drawable.ic_check_box_checked)
-         //   } else {
-         //       ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
-            }
+            //  if (filterParameters.isDoNotShowWithoutSalary) {
+            //      checkBoxShowSalary.setImageResource(R.drawable.ic_check_box_checked)
+            //   } else {
+            //       ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
         }
-
+    }
 
     private fun initializationButtonsListener() {
         with(binding) {
@@ -133,9 +132,9 @@ class FilterSettingsFragment : Fragment() {
                 findNavController().navigateUp()
             }
 
-        //    flPlaceToJob.setOnClickListener {
-           //     Log.i("TEST_REY", "segue to place to job")
-        //    }
+            //    flPlaceToJob.setOnClickListener {
+            //     Log.i("TEST_REY", "segue to place to job")
+            //    }
 
             industryButton.setOnClickListener {
                 findNavController().navigate(
@@ -186,7 +185,7 @@ class FilterSettingsFragment : Fragment() {
 
     private fun onTextChangedAction(s: CharSequence?) {
         with(binding) {
-       //     btClearInputExpectedSalary.isVisible = etExpectedSalary.hasFocus() && s?.isEmpty() == false
+            //     btClearInputExpectedSalary.isVisible = etExpectedSalary.hasFocus() && s?.isEmpty() == false
             filterParameters = if (s.isNullOrEmpty()) {
                 filterParameters.copy(expectedSalary = null)
             } else {
