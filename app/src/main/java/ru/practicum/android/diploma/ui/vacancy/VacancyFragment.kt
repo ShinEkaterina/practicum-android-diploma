@@ -1,6 +1,9 @@
 package ru.practicum.android.diploma.ui.vacancy
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -9,20 +12,21 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.ui.similar.SimilarFragment
 
 class VacancyFragment : Fragment() {
 
     private var vacancyId: String? = null
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: VacancyViewModel by viewModels<VacancyViewModel>()
+    private val viewModel: VacancyViewModel by viewModel<VacancyViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,20 +42,52 @@ class VacancyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.contactPersonPhoneData.setSpannableFactory(MySpannableFactory())
         vacancyId = requireArguments().getString(ARGS_VACANCY)
-        viewModel.getVacancyDetail(vacancyId!!)
+        if (vacancyId != null) viewModel.showVacancyDetail(vacancyId!!)
         viewModel.vacancyState.observe(viewLifecycleOwner) { state ->
             render(state)
         }
         binding.buttonSimilarVacancy.setOnClickListener {
-            val vacancyId = it.id.toString()
-            findNavController().navigate(
-                R.id.action_vacancyFragment3_to_similarVacancy,
-                // SimilarVacanciesFragment.createArgs(vacancyId)
-            )
+            if (vacancyId != null) {
+                findNavController().navigate(
+                    R.id.action_vacancyFragment3_to_similarVacancy,
+                    SimilarFragment.createArgs(vacancyId!!)
+                )
+            }
+        }
+        binding.buttonAddToFavorites.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+
+        viewModel.getIsFavorite().observe(viewLifecycleOwner) { isFavorite ->
+            changeLikeButton(isFavorite)
+
         }
     }
+
+    private fun changeLikeButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.buttonAddToFavorites.setImageResource(R.drawable.ic_favorite_on)
+        } else {
+            binding.buttonAddToFavorites.setImageResource(R.drawable.ic_favorite)
+        }
+        binding.contactPersonPhoneData.setOnClickListener {
+            val phoneNumber = binding.contactPersonPhoneData.text.toString()
+            val call = Intent(
+                Intent.ACTION_DIAL,
+                Uri.fromParts("tel", phoneNumber, null))
+            requireContext().startActivity(call)
+        }
+        binding.contactPersonEmailData.setOnClickListener {
+            val emailAddress = binding.contactPersonEmailData.text.toString()
+            val emailIntent = Intent(
+                Intent.ACTION_SENDTO,
+                Uri.parse("mailto:$emailAddress"))
+            requireContext().startActivity(emailIntent)
+        }
+    }
+
 
     private fun render(stateLiveData: VacancyState) {
         when (stateLiveData) {
@@ -66,15 +102,7 @@ class VacancyFragment : Fragment() {
         with(binding) {
             jobName.text = vacancy.name
             jobSalary.text = ""
-            /*
-            ConvertSalary().formatSalaryWithCurrency(
-                vacancy.salaryFrom,
-                vacancy.salaryTo,
-                vacancy.salaryCurrency
-            )
 
-
-             */
             Glide.with(requireContext())
                 .load(vacancy.areaUrl)
                 .placeholder(R.drawable.ic_logo)
@@ -85,7 +113,7 @@ class VacancyFragment : Fragment() {
             companyName.text = vacancy.employerName
             companyCity.text = vacancy.areaName
             jobTime.text = vacancy.scheduleName
-            if (vacancy.experienceName == null) {
+            if (vacancy.experienceName.isEmpty()) {
                 neededExperience.visibility = GONE
                 yearsOfExperience.visibility = GONE
             } else {
@@ -102,30 +130,35 @@ class VacancyFragment : Fragment() {
 
     fun createContacts(vacancy: DetailVacancy) {
         with(binding) {
-            if (
-                vacancy.contactsName == null ||
-                vacancy.contactsEmail == null ||
-                vacancy.contactsPhones == null
-            ) {
-                contactInformation.visibility = GONE
-                contactPerson.visibility = GONE
-                contactInformation.visibility = GONE
-                contactPersonEmail.visibility = GONE
-                contactPersonPhone.visibility = GONE
-            }
-            if (vacancy.contactsName != null) {
+            if (vacancy.contactsName.isNotEmpty()) {
                 contactPersonData.text = vacancy.contactsName
+                contactInformation.visibility = VISIBLE
+                contactPerson.visibility = VISIBLE
+                contactPersonData.visibility = VISIBLE
             }
-            if (vacancy.contactsEmail != null) {
+            if (vacancy.contactsEmail.isNotEmpty()) {
                 contactPersonEmailData.text = vacancy.contactsEmail
+                contactInformation.visibility = VISIBLE
+                contactPersonEmail.visibility = VISIBLE
+                contactPersonEmailData.visibility = VISIBLE
+                contactPersonEmailData.setOnClickListener {
+                    // viewModel.email(vacancy.contactsEmail)
+                }
             }
-            if (vacancy.contactsPhones != null) {
+            if (vacancy.contactsPhones.isNotEmpty()) {
                 var phones = ""
                 vacancy.contactsPhones.forEach { phone ->
-                    phones += " ${phone}\n"
+                    phones += " ${phone.first}\n\n" +
+                        "${getString(R.string.contact_comment_text)}\n" +
+                        phone.second
+
                 }
                 contactPersonPhoneData.text = phones
+                contactInformation.visibility = VISIBLE
+                contactPersonPhone.visibility = VISIBLE
+                contactPersonPhoneData.visibility = VISIBLE
             }
+
         }
     }
 
@@ -189,5 +222,11 @@ class VacancyFragment : Fragment() {
         fun createArgs(vacancyId: String): Bundle =
             bundleOf(ARGS_VACANCY to vacancyId)
 
+    }
+}
+
+class MySpannableFactory : Spannable.Factory() {
+    override fun newSpannable(source: CharSequence): Spannable {
+        return source as? Spannable ?: super.newSpannable(source)
     }
 }

@@ -16,6 +16,7 @@ import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
@@ -25,10 +26,10 @@ import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.adapter.VacanciesAdapter
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
-import ru.practicum.android.diploma.ui.search.view_model.SearchViewModel
+import ru.practicum.android.diploma.ui.search.viewmodel.SearchViewModel
+import ru.practicum.android.diploma.ui.vacancy.VacancyFragment
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.debounce
-
 
 class SearchFragment : Fragment() {
 
@@ -37,7 +38,7 @@ class SearchFragment : Fragment() {
         coroutineScope = lifecycleScope,
         useLastParam = false
     ) { vacancy ->
-        startVacancyActivity(vacancy.id.toLong())
+        startVacancyActivity(vacancy.id)
     }
 
     private var vacanciesAdapter: VacanciesAdapter? = null
@@ -79,6 +80,12 @@ class SearchFragment : Fragment() {
         binding?.searchFieldClearButton?.setOnClickListener {
             hideKeyboard()
             binding?.inputSearchForm?.setText("")
+        }
+
+        binding?.filterButton?.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_searchFragment2_to_filterSettingsFragment
+            )
         }
 
         binding?.foundVacanciesList?.addOnScrollListener(object : OnScrollListener() {
@@ -154,9 +161,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun startVacancyActivity(
-        id: Long
+        id: String
     ) {
-
+        findNavController().navigate(
+            R.id.action_searchFragment2_to_vacancyFragment3,
+            VacancyFragment.createArgs(id)
+        )
     }
 
     private fun hideKeyboard() {

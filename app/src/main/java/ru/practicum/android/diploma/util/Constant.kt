@@ -8,8 +8,10 @@ object Constant {
     const val BAD_REQUEST_RESULT_CODE = 400
     const val CAPTCHA_INPUT = 403
     const val NOT_FOUND = 404
-    const val PER_PAGE_ITEMS = 20L
+    const val PER_PAGE_ITEMS = 20
     const val COMPANY_LOGO_RADIUS_12_PX = 12
+    const val FILTRATION_KEY = "key_for_filtration"
+    const val FILTRATION_PREFERENCES = "filtration_preferences"
     const val SEARCH_DEBOUNCE_WAIT_MILLIS = 2000L
     const val VACANCY_ITEM_CLICK_DEBOUNCE = 300L
     const val PAGINATION_AWAIT = 200L

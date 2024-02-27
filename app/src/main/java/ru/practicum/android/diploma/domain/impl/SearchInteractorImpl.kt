@@ -1,20 +1,21 @@
 package ru.practicum.android.diploma.domain.impl
 
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.domain.api.SearchInteractor
-import ru.practicum.android.diploma.domain.api.SearchRepository
-import ru.practicum.android.diploma.domain.api.SearchResponse
+import ru.practicum.android.diploma.Resource
+import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
+import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
+import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 class SearchInteractorImpl(
-    private val searchRepository: SearchRepository
+    private val searchRepository: VacanciesRepository
 ) : SearchInteractor {
 
-    override fun searchVacancies(
+    override fun getVacancies(
         vacancyName: String,
-        page: Long,
-        amount: Long
-    ): Flow<SearchResponse> {
-        return searchRepository.searchVacancies(vacancyName, page, amount)
+        page: Int,
+        amount: Int
+    ): Flow<Resource<VacanciesModel>> {
+        return searchRepository.getVacancies(vacancyName, page, amount)
     }
 
 }

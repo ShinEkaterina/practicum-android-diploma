@@ -3,14 +3,17 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.dto.Convertors
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
+import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
-import ru.practicum.android.diploma.util.Constant.BAD_REQUEST_RESULT_CODE
-import ru.practicum.android.diploma.util.Constant.NO_CONNECTIVITY_MESSAGE
-import ru.practicum.android.diploma.util.Constant.SERVER_ERROR
-import ru.practicum.android.diploma.util.Constant.SUCCESS_RESULT_CODE
+import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NO_INTERNET_RESULT_CODE
+import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.IndustriesModel
+import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.isConnected
 
 class RetrofitNetworkClient(
@@ -18,55 +21,77 @@ class RetrofitNetworkClient(
     private val context: Context
 ) : NetworkClient {
 
-    override suspend fun doRequest(
-        dto: Any
+    override suspend fun getVacancies(
+        dto: VacanciesSearchByNameRequest
     ): Response {
+        if (!isConnected(context)) {
+            return Response().apply {
+                responseCode = NO_INTERNET_RESULT_CODE
+            }
+        }
         return withContext(Dispatchers.IO) {
             try {
-                when (dto) {
-                    is VacanciesSearchByNameRequest -> {
-                        headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
-                            responseCode = SUCCESS_RESULT_CODE
-                        }
-                    }
-
-                    is VacancyDetailedRequest -> {
-                        headHunterService.searchConcreteVacancy(dto.id).apply {
-                            responseCode = SUCCESS_RESULT_CODE
-                        }
-                    }
-
-                    else -> {
-                        Response().apply {
-                            responseCode = BAD_REQUEST_RESULT_CODE
-                        }
-                    }
+                headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
+                    responseCode = Constant.SUCCESS_RESULT_CODE
                 }
-                // падает, если вместо Throwable стоит HttpException при тестировании поиска без интернета
             } catch (exception: Throwable) {
                 Response().apply {
-                    responseCode = SERVER_ERROR
+                    responseCode = Constant.SERVER_ERROR
                 }
             }
         }
     }
 
-    // с doRequest через When красивее было, что ревьюру не понравилось?
     override suspend fun getDetailVacancy(
         dto: VacancyDetailedRequest
     ): Response {
-        if (isConnected(context)) {
-            return Response().apply { responseCode = NO_CONNECTIVITY_MESSAGE }
+        if (!isConnected(context)) {
+            return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
         }
         return withContext(Dispatchers.IO) {
             try {
                 headHunterService.searchConcreteVacancy(dto.id).apply {
-                    responseCode = SUCCESS_RESULT_CODE
+                    responseCode = Constant.SUCCESS_RESULT_CODE
                 }
-                // подозреваю, что тут тоже надо поменять
             } catch (exception: Throwable) {
-                Response().apply { responseCode = SERVER_ERROR }
+                Response().apply { responseCode = Constant.SERVER_ERROR }
             }
         }
     }
+
+    override suspend fun getSimilarVacancies(
+        dto: VacanciesSimilarRequest
+    ): Response {
+        if (!isConnected(context)) {
+            return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                headHunterService.searchSimilarVacancies(dto.id).apply {
+                    responseCode = Constant.SUCCESS_RESULT_CODE
+                }
+            } catch (exception: Throwable) {
+                Response().apply { responseCode = Constant.SERVER_ERROR }
+            }
+        }
+    }
+
+    override suspend fun getIndustries(): Resource<List<IndustriesModel>> {
+        if (!isConnected(context)) {
+            return Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE)
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                Resource.Success(
+                    Convertors()
+                        .converterIndustriesResponseToIndustriesModelList(
+                            headHunterService.getIndustries()
+                        )
+                )
+            } catch (exception: Throwable) {
+                Resource.Error(ErrorMessage.getErrorMessage(exception.message.toString()))
+            }
+        }
+    }
+
 }

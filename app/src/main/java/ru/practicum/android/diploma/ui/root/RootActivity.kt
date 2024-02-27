@@ -33,7 +33,10 @@ class RootActivity : AppCompatActivity() {
         // Панель меню не отображается для фрагмента вакансий и фильтров
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.filterFragment, R.id.vacancyFragment3 -> {
+                R.id.filterSettingsFragment,
+                R.id.vacancyFragment3,
+                R.id.similarVacancy,
+                R.id.industrySelectionFragment -> {
                     binding?.bottomNavigationView?.isVisible = false
                 }
 

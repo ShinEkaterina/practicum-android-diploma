@@ -19,7 +19,7 @@ class VacanciesViewHolder(
         binding.companyName.text = model.companyName
         binding.companySalary.text = model.salary.ifEmpty { itemView.context.getString(R.string.salary_not_specified) }
 
-        if (model.logoUrls.isNotEmpty()) {
+        if (model.logoUrls?.isNotEmpty() == true) {
             Glide.with(itemView)
                 .load(model.logoUrls[0])
                 .centerCrop()
