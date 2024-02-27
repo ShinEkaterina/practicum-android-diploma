@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.isConnected
+import java.net.SocketTimeoutException
 
 class RetrofitNetworkClient(
     private val headHunterService: HeadHunterServiceApi,
@@ -36,7 +37,11 @@ class RetrofitNetworkClient(
                 headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
                     responseCode = Constant.SUCCESS_RESULT_CODE
                 }
-            } catch (exception: Exception) {
+            } catch (exception: HttpException) {
+                Response().apply {
+                    responseCode = Constant.SERVER_ERROR
+                }
+            } catch (exception: SocketTimeoutException) {
                 Response().apply {
                     responseCode = Constant.SERVER_ERROR
                 }
