@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.BAD_REQUEST_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NO_INTERNET_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.SUCCESS_RESULT_CODE
+import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.util.isConnected
@@ -86,6 +87,24 @@ class RetrofitNetworkClient(
                     Convertors()
                         .converterIndustriesResponseToIndustriesModelList(
                             headHunterService.getIndustries()
+                        )
+                )
+            } catch (exception: HttpException) {
+                Resource.Error(ErrorMessage.getErrorMessage(exception.message.toString()))
+            }
+        }
+    }
+
+    override suspend fun getAreas(): Resource<Map<AreasModel, List<AreasModel>>> {
+        if (!isConnected(context)) {
+            return Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE)
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                Resource.Success(
+                    Convertors()
+                        .converterAreasResponseToAreasModelList(
+                            headHunterService.getAreas()
                         )
                 )
             } catch (exception: HttpException) {
