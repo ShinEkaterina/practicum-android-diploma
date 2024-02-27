@@ -52,6 +52,12 @@
     <string name="empty_list">Список пуст</string>
     <string name="can_not_get_list">Не удалось получить список вакансий</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="reset_button_text">Сбросить</string>
+    <string name="apply_text">Применить</string>
+    <string name="dont_show_without_salary">Не показывать без зарплаты</string>
+    <string name="industry_text">Отрасль</string>
+    <string name="place_of_work_text">Место работы</string>
+    <string name="filtration_settings_text">Настройки фильтрации</string>
 
 
 </resources>
