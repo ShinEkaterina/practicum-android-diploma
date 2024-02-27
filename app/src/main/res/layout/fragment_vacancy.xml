@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:background="?attr/colorOnSecondary">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -79,6 +80,8 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/ys_display_bold"
                     android:text="@string/company_name_text"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="24sp" />
 
@@ -137,6 +140,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:fontFamily="@font/ys_display_bold"
+                android:autoLink="web"
+                android:linksClickable="true"
                 android:text="@string/vacancy_description_text"
                 android:textSize="@dimen/font_size_22"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
@@ -183,6 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:visibility="gone"
                 android:fontFamily="@font/ys_display_bold"
                 android:text="@string/contact_information_text"
                 android:textSize="@dimen/font_size_22"
@@ -196,6 +202,7 @@
                 android:layout_marginTop="32dp"
                 android:fontFamily="@font/ys_display_bold"
                 android:text="@string/contact_person_text"
+                android:visibility="gone"
                 android:textSize="@dimen/font_size_16"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_information" />
@@ -207,6 +214,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/contact_person_data"
+                android:visibility="gone"
                 android:textSize="@dimen/font_size_16"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_person" />
@@ -218,6 +226,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/ys_display_bold"
                 android:text="@string/contact_person_email_text"
+                android:visibility="gone"
                 android:textSize="@dimen/font_size_16"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_person_data" />
@@ -227,8 +236,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:autoLink="email"
+                android:visibility="gone"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/contact_person_email_data_text"
+                android:linksClickable="true"
                 android:textSize="@dimen/font_size_16"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_person_email" />
@@ -240,6 +252,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/ys_display_bold"
                 android:text="@string/contact_person_phone_text"
+                android:visibility="gone"
                 android:textSize="@dimen/font_size_16"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_person_email_data" />
@@ -249,8 +262,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:autoLink="phone"
+                android:linksClickable="true"
+                android:visibility="gone"
                 android:fontFamily="@font/ys_display_medium"
-                android:text="@string/contact_person_phone_data_text"
                 android:textSize="@dimen/font_size_16"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_person_phone" />
@@ -263,6 +278,7 @@
                 android:fontFamily="@font/ys_display_bold"
                 android:text="@string/contact_comment_text"
                 android:textSize="@dimen/font_size_16"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
                 app:layout_constraintTop_toBottomOf="@id/contact_person_phone_data" />
 
@@ -273,6 +289,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:lines="2"
+                android:visibility="gone"
                 android:paddingEnd="@dimen/margin_16"
                 android:text="@string/contact_comment_data_text"
                 app:layout_constraintStart_toStartOf="@id/card_view_company"
@@ -288,11 +305,10 @@
                 android:layout_marginVertical="24dp"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginEnd="@dimen/margin_16"
-                android:background="@color/blue"
+                android:background="@drawable/field_button"
                 android:text="@string/similar_vacancies_button_text"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:cornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -337,31 +353,37 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/server_error_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:visibility="gone">
+    <TextView
+        android:id="@+id/no_internet_placeholder"
+        style="@style/Text_Medium_22_500"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
+        android:padding="@dimen/margin_16"
+        android:text="@string/not_internet"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:drawableTopCompat="@drawable/placeholder_skull"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-        <ImageView
-            android:id="@+id/iv_server_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="200dp"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/ic_logo" />
-
-        <TextView
-            android:id="@+id/tv_server_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/ys_display_bold"
-            android:text=""
-            android:textSize="@dimen/font_size_22" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/placeholder_server_error"
+        style="@style/Text_Medium_22_500"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
+        android:padding="@dimen/margin_16"
+        android:text="@string/server_error"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:drawableTopCompat="@drawable/placeholder_cat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

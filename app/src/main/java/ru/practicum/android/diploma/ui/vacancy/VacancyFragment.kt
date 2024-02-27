@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.ui.vacancy
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,20 +11,21 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.ui.similar.SimilarFragment
 
 class VacancyFragment : Fragment() {
 
     private var vacancyId: String? = null
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: VacancyViewModel by viewModels<VacancyViewModel>()
+    private val viewModel: VacancyViewModel by viewModel<VacancyViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,18 +41,56 @@ class VacancyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         vacancyId = requireArguments().getString(ARGS_VACANCY)
-        viewModel.getVacancyDetail(vacancyId!!)
+        if (vacancyId != null) viewModel.showVacancyDetail(vacancyId!!)
         viewModel.vacancyState.observe(viewLifecycleOwner) { state ->
             render(state)
         }
         binding.buttonSimilarVacancy.setOnClickListener {
-            val vacancyId = it.id.toString()
-            findNavController().navigate(
-                R.id.action_vacancyFragment3_to_similarVacancy,
-                // SimilarVacanciesFragment.createArgs(vacancyId)
+            if (vacancyId != null) {
+                findNavController().navigate(
+                    R.id.action_vacancyFragment3_to_similarVacancy,
+                    SimilarFragment.createArgs(vacancyId!!)
+                )
+            }
+        }
+        binding.buttonAddToFavorites.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+
+        viewModel.getIsFavorite().observe(viewLifecycleOwner) { isFavorite ->
+            changeLikeButton(isFavorite)
+
+        }
+    }
+
+    private fun changeLikeButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.buttonAddToFavorites.setImageResource(R.drawable.ic_favorite_on)
+        } else {
+            binding.buttonAddToFavorites.setImageResource(R.drawable.ic_favorite)
+        }
+        binding.contactPersonPhoneData.setOnClickListener {
+            val phoneNumber = binding.contactPersonPhoneData.text.toString()
+
+            if (binding.contactPersonPhoneData.selectionStart != -1 &&
+                binding.contactPersonPhoneData.selectionEnd != -1
+            ) {
+                val call = Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", phoneNumber, null)
+                )
+                requireContext().startActivity(call)
+            }
+
+        }
+        binding.contactPersonEmailData.setOnClickListener {
+            val emailAddress = binding.contactPersonEmailData.text.toString()
+            val emailIntent = Intent(
+                Intent.ACTION_SENDTO,
+                Uri.parse("mailto:$emailAddress")
             )
+            requireContext().startActivity(emailIntent)
         }
     }
 
@@ -57,24 +98,16 @@ class VacancyFragment : Fragment() {
         when (stateLiveData) {
             is VacancyState.Loading -> loading()
             is VacancyState.Content -> content(stateLiveData.vacancy)
-            is VacancyState.Error -> connectionError()
-            is VacancyState.EmptyScreen -> defaultSearch()
+            is VacancyState.NotInternet -> connectionError()
+            is VacancyState.ErrorServer -> errorServer()
         }
     }
 
     private fun initViews(vacancy: DetailVacancy) {
         with(binding) {
             jobName.text = vacancy.name
-            jobSalary.text = ""
-            /*
-            ConvertSalary().formatSalaryWithCurrency(
-                vacancy.salaryFrom,
-                vacancy.salaryTo,
-                vacancy.salaryCurrency
-            )
+            jobSalary.text = vacancy.salary
 
-
-             */
             Glide.with(requireContext())
                 .load(vacancy.areaUrl)
                 .placeholder(R.drawable.ic_logo)
@@ -83,9 +116,14 @@ class VacancyFragment : Fragment() {
                 .into(ivCompany)
 
             companyName.text = vacancy.employerName
-            companyCity.text = vacancy.areaName
+            if (vacancy.address.isEmpty()) {
+                companyCity.text = vacancy.areaName
+            } else {
+                companyCity.text = vacancy.address
+            }
+
             jobTime.text = vacancy.scheduleName
-            if (vacancy.experienceName == null) {
+            if (vacancy.experienceName.isEmpty()) {
                 neededExperience.visibility = GONE
                 yearsOfExperience.visibility = GONE
             } else {
@@ -102,30 +140,42 @@ class VacancyFragment : Fragment() {
 
     fun createContacts(vacancy: DetailVacancy) {
         with(binding) {
-            if (
-                vacancy.contactsName == null ||
-                vacancy.contactsEmail == null ||
-                vacancy.contactsPhones == null
-            ) {
-                contactInformation.visibility = GONE
-                contactPerson.visibility = GONE
-                contactInformation.visibility = GONE
-                contactPersonEmail.visibility = GONE
-                contactPersonPhone.visibility = GONE
-            }
-            if (vacancy.contactsName != null) {
+            if (vacancy.contactsName.isNotEmpty()) {
                 contactPersonData.text = vacancy.contactsName
+                contactInformation.visibility = VISIBLE
+                contactPerson.visibility = VISIBLE
+                contactPersonData.visibility = VISIBLE
             }
-            if (vacancy.contactsEmail != null) {
+            if (vacancy.contactsEmail.isNotEmpty()) {
                 contactPersonEmailData.text = vacancy.contactsEmail
+                contactInformation.visibility = VISIBLE
+                contactPersonEmail.visibility = VISIBLE
+                contactPersonEmailData.visibility = VISIBLE
+
             }
-            if (vacancy.contactsPhones != null) {
+            if (vacancy.contactsPhones.isNotEmpty()) {
                 var phones = ""
                 vacancy.contactsPhones.forEach { phone ->
-                    phones += " ${phone}\n"
+                    phones += phone.first +
+                        isEmptyComment(phone.second)
+
                 }
-                contactPersonPhoneData.text = phones
+
+                contactPersonPhoneData.text =
+                    HtmlCompat.fromHtml(phones, HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM)
+                contactInformation.visibility = VISIBLE
+                contactPersonPhone.visibility = VISIBLE
+                contactPersonPhoneData.visibility = VISIBLE
             }
+
+        }
+    }
+
+    private fun isEmptyComment(comment: String?): String {
+        return if (comment.isNullOrEmpty()) {
+            ""
+        } else {
+            "<br><br><b>${getString(R.string.contact_comment_text)}</b><br>" + comment + "<br>"
         }
     }
 
@@ -153,29 +203,38 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loading() {
-        binding.progressBar.visibility = VISIBLE
-        binding.fragmentNotifications.visibility = GONE
-
+        with(binding) {
+            progressBar.visibility = VISIBLE
+            fragmentNotifications.visibility = GONE
+            placeholderServerError.visibility = GONE
+            noInternetPlaceholder.visibility = GONE
+        }
     }
 
     private fun content(data: DetailVacancy) {
-        binding.progressBar.visibility = GONE
         initViews(data)
-        binding.fragmentNotifications.visibility = VISIBLE
-
+        with(binding) {
+            progressBar.visibility = GONE
+            fragmentNotifications.visibility = VISIBLE
+            placeholderServerError.visibility = GONE
+            noInternetPlaceholder.visibility = GONE
+        }
     }
 
-    private fun defaultSearch() {
-        binding.progressBar.visibility = GONE
-        binding.fragmentNotifications.visibility = GONE
+    private fun errorServer() {
+        with(binding) {
+            progressBar.visibility = GONE
+            fragmentNotifications.visibility = GONE
+            placeholderServerError.visibility = VISIBLE
+            noInternetPlaceholder.visibility = GONE
+        }
     }
-
     private fun connectionError() {
         with(binding) {
             progressBar.visibility = GONE
             fragmentNotifications.visibility = GONE
-            tvServerError.visibility = VISIBLE
-            ivServerError.visibility = VISIBLE
+            placeholderServerError.visibility = GONE
+            noInternetPlaceholder.visibility = VISIBLE
         }
     }
 

@@ -5,8 +5,8 @@ data class VacancyModel(
     val vacancyName: String,
     val city: String,
     val salary: String,
-    val companyName: String,
-    val logoUrls: ArrayList<String>,
+    val companyName: String?,
+    val logoUrls: String?,
     val details: Details?
 )
 data class Details(
