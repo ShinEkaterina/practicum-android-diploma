@@ -15,7 +15,6 @@
         android:textColor="?attr/colorOnPrimary"
         app:layout_constraintTop_toTopOf="@id/industry_region_button"
         app:layout_constraintBottom_toBottomOf="@id/industry_region_button"
-
         android:text="Москва"
         android:paddingStart="@dimen/margin_16"
         android:fontFamily="@font/ys_display_regular"
