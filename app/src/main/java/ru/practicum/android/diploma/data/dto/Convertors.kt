@@ -152,13 +152,15 @@ class Convertors {
                     city = vacancy.area.name,
                     salary = getSalaryString(vacancy.salary),
                     companyName = vacancy.employment?.name,
-                    logoUrls = if (vacancy.employer?.logoUrls == null)
+                    logoUrls = if (vacancy.employer?.logoUrls == null) {
                         arrayListOf()
-                    else arrayListOf(
-                        vacancy.employer.logoUrls.logoUrl90,
-                        vacancy.employer.logoUrls.logoUrl240,
-                        vacancy.employer.logoUrls.logoUrlOrigin
-                    )
+                    } else {
+                        arrayListOf(
+                            vacancy.employer.logoUrls.logoUrl90,
+                            vacancy.employer.logoUrls.logoUrl240,
+                            vacancy.employer.logoUrls.logoUrlOrigin
+                        )
+                    }
                 )
             )
         }

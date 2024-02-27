@@ -115,8 +115,16 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         watcher = object : TextWatcher {
-            override fun beforeTextChanged(str: CharSequence?, start: Int, count: Int, after: Int) { /* cannot be removed */ }
-            override fun afterTextChanged(str: Editable?) { /* cannot be removed */ }
+            override fun beforeTextChanged(
+                str: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) { /* cannot be removed */ }
+
+            override fun afterTextChanged(
+                str: Editable?
+            ) { /* cannot be removed */ }
 
             override fun onTextChanged(
                 searchText: CharSequence?,

@@ -19,7 +19,7 @@ import ru.practicum.android.diploma.util.isConnected
 class SearchViewModel(
     private val searchInteractor: SearchInteractor,
     private val application: Application
-): ViewModel() {
+) : ViewModel() {
 
     private val renderStateLiveDate = MutableLiveData<SearchRenderState>()
     fun observeRenderState(): LiveData<SearchRenderState> = renderStateLiveDate
@@ -83,7 +83,11 @@ class SearchViewModel(
             }
             if (renderStateLiveDate.value !is SearchRenderState.Loading) {
                 renderStateLiveDate.postValue(SearchRenderState.PaginationLoading)
-                searchInteractor.getVacancies(paginationStringRequest, currentPage++, Constant.PER_PAGE_ITEMS).collect { response ->
+                searchInteractor.getVacancies(
+                    paginationStringRequest,
+                    currentPage++,
+                    Constant.PER_PAGE_ITEMS
+                ).collect { response ->
                     if (response is Resource.Success<*>) {
                         loadedVacancies.removeLast()
                         loadedVacancies.addAll(response.data?.vacancies ?: arrayListOf())
