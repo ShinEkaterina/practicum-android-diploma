@@ -20,8 +20,7 @@ import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 class VacanciesRepositoryImpl(
-    private val networkClient: NetworkClient,
-    private val application: Application
+    private val networkClient: NetworkClient
 ) : VacanciesRepository {
 
     /*override fun getVacancies(

@@ -38,8 +38,7 @@ val repositoryModule = module {
 
     single<VacanciesRepository> {
         VacanciesRepositoryImpl(
-            networkClient = get(),
-            application = get()
+            networkClient = get()
         )
     }
 
