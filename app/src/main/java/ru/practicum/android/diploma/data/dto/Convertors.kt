@@ -7,9 +7,11 @@ import ru.practicum.android.diploma.data.dto.field.EmployerDto
 import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
 import ru.practicum.android.diploma.data.dto.field.SalaryDto
+import ru.practicum.android.diploma.data.dto.respone.AreasResponse
 import ru.practicum.android.diploma.data.dto.respone.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
+import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.domain.model.VacanciesModel
@@ -146,6 +148,22 @@ class Convertors {
         return listIndustriesModel.sortedBy { it.name }
     }
 
+    fun converterAreasResponseToAreasModelList(response: List<AreasResponse>): Map<AreasModel, List<AreasModel>> {
+        val mapAreasModel = mutableMapOf<AreasModel, List<AreasModel>>()
+        response.forEach {
+            mapAreasModel.put(
+                AreasModel(
+                    id = it.id,
+                    parentId = null,
+                    name = it.name,
+                    areas = null
+                ),
+                createAreasList(it.areas)
+            )
+        }
+        return mapAreasModel
+    }
+
     private fun createPhone(phone: PhonesDto): Pair<String, String> {
         val phoneNumber = "+${phone.country}" +
             " (${phone.city})" +
@@ -177,6 +195,25 @@ class Convertors {
             )
         }
         return listIndustriesModel
+    }
+
+    private fun createAreasList(nestedAreasList: List<AreasModel>?): List<AreasModel> {
+        val listAreasModel = mutableListOf<AreasModel>()
+        nestedAreasList?.forEach {
+            if (it.areas?.isEmpty() == true) {
+                listAreasModel.add(
+                    AreasModel(
+                        id = it.id,
+                        parentId = it.parentId,
+                        name = it.name,
+                        areas = null
+                    )
+                )
+            } else {
+                listAreasModel.addAll(createAreasList(it.areas))
+            }
+        }
+        return listAreasModel.sortedBy { it.name }
     }
 
     companion object {
