@@ -37,11 +37,16 @@ val repositoryModule = module {
     }
 
     single<VacanciesRepository> {
-        VacanciesRepositoryImpl(networkClient = get())
+        VacanciesRepositoryImpl(
+            networkClient = get()
+        )
     }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(get(), context = get())
+        RetrofitNetworkClient(
+            headHunterService = get(),
+            context = get()
+        )
     }
 
     single {
@@ -66,7 +71,9 @@ val repositoryModule = module {
         )
     }
 
-    single { VacancyDbConvertor() }
+    single {
+        VacancyDbConvertor()
+    }
 
     // Database
     single {
@@ -76,4 +83,5 @@ val repositoryModule = module {
             "database_2.db"
         ).addMigrations().build()
     }
+
 }

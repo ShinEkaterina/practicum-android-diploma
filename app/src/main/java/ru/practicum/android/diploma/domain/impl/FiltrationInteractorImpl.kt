@@ -8,13 +8,17 @@ import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 
-class FiltrationInteractorImpl(private val repository: FiltrationRepository) :
-    FiltrationInteractor {
+class FiltrationInteractorImpl(
+    private val repository: FiltrationRepository
+) : FiltrationInteractor {
+
     override fun getFilterParametersFromStorage(): Flow<FilterParameters> {
         return repository.getFilterParametersFromStorage()
     }
 
-    override fun setFilterParametersToStorage(filterParameters: FilterParameters): Flow<Boolean> {
+    override fun setFilterParametersToStorage(
+        filterParameters: FilterParameters
+    ): Flow<Boolean> {
         return repository.setFilterParametersToStorage(filterParameters)
     }
 
@@ -25,4 +29,5 @@ class FiltrationInteractorImpl(private val repository: FiltrationRepository) :
     override fun getAreas(): Flow<Resource<Map<AreasModel, List<AreasModel>>>> {
         return repository.getAreas()
     }
+
 }

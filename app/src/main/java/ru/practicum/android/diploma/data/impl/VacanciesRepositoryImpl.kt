@@ -19,10 +19,14 @@ import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 class VacanciesRepositoryImpl(
-    private val networkClient: NetworkClient,
+    private val networkClient: NetworkClient
 ) : VacanciesRepository {
-    override fun search(expression: String, page: Int): Flow<Resource<VacanciesModel>> = flow {
-        val response = networkClient.doRequest(VacanciesSearchByNameRequest(expression, page))
+
+    /*override fun getVacancies(
+        expression: String,
+        page: Int
+    ): Flow<Resource<VacanciesModel>> = flow {
+        val response = networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page))
         when (response.responseCode) {
             SUCCESS_RESULT_CODE -> {
                 emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
@@ -31,6 +35,24 @@ class VacanciesRepositoryImpl(
             else -> {
                 emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
             }
+        }
+    }*/
+
+    override fun getVacancies(
+        expression: String,
+        page: Int,
+        amount: Int
+    ): Flow<Resource<VacanciesModel>> = flow {
+        val response = networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
+        if (response.responseCode == SUCCESS_RESULT_CODE) {
+            emit(
+                Resource.Success(
+                    Convertors()
+                        .convertorToVacanciesModel(response as SearchResponse)
+                )
+            )
+        } else {
+            emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
         }
     }
 
@@ -46,27 +68,27 @@ class VacanciesRepositoryImpl(
         }
     }
 
-    override fun getSimilarVacancies(id: String): Flow<Resource<VacanciesModel>> =
-        flow {
-            val response = networkClient.getSimilarVacancies(VacanciesSimilarRequest(id))
-            when (response.responseCode) {
-                SUCCESS_RESULT_CODE -> {
-                    emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
-                }
-
-                NO_INTERNET_RESULT_CODE -> {
-                    emit(Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE))
-                }
-
-                NOT_FOUND_RESULT_CODE -> {
-                    emit(Resource.Error(ErrorMessage.NOT_FOUND))
-                }
-
-                else -> {
-                    emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
-                }
-
+    override fun getSimilarVacancies(
+        id: String
+    ): Flow<Resource<VacanciesModel>> = flow {
+        val response = networkClient.getSimilarVacancies(VacanciesSimilarRequest(id))
+        when (response.responseCode) {
+            SUCCESS_RESULT_CODE -> {
+                emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
             }
 
+            NO_INTERNET_RESULT_CODE -> {
+                emit(Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE))
+            }
+
+            NOT_FOUND_RESULT_CODE -> {
+                emit(Resource.Error(ErrorMessage.NOT_FOUND))
+            }
+
+            else -> {
+                emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+            }
         }
+    }
+
 }

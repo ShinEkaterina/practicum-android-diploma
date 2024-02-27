@@ -35,7 +35,9 @@ class Convertors {
     private fun getEmployerLogoUrl(employer: EmployerDto?): String =
         employer?.logoUrls?.logoUrl240 ?: ""
 
-    private fun getReadableNumber(number: Int): String {
+    private fun getReadableNumber(number: Int?): String {
+        if (number == null) return "0"
+
         // Создаем экземпляр DecimalFormat, явно приводя NumberFormat к нужному типу
         val formatter = NumberFormat.getNumberInstance(Locale.US) as DecimalFormat
         val symbols = formatter.decimalFormatSymbols // Получаем текущие символы форматирования
@@ -119,17 +121,57 @@ class Convertors {
             city = vacancyDto.area.name,
             salary = getSalaryString(vacancyDto.salary),
             companyName = null,
-            logoUrls = vacancyDto.employer?.logoUrls?.logoUrl240,
+            logoUrls = arrayListOf(vacancyDto.employer?.logoUrls?.logoUrl240),
             details = null,
         )
     }
 
-    fun convertorToSearchList(searchList: SearchResponse): VacanciesModel {
+    fun convertorToSearchList(
+        searchList: SearchResponse
+    ): VacanciesModel {
         return VacanciesModel(
-            found = searchList.found,
-            maxPages = searchList.pages,
-            currentPages = searchList.page,
-            listVacancy = searchList.items?.map { vacancyDto -> dtoToModel(vacancyDto) },
+            foundAsNumber = searchList.found ?: 0,
+            foundAsString = getReadableNumber(searchList.found),
+            pages = searchList.pages ?: 0,
+//            currentPages = searchList.page,
+            vacancies = searchList.items?.map { vacancyDto -> dtoToModel(vacancyDto) }
+        )
+    }
+
+    fun convertorToVacanciesModel(
+        vacanciesDto: SearchResponse
+    ): VacanciesModel {
+        val vacancies = vacanciesDto.items
+        val domainVacancies = arrayListOf<VacancyModel>()
+
+        vacancies?.forEach { vacancy ->
+            domainVacancies.add(
+                VacancyModel(
+                    id = vacancy.id,
+                    vacancyName = vacancy.name,
+                    city = vacancy.area.name,
+                    salary = getSalaryString(vacancy.salary),
+                    companyName = vacancy.employment?.name,
+                    logoUrls = if (vacancy.employer?.logoUrls == null) {
+                        arrayListOf()
+                    } else {
+                        arrayListOf(
+                            vacancy.employer.logoUrls.logoUrl90,
+                            vacancy.employer.logoUrls.logoUrl240,
+                            vacancy.employer.logoUrls.logoUrlOrigin
+                        )
+                    }
+                )
+            )
+        }
+
+        return VacanciesModel(
+            vacanciesDto.pages ?: 0,
+            vacanciesDto.found ?: 0,
+            getReadableNumber(
+                vacanciesDto.found
+            ),
+            domainVacancies
         )
     }
 

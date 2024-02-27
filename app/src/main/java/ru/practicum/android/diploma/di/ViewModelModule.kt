@@ -3,9 +3,9 @@ package ru.practicum.android.diploma.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.ui.favorites.FavoritesViewModel
+import ru.practicum.android.diploma.ui.search.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.ui.filter.industry.IndustrySelectionFragmentViewModel
 import ru.practicum.android.diploma.ui.filter.settings.FilterSettingsFragmentViewModel
-import ru.practicum.android.diploma.ui.search.viewholder.SearchViewModel
 import ru.practicum.android.diploma.ui.similar.SimilarViewModel
 import ru.practicum.android.diploma.ui.vacancy.VacancyViewModel
 
@@ -23,8 +23,12 @@ val viewModelModule = module {
             favoriteInteractor = get()
         )
     }
+
     viewModel {
-        SearchViewModel(searchInteractor = get())
+        SearchViewModel(
+            searchInteractor = get(),
+            application = get()
+        )
     }
 
     viewModel {
@@ -34,7 +38,9 @@ val viewModelModule = module {
     viewModel {
         IndustrySelectionFragmentViewModel(filtrationInteractor = get())
     }
+
     viewModel {
         SimilarViewModel(similarInteractor = get())
     }
+
 }

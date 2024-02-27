@@ -48,6 +48,36 @@
     <string name="placeholder">placeholder</string>
     <string name="image_not_list">изображение состояния нет списка</string>
     <string name="failed_to_get_list">Не удалось получить\nсписок</string>
+    <string name="clear_button">Кнопка очистки всего текста, введенного в поле ввода</string>
+    <string name="search_button">Кнопка поиска вакансий</string>
+    <string name="vacancy_no_internet">Нет интернета</string>
+    <string name="vacancy_nothing_found">Не удалось получить\nсписок вакансий</string>
+    <string name="salary_not_specified">Зарплата не указана</string>
+    <string name="salary_from">от</string>
+    <string name="salary_to">до</string>
+    <string name="currency_rur_rub">₽</string>
+    <string name="currency_byr_bin">p.</string>
+    <string name="currency_usd">$</string>
+    <string name="currency_eur">€</string>
+    <string name="currency_kzt">₸</string>
+    <string name="currency_uah">₴</string>
+    <string name="currency_azn">₼</string>
+    <string name="currency_uzs">лв</string>
+    <string name="currency_gel">₾</string>
+    <string name="currency_kgt">⃀</string>
+    <string name="currency_unknown">\?</string>
+    <string name="no_internet_connection">Проверьте подключение к интернету</string>
+    <string name="placeholder_description">Изображение-заглушка, находящееся на экране до тех пор, пока не будет осуществлен успешный поиск вакансий</string>
+    <plurals name="vacancies">
+        <item quantity="zero">Найдено %1$s вакансий</item>
+        <item quantity="one">Найдена %1$s вакансия</item>
+        <item quantity="two">Найдено %1$s вакансии</item>
+        <item quantity="few">Найдено %1$s вакансии</item>
+        <item quantity="many">Найдено %1$s вакансий</item>
+        <item quantity="other">Найдено %1$s вакансий</item>
+    </plurals>
+    <string name="no_vacancies_found">Таких вакансий нет</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_list">Список пуст</string>
     <string name="can_not_get_list">Не удалось получить список вакансий</string>

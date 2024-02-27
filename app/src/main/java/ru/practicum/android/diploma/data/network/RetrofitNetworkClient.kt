@@ -11,12 +11,11 @@ import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameReques
 import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
-import ru.practicum.android.diploma.data.dto.respone.Response.Companion.BAD_REQUEST_RESULT_CODE
 import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NO_INTERNET_RESULT_CODE
-import ru.practicum.android.diploma.data.dto.respone.Response.Companion.SUCCESS_RESULT_CODE
 import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.IndustriesModel
+import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.isConnected
 
 class RetrofitNetworkClient(
@@ -24,55 +23,57 @@ class RetrofitNetworkClient(
     private val context: Context
 ) : NetworkClient {
 
-    override suspend fun doRequest(
-        dto: Any
+    override suspend fun getVacancies(
+        dto: VacanciesSearchByNameRequest
     ): Response {
+        if (!isConnected(context)) {
+            return Response().apply {
+                responseCode = NO_INTERNET_RESULT_CODE
+            }
+        }
         return withContext(Dispatchers.IO) {
             try {
-                when (dto) {
-                    is VacanciesSearchByNameRequest -> {
-                        headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
-                            responseCode = SUCCESS_RESULT_CODE
-                        }
-                    }
-
-                    else -> {
-                        Response().apply {
-                            responseCode = BAD_REQUEST_RESULT_CODE
-                        }
-                    }
+                headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
+                    responseCode = Constant.SUCCESS_RESULT_CODE
                 }
             } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
-
+                Response().apply {
+                    responseCode = Constant.SERVER_ERROR
+                }
             }
         }
     }
-    override suspend fun getDetailVacancy(dto: VacancyDetailedRequest): Response {
+
+    override suspend fun getDetailVacancy(
+        dto: VacancyDetailedRequest
+    ): Response {
         if (!isConnected(context)) {
             return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
         }
         return withContext(Dispatchers.IO) {
             try {
                 headHunterService.searchConcreteVacancy(dto.id).apply {
-                    responseCode = SUCCESS_RESULT_CODE
+                    responseCode = Constant.SUCCESS_RESULT_CODE
                 }
             } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
+                Response().apply { responseCode = Constant.SERVER_ERROR }
             }
         }
     }
-    override suspend fun getSimilarVacancies(dto: VacanciesSimilarRequest): Response {
+
+    override suspend fun getSimilarVacancies(
+        dto: VacanciesSimilarRequest
+    ): Response {
         if (!isConnected(context)) {
             return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
         }
         return withContext(Dispatchers.IO) {
             try {
                 headHunterService.searchSimilarVacancies(dto.id).apply {
-                    responseCode = SUCCESS_RESULT_CODE
+                    responseCode = Constant.SUCCESS_RESULT_CODE
                 }
             } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
+                Response().apply { responseCode = Constant.SERVER_ERROR }
             }
         }
     }
@@ -112,4 +113,5 @@ class RetrofitNetworkClient(
             }
         }
     }
+
 }

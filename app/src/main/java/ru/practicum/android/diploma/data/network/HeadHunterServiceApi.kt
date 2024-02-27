@@ -16,8 +16,9 @@ interface HeadHunterServiceApi {
     suspend fun searchVacancies(
         @Query("text") name: String,
         @Query("page") page: Int,
-        @Query("per_page") amount: Long
+        @Query("per_page") amount: Int
     ): SearchResponse
+
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: Practicum HHit (krinova258@mail.ru)"
@@ -26,6 +27,7 @@ interface HeadHunterServiceApi {
     suspend fun searchSimilarVacancies(
         @Path("id") id: String,
     ): SearchResponse
+
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: Practicum HHit/1.0 (krinova258@mail.ru)"
@@ -40,4 +42,5 @@ interface HeadHunterServiceApi {
 
     @GET("/areas")
     suspend fun getAreas(): List<AreasResponse>
+
 }

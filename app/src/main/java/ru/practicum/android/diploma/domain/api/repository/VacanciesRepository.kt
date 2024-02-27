@@ -6,9 +6,19 @@ import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 interface VacanciesRepository {
-    fun search(expression: String, page: Int): Flow<Resource<VacanciesModel>>
+
+    fun getVacancies(
+        expression: String,
+        page: Int,
+        amount: Int
+    ): Flow<Resource<VacanciesModel>>
+
     fun getDetailVacancy(
         id: String
     ): Flow<Resource<DetailVacancy>>
-    fun getSimilarVacancies(id: String): Flow<Resource<VacanciesModel>>
+
+    fun getSimilarVacancies(
+        id: String
+    ): Flow<Resource<VacanciesModel>>
+
 }

@@ -18,8 +18,10 @@ val interactorModule = module {
         FavoriteInteractorImpl(favoriteRepository = get())
     }
 
-    factory<SearchInteractor> {
-        SearchInteractorImpl(repository = get())
+    single<SearchInteractor> {
+        SearchInteractorImpl(
+            searchRepository = get()
+        )
     }
     factory<DetailVacancyInteractor> {
         DetailVacancyInteractorImpl(repository = get())
@@ -30,4 +32,6 @@ val interactorModule = module {
     }
     factory<SimilarInteractor> {
         SimilarInteractorImpl(repository = get())
-    } }
+    }
+
+}
