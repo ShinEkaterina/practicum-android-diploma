@@ -120,7 +120,7 @@ class Convertors {
             vacancyName = vacancyDto.name,
             city = vacancyDto.area.name,
             salary = getSalaryString(vacancyDto.salary),
-            companyName = null,
+            companyName = getEmployerName(vacancyDto.employer),
             logoUrls = arrayListOf(vacancyDto.employer?.logoUrls?.logoUrl240),
             details = null,
         )
@@ -151,7 +151,7 @@ class Convertors {
                     vacancyName = vacancy.name,
                     city = vacancy.area.name,
                     salary = getSalaryString(vacancy.salary),
-                    companyName = vacancy.employment?.name,
+                    companyName = getEmployerName(vacancy.employer),
                     logoUrls = if (vacancy.employer?.logoUrls == null) {
                         arrayListOf()
                     } else {
