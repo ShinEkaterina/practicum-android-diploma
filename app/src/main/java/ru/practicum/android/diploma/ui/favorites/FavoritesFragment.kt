@@ -56,10 +56,10 @@ class FavoritesFragment : Fragment() {
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
             false
-        ) { vavancy ->
+        ) { vacancy ->
             findNavController().navigate(
                 R.id.action_favoritesFragment_to_vacancyFragment3,
-                bundleOf(VacancyFragment.ARGS_VACANCY to vavancy.id)
+                bundleOf(VacancyFragment.ARGS_VACANCY to vacancy.id)
             )
 
         }
