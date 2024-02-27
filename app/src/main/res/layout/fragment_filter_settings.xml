@@ -63,7 +63,6 @@
 
         <EditText
             android:id="@+id/input_search_salary"
-            style="@style/TextStyleMedium16_500"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="center"
@@ -72,25 +71,27 @@
             android:cursorVisible="true"
             android:drawablePadding="4dp"
             android:foregroundGravity="center_horizontal"
-            android:hint="@string/input_text"
+            android:textSize="@dimen/font_size_16"
+            android:textColorHint="@color/gray"
+            android:hint="@string/enter_salary"
             android:imeOptions="actionDone"
             android:inputType="text"
-            android:padding="8dp"
-            android:paddingStart="8dp"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
             android:paddingEnd="8dp"
             android:textCursorDrawable="@drawable/cursor" />
 
-        <ImageView
-            android:id="@+id/search_image"
+        <TextView
+            android:id="@+id/text_expected_salary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_marginStart="@dimen/margin_16"
-            android:contentDescription="@string/todo"
-            android:padding="@dimen/margin_16"
-            android:src="@drawable/ic_search"
-            android:visibility="visible"
-            app:tint="@color/black" />
+            android:layout_marginTop="@dimen/margin_8"
+            android:fontFamily="@font/ys_display_regular"
+            android:text="@string/wanted_salary"
+            android:textColor="@color/gray"
+            app:layout_constraintStart_toStartOf="@+id/payment_field"
+            app:layout_constraintTop_toTopOf="@+id/payment_field" />
 
         <ImageView
             android:id="@+id/clear_button"

@@ -58,6 +58,8 @@
     <string name="industry_text">Отрасль</string>
     <string name="place_of_work_text">Место работы</string>
     <string name="filtration_settings_text">Настройки фильтрации</string>
-
+    <string name="country">Страна</string>
+    <string name="choose_button_text">Выбрать</string>
+    <string name="wanted_salary">Ожидаемая зарплата</string>
 
 </resources>
