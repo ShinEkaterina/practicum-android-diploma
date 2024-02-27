@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Convertors
@@ -35,7 +36,7 @@ class RetrofitNetworkClient(
                 headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
                     responseCode = Constant.SUCCESS_RESULT_CODE
                 }
-            } catch (exception: Throwable) {
+            } catch (exception: HttpException) {
                 Response().apply {
                     responseCode = Constant.SERVER_ERROR
                 }
@@ -54,7 +55,7 @@ class RetrofitNetworkClient(
                 headHunterService.searchConcreteVacancy(dto.id).apply {
                     responseCode = Constant.SUCCESS_RESULT_CODE
                 }
-            } catch (exception: Throwable) {
+            } catch (exception: HttpException) {
                 Response().apply { responseCode = Constant.SERVER_ERROR }
             }
         }
@@ -71,7 +72,7 @@ class RetrofitNetworkClient(
                 headHunterService.searchSimilarVacancies(dto.id).apply {
                     responseCode = Constant.SUCCESS_RESULT_CODE
                 }
-            } catch (exception: Throwable) {
+            } catch (exception: HttpException) {
                 Response().apply { responseCode = Constant.SERVER_ERROR }
             }
         }
@@ -89,7 +90,7 @@ class RetrofitNetworkClient(
                             headHunterService.getIndustries()
                         )
                 )
-            } catch (exception: Throwable) {
+            } catch (exception: HttpException) {
                 Resource.Error(ErrorMessage.getErrorMessage(exception.message.toString()))
             }
         }
@@ -107,7 +108,7 @@ class RetrofitNetworkClient(
                             headHunterService.getAreas()
                         )
                 )
-            } catch (exception: Throwable) {
+            } catch (exception: HttpException) {
                 Resource.Error(ErrorMessage.getErrorMessage(exception.message.toString()))
             }
         }

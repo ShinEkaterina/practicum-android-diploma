@@ -48,8 +48,10 @@ class VacanciesRepositoryImpl(
         val response = networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
         if (response.responseCode == SUCCESS_RESULT_CODE) {
             emit(
-                Resource.Success(Convertors()
-                    .convertorToVacanciesModel(response as SearchResponse))
+                Resource.Success(
+                    Convertors()
+                        .convertorToVacanciesModel(response as SearchResponse)
+                )
             )
         } else {
             emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))

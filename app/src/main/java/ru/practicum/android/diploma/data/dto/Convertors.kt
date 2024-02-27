@@ -145,17 +145,32 @@ class Convertors {
         val domainVacancies = arrayListOf<VacancyModel>()
 
         vacancies?.forEach { vacancy ->
-            domainVacancies.add(VacancyModel(
-                id = vacancy.id,
-                vacancyName = vacancy.name,
-                city = vacancy.area.name,
-                salary = getSalaryString(vacancy.salary),
-                companyName = vacancy.employment?.name,
-                logoUrls = if (vacancy.employer?.logoUrls == null) arrayListOf() else arrayListOf(vacancy.employer.logoUrls.logoUrl90, vacancy.employer.logoUrls.logoUrl240, vacancy.employer.logoUrls.logoUrlOrigin)
-            ))
+            domainVacancies.add(
+                VacancyModel(
+                    id = vacancy.id,
+                    vacancyName = vacancy.name,
+                    city = vacancy.area.name,
+                    salary = getSalaryString(vacancy.salary),
+                    companyName = vacancy.employment?.name,
+                    logoUrls = if (vacancy.employer?.logoUrls == null)
+                        arrayListOf()
+                    else arrayListOf(
+                        vacancy.employer.logoUrls.logoUrl90,
+                        vacancy.employer.logoUrls.logoUrl240,
+                        vacancy.employer.logoUrls.logoUrlOrigin
+                    )
+                )
+            )
         }
 
-        return VacanciesModel(vacanciesDto.pages ?: 0, vacanciesDto.found ?: 0, getReadableNumber(vacanciesDto.found), domainVacancies)
+        return VacanciesModel(
+            vacanciesDto.pages ?: 0,
+            vacanciesDto.found ?: 0,
+            getReadableNumber(
+                vacanciesDto.found
+            ),
+            domainVacancies
+        )
     }
 
     fun converterIndustriesResponseToIndustriesModelList(response: List<IndustriesResponse>): List<IndustriesModel> {
