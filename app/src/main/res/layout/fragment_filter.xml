@@ -19,28 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/vacancy_text">
-
-        <ImageView
-            android:id="@+id/button_add_to_favorites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/margin_8"
-            android:contentDescription="@string/todo"
-            android:paddingEnd="@dimen/font_size_16"
-            android:src="@drawable/ic_favorite"
-            tools:ignore="RtlSymmetry" />
-
-        <ImageView
-            android:id="@+id/button_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/margin_16"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/ic_share"
-            tools:ignore="RtlSymmetry" />
+        app:title="@string/filtration_settings_text">
     </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.button.MaterialButton

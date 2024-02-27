@@ -45,6 +45,5 @@
     <string name="dont_show_without_salary">Не показывать без зарплаты</string>
     <string name="apply_text">Принять</string>
     <string name="reset_button_text">Сбросить</string>
-
-
+    <string name="filtration_settings_text">Настройки фильтрации</string>
 </resources>
