@@ -24,7 +24,7 @@ val interactorModule = module {
         )
     }
     factory<DetailVacancyInteractor> {
-        DetailVacancyInteractorImpl(repository = get())
+        DetailVacancyInteractorImpl(repository = get(), externalNavigator = get())
     }
 
     factory<FiltrationInteractor> {
