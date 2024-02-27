@@ -36,7 +36,7 @@ class RetrofitNetworkClient(
                 headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
                     responseCode = Constant.SUCCESS_RESULT_CODE
                 }
-            } catch (exception: HttpException) {
+            } catch (exception: Exception) {
                 Response().apply {
                     responseCode = Constant.SERVER_ERROR
                 }
