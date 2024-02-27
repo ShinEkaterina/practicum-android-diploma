@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -105,46 +104,46 @@ class FilterSettingsFragment : Fragment() {
         with(binding) {
             if (filterParameters.nameCountry != null) {
                 val nameCountry = filterParameters.nameCountry
-                tvPlaceToJob.text = nameCountry
+                workPlaceButton.text = nameCountry
                 if (filterParameters.nameRegion != null) {
                     val nameRegion = filterParameters.nameRegion
-                    tvPlaceToJob.text = "$nameCountry, $nameRegion"
+                    workPlaceButton.text = "$nameCountry, $nameRegion"
                 }
             }
 
             if (filterParameters.nameIndustry != null) {
-                tvIndustry.text = filterParameters.nameIndustry
+                industryButton.text = filterParameters.nameIndustry
             }
 
             if (filterParameters.expectedSalary != null) {
-                etExpectedSalary.setText(filterParameters.expectedSalary.toString())
+                inputSearchSalary.setText(filterParameters.expectedSalary.toString())
             }
 
-            if (filterParameters.isDoNotShowWithoutSalary) {
-                ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_checked)
-            } else {
-                ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
+          //  if (filterParameters.isDoNotShowWithoutSalary) {
+          //      checkBoxShowSalary.setImageResource(R.drawable.ic_check_box_checked)
+         //   } else {
+         //       ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
             }
         }
-    }
+
 
     private fun initializationButtonsListener() {
         with(binding) {
-            filterSettingsToolbar.setNavigationOnClickListener {
+            filterToolbars.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
 
-            flPlaceToJob.setOnClickListener {
-                Log.i("TEST_REY", "segue to place to job")
-            }
+        //    flPlaceToJob.setOnClickListener {
+           //     Log.i("TEST_REY", "segue to place to job")
+        //    }
 
-            flIndustry.setOnClickListener {
+            industryButton.setOnClickListener {
                 findNavController().navigate(
                     R.id.action_filterSettingsFragment_to_industrySelectionFragment
                 )
             }
 
-            ivDoNotShowWithoutSalary.setOnClickListener {
+            checkBoxShowSalary.setOnClickListener {
                 filterParameters = if (filterParameters.isDoNotShowWithoutSalary) {
                     filterParameters.copy(isDoNotShowWithoutSalary = false)
                 } else {
@@ -153,8 +152,8 @@ class FilterSettingsFragment : Fragment() {
                 viewModel.setFilterParameters(filterParameters)
             }
 
-            btClearInputExpectedSalary.setOnClickListener {
-                etExpectedSalary.setText("")
+            clearButton.setOnClickListener {
+                inputSearchSalary.setText("")
             }
         }
     }
@@ -164,22 +163,22 @@ class FilterSettingsFragment : Fragment() {
         inputMethodManager: InputMethodManager?
     ) {
         with(binding) {
-            etExpectedSalary.addTextChangedListener(simpleTextWatcher)
-            etExpectedSalary.setOnKeyListener { _, i, keyEvent ->
+            inputSearchSalary.addTextChangedListener(simpleTextWatcher)
+            inputSearchSalary.setOnKeyListener { _, i, keyEvent ->
                 if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                    etExpectedSalary.clearFocus()
+                    inputSearchSalary.clearFocus()
                 }
                 false
             }
-            etExpectedSalary.setOnFocusChangeListener { _, hasFocus ->
+            inputSearchSalary.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     inputMethodManager?.hideSoftInputFromWindow(
-                        etExpectedSalary.windowToken,
+                        inputSearchSalary.windowToken,
                         0
                     )
                     viewModel.setFilterParameters(filterParameters)
                 } else {
-                    btClearInputExpectedSalary.isVisible = filterParameters.expectedSalary != null
+                    clearButton.isVisible = filterParameters.expectedSalary != null
                 }
             }
         }
@@ -187,7 +186,7 @@ class FilterSettingsFragment : Fragment() {
 
     private fun onTextChangedAction(s: CharSequence?) {
         with(binding) {
-            btClearInputExpectedSalary.isVisible = etExpectedSalary.hasFocus() && s?.isEmpty() == false
+       //     btClearInputExpectedSalary.isVisible = etExpectedSalary.hasFocus() && s?.isEmpty() == false
             filterParameters = if (s.isNullOrEmpty()) {
                 filterParameters.copy(expectedSalary = null)
             } else {
