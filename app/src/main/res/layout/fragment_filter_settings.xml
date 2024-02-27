@@ -110,7 +110,7 @@
     <CheckBox
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/checkBox"
+        android:id="@+id/check_box_show_salary"
         android:button="@null"
         android:drawableRight="@drawable/check_box_selector"
         android:text="@string/dont_show_without_salary"
