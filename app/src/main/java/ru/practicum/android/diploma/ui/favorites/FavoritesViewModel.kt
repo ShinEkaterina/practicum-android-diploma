@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.api.FavoriteInteractor
+import ru.practicum.android.diploma.domain.api.interactor.FavoriteInteractor
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
 class FavoritesViewModel(
@@ -28,11 +28,11 @@ class FavoritesViewModel(
 
     fun getFavorites() {
         viewModelScope.launch {
-            favoriteInteractor.getMockResults().collect(::renderState)
+            favoriteInteractor.getAll().collect(::renderState)
         }
     }
 
-    private fun renderState(vacancies: ArrayList<VacancyModel>) {
+    private fun renderState(vacancies: List<VacancyModel>) {
         if (vacancies.isEmpty()) {
             _stateLiveData.postValue(FavoritesState.Empty)
         } else {

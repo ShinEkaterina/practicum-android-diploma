@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
+import ru.practicum.android.diploma.data.dto.field.Address
 
 data class VacanciesSearchDto(
     val pages: Long,
@@ -13,10 +14,6 @@ data class Vacancies(
     val address: Address?,
     val salary: Salary?,
     @SerializedName("employer") val company: Company
-)
-
-data class Address(
-    val city: String?
 )
 
 data class Salary(
