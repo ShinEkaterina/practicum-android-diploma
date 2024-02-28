@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?attr/colorOnSecondary"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="?attr/colorOnSecondary">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/industrySelectionToolbar"
@@ -13,16 +13,22 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimaryVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/industry_selection">
-
     </androidx.appcompat.widget.Toolbar>
+
     <FrameLayout
         android:id="@+id/frame_layout_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/margin_16"
-        android:paddingVertical="8dp">
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/industrySelectionToolbar"
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/input_search_salary"
@@ -68,55 +74,78 @@
             app:tint="@color/black" />
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/flRecycleViewIndustries"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvIndustries"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_8">
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_8"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/selected_button"
+        tools:listitem="@layout/industry_item" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvIndustries"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/selected_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/blue"
+        android:text="@string/choose_button_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_16"
+        app:cornerRadius="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/ivNotListIndustries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="122dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_not_list"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/tvNotListIndustries"
+            style="@style/TextStyleMedium22_500"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/industry_item" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:id="@+id/ivNotListIndustries"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="122dp"
-                android:contentDescription="@string/todo"
-                android:src="@drawable/ic_not_list"
-                android:visibility="gone"
-                tools:ignore="MissingConstraints" />
-
-            <TextView
-                android:id="@+id/tvNotListIndustries"
-                style="@style/TextStyleMedium22_500"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_16"
-                android:gravity="center_horizontal"
-                android:text="@string/failed_to_get_list"
-                android:textColor="?attr/colorOnPrimary"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_gravity="center"
-            android:indeterminateTint="@color/blue"
+            android:layout_margin="@dimen/margin_16"
+            android:gravity="center_horizontal"
+            android:text="@string/failed_to_get_list"
+            android:textColor="?attr/colorOnPrimary"
             android:visibility="gone" />
-    </FrameLayout>
-</LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search" />
+</androidx.constraintlayout.widget.ConstraintLayout>

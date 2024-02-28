@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.ui.filter.industry
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,15 +43,13 @@ class IndustrySelectionFragment : Fragment() {
             view,
             savedInstanceState
         )
+        initializationButtonsListener()
         initializationAdapter()
         viewModel.industriesListState.observe(viewLifecycleOwner) {
             industriesListState(it)
         }
 
         viewModel.getIndustries()
-        binding.industrySelectionToolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
     }
 
     override fun onDestroyView() {
@@ -58,13 +57,30 @@ class IndustrySelectionFragment : Fragment() {
         _binding = null
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initializationAdapter() {
-        industriesAdapter = IndustriesAdapter(industriesList) { industry ->
-            viewModel.setFilterParameters(industry)
-            findNavController().navigateUp()
-        }
+        with(binding) {
+            industriesAdapter = IndustriesAdapter(industriesList) { industry ->
+                viewModel.setTempFilterParameters(industry)
+                selectedButton.isVisible = true
+                industriesAdapter?.notifyDataSetChanged()
+            }
 
-        binding.rvIndustries.adapter = industriesAdapter
+            rvIndustries.adapter = industriesAdapter
+        }
+    }
+
+    private fun initializationButtonsListener() {
+        with(binding) {
+            industrySelectionToolbar.setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+
+            selectedButton.setOnClickListener {
+                viewModel.setFilterParameters()
+                findNavController().navigateUp()
+            }
+        }
     }
     @SuppressLint("NotifyDataSetChanged")
     private fun industriesListState(state: IndustriesListState) {
