@@ -12,37 +12,22 @@ import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
-import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.Error
 import ru.practicum.android.diploma.domain.model.VacanciesModel
-import ru.practicum.android.diploma.util.Constant
+import ru.practicum.android.diploma.util.Constant.SUCCESS_RESULT_CODE
 
 class VacanciesRepositoryImpl(
     private val networkClient: NetworkClient
 ) : VacanciesRepository {
-
-    /*override fun getVacancies(
-        expression: String,
-        page: Int
-    ): Flow<Resource<VacanciesModel>> = flow {
-        val response = networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page))
-        when (response.responseCode) {
-            SUCCESS_RESULT_CODE -> {
-                emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
-            }
-
-            else -> {
-                emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
-            }
-        }
-    }*/
 
     override fun getVacancies(
         expression: String,
         page: Int,
         amount: Int
     ): Flow<Resource<VacanciesModel>> = flow {
-        val response = networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
-        if (response.responseCode == Constant.SUCCESS_RESULT_CODE) {
+        val response =
+            networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
+        if (response.responseCode == SUCCESS_RESULT_CODE) {
             emit(
                 Resource.Success(
                     Convertors()
@@ -50,7 +35,7 @@ class VacanciesRepositoryImpl(
                 )
             )
         } else {
-            emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+            emit(Resource.Error(Error.INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -58,11 +43,12 @@ class VacanciesRepositoryImpl(
         id: String
     ): Flow<Resource<DetailVacancy>> = flow {
         val response = networkClient.getDetailVacancy(VacancyDetailedRequest(id))
-        if (response.responseCode == Constant.SUCCESS_RESULT_CODE) {
-            val information = Convertors().responseToDetailModel(response as VacancyDetailedResponse)
+        if (response.responseCode == SUCCESS_RESULT_CODE) {
+            val information =
+                Convertors().responseToDetailModel(response as VacancyDetailedResponse)
             emit(Resource.Success(information))
         } else {
-            emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+            emit(Resource.Error(Error.INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -71,20 +57,20 @@ class VacanciesRepositoryImpl(
     ): Flow<Resource<VacanciesModel>> = flow {
         val response = networkClient.getSimilarVacancies(VacanciesSimilarRequest(id))
         when (response.responseCode) {
-            Constant.SUCCESS_RESULT_CODE -> {
+            SUCCESS_RESULT_CODE -> {
                 emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
             }
 
-            Constant.NO_CONNECTIVITY_MESSAGE -> {
-                emit(Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE))
+            Error.NO_CONNECTIVITY.code -> {
+                emit(Resource.Error(Error.NO_CONNECTIVITY))
             }
 
-            Constant.NOT_FOUND -> {
-                emit(Resource.Error(ErrorMessage.NOT_FOUND))
+            Error.NOT_FOUND.code -> {
+                emit(Resource.Error(Error.NOT_FOUND))
             }
 
             else -> {
-                emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+                emit(Resource.Error(Error.INTERNAL_SERVER_ERROR))
             }
         }
     }

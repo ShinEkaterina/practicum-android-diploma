@@ -1,10 +1,8 @@
 package ru.practicum.android.diploma
 
-import ru.practicum.android.diploma.domain.model.ErrorMessage
-
 sealed class Resource<T>(
     val data: T? = null,
-    val message: ErrorMessage? = null
+    val message: ru.practicum.android.diploma.domain.model.Error? = null
 ) {
 
     class Success<T>(
@@ -12,7 +10,7 @@ sealed class Resource<T>(
     ) : Resource<T>(data)
 
     class Error<T>(
-        message: ErrorMessage,
+        message: ru.practicum.android.diploma.domain.model.Error,
         data: T? = null
     ) : Resource<T>(data, message)
 
