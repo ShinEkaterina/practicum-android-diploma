@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_size_22"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_medium"
             tools:text="[Супер вакансия с очень большой зарплатой!]"/>
 
@@ -35,7 +35,7 @@
             android:id="@+id/company_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_regular"
             android:textSize="@dimen/font_size_16"
             android:ellipsize="end"
@@ -46,7 +46,7 @@
             android:id="@+id/company_salary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_regular"
             android:textSize="@dimen/font_size_16"
             tools:text="от 100 000 000 ₽"/>

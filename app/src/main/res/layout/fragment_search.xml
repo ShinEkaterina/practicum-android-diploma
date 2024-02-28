@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:id="@+id/search_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <!--- Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -42,9 +42,11 @@
             android:background="@drawable/search_field"
             android:drawablePadding="4dp"
             android:hint="@string/input_text"
-            android:maxLines="1"
             android:inputType="text"
+            android:maxLines="1"
             android:padding="8dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
             android:textCursorDrawable="@drawable/cursor" />
 
         <ImageView
@@ -52,10 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
-            android:contentDescription="@string/search_button"
-            android:padding="@dimen/margin_16"
             android:layout_marginEnd="2dp"
             android:background="@color/light_gray"
+            android:contentDescription="@string/search_button"
+            android:padding="@dimen/margin_16"
             android:src="@drawable/ic_search"
             app:tint="@color/black" />
 
@@ -64,11 +66,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"
+            android:layout_marginEnd="2dp"
+            android:background="@color/light_gray"
             android:contentDescription="@string/clear_button"
             android:padding="@dimen/margin_16"
             android:src="@drawable/ic_clear"
-            android:layout_marginEnd="2dp"
-            android:background="@color/light_gray"
             android:visibility="gone"
             app:tint="@color/black" />
 
@@ -79,73 +81,73 @@
         android:id="@+id/search_found_vacancies_wrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:layout_gravity="center"
         android:layout_marginTop="11dp"
+        android:visibility="gone"
         app:cardCornerRadius="@dimen/radius_12"
-        app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/search_found_vacancies"
+            style="@style/TextStyleRegular16_400"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Найдено 286 вакансий"
-            style="@style/TextStyleRegular16_400"
-            android:paddingVertical="@dimen/padding_4"
-            android:paddingHorizontal="@dimen/padding_12"
             android:background="@color/blue"
-            android:textColor="@color/white"/>
+            android:paddingHorizontal="@dimen/padding_12"
+            android:paddingVertical="@dimen/padding_4"
+            android:textColor="@color/white"
+            tools:text="Найдено 286 вакансий" />
 
     </androidx.cardview.widget.CardView>
 
     <!--- Recycler view with progress bar for pagination as one of items -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/found_vacancies_list"
+        style="@style/TextStyleRegular12_400"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="17dp"
         android:visibility="gone"
-        style="@style/TextStyleRegular12_400"
-        tools:listitem="@layout/vacancy_pagination_loading"/>
+        tools:listitem="@layout/vacancy_pagination_loading" />
 
     <!--- Placeholders + ProgressBar -->
     <FrameLayout
-        tools:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:visibility="gone">
 
         <ImageView
             android:id="@+id/default_placeholder_image"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:contentDescription="@string/placeholder_description"
             android:src="@drawable/ic_placeholder" />
 
         <TextView
             android:id="@+id/search_nothing_found"
+            style="@style/TextStyleMedium22_500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:visibility="gone"
-            style="@style/TextStyleMedium22_500"
             android:text="@string/vacancy_nothing_found"
+            android:visibility="gone"
             app:drawableTopCompat="@drawable/ic_not_found" />
 
         <TextView
             android:id="@+id/search_no_internet"
+            style="@style/TextStyleMedium22_500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:visibility="gone"
-            style="@style/TextStyleMedium22_500"
             android:text="@string/vacancy_no_internet"
-            app:drawableTopCompat="@drawable/ic_not_internet"/>
+            android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_not_internet" />
 
         <!--- Loading progressbar -->
         <ProgressBar
