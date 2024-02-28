@@ -14,7 +14,7 @@ import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
 import ru.practicum.android.diploma.domain.model.Error
 import ru.practicum.android.diploma.domain.model.VacanciesModel
-import ru.practicum.android.diploma.util.Constant.SUCCESS_RESULT_CODE
+import java.net.HttpURLConnection.HTTP_OK
 
 class VacanciesRepositoryImpl(
     private val networkClient: NetworkClient
@@ -27,7 +27,7 @@ class VacanciesRepositoryImpl(
     ): Flow<Resource<VacanciesModel>> = flow {
         val response =
             networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
-        if (response.responseCode == SUCCESS_RESULT_CODE) {
+        if (response.responseCode == HTTP_OK) {
             emit(
                 Resource.Success(
                     Convertors()
@@ -43,7 +43,7 @@ class VacanciesRepositoryImpl(
         id: String
     ): Flow<Resource<DetailVacancy>> = flow {
         val response = networkClient.getDetailVacancy(VacancyDetailedRequest(id))
-        if (response.responseCode == SUCCESS_RESULT_CODE) {
+        if (response.responseCode == HTTP_OK) {
             val information =
                 Convertors().responseToDetailModel(response as VacancyDetailedResponse)
             emit(Resource.Success(information))
@@ -57,7 +57,7 @@ class VacanciesRepositoryImpl(
     ): Flow<Resource<VacanciesModel>> = flow {
         val response = networkClient.getSimilarVacancies(VacanciesSimilarRequest(id))
         when (response.responseCode) {
-            SUCCESS_RESULT_CODE -> {
+            HTTP_OK -> {
                 emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
             }
 
