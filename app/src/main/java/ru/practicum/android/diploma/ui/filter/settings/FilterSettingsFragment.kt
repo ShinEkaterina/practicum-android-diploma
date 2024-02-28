@@ -102,8 +102,8 @@ class FilterSettingsFragment : Fragment() {
     private fun updateFilterSettingsScreen(newFilterParameters: FilterParameters) {
         filterParameters = newFilterParameters
         with(binding) {
-            resetButton.isVisible = isFilterParametersNotEmpty()
-            applyButton.isVisible = isFilterParametersUpdated()
+            resetButton.isVisible = viewModel.isFilterParametersNotEmpty(filterParameters)
+            applyButton.isVisible = viewModel.isFilterParametersUpdated(filterParameters)
         }
         updatePlaceToJobSettingsScreen(filterParameters)
         updateIndustrySettingsScreen(filterParameters)
@@ -304,19 +304,5 @@ class FilterSettingsFragment : Fragment() {
                 filterParameters.copy(expectedSalary = s.toString().toInt())
             }
         }
-    }
-
-    private fun isFilterParametersNotEmpty(): Boolean {
-        return filterParameters.idCountry != null ||
-            filterParameters.nameCountry != null ||
-            filterParameters.idRegion != null ||
-            filterParameters.idIndustry != null ||
-            filterParameters.nameIndustry != null ||
-            filterParameters.expectedSalary != null ||
-            filterParameters.isDoNotShowWithoutSalary
-    }
-
-    private fun isFilterParametersUpdated(): Boolean {
-        return viewModel.getStartFilterParameters() != filterParameters
     }
 }

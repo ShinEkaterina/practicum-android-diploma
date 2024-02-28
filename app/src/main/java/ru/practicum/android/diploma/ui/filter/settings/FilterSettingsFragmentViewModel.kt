@@ -55,4 +55,18 @@ class FilterSettingsFragmentViewModel(private val filtrationInteractor: Filtrati
     fun getStartFilterParameters(): FilterParameters {
         return this.startFilterParameters
     }
+
+    fun isFilterParametersNotEmpty(filterParameters: FilterParameters): Boolean {
+        return filterParameters.idCountry != null ||
+            filterParameters.nameCountry != null ||
+            filterParameters.idRegion != null ||
+            filterParameters.idIndustry != null ||
+            filterParameters.nameIndustry != null ||
+            filterParameters.expectedSalary != null ||
+            filterParameters.isDoNotShowWithoutSalary
+    }
+
+    fun isFilterParametersUpdated(filterParameters: FilterParameters): Boolean {
+        return this.startFilterParameters != filterParameters
+    }
 }
