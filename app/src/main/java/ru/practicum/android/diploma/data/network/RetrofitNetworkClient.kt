@@ -88,7 +88,7 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 headHunterService.searchConcreteVacancy(dto.id).apply {
-                    responseCode = Error.UNKNOWN_ERROR.code
+                    responseCode = HTTP_OK
                 }
             } catch (exception: HttpException) {
                 handleNetworkException(exception, Error.INTERNAL_SERVER_ERROR)
