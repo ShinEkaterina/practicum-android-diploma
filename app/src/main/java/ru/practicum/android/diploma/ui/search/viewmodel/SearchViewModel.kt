@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.search.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,11 +14,9 @@ import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.debounce
-import ru.practicum.android.diploma.util.isConnected
 
 class SearchViewModel(
     private val searchInteractor: SearchInteractor,
-    private val application: Application
 ) : ViewModel() {
 
     private val renderStateLiveDate = MutableLiveData<SearchRenderState>()
@@ -80,12 +77,13 @@ class SearchViewModel(
         }
     }
 
+    private fun render(s: SearchRenderState) {
+        renderStateLiveDate.postValue(s)
+    }
+
     private fun paginationRequest() {
         loadingPaginationJob = viewModelScope.launch {
             delay(Constant.PAGINATION_AWAIT)
-            if (!isConnected(application.applicationContext)) {
-                renderStateLiveDate.postValue(SearchRenderState.PaginationNoInternet)
-            }
             if (renderStateLiveDate.value !is SearchRenderState.Loading) {
                 renderStateLiveDate.postValue(SearchRenderState.PaginationLoading)
                 searchInteractor.getVacancies(
@@ -102,11 +100,11 @@ class SearchViewModel(
                         }
 
                         renderStateLiveDate.postValue(SearchRenderState.Success(false))
-                    } else if (response is Resource.Error && response.message == NetworkError.NO_CONNECTIVITY) {
-                        renderStateLiveDate.postValue(SearchRenderState.PaginationNoInternet)
+                    } else if (response.message == NetworkError.NO_CONNECTIVITY) {
+                        render(SearchRenderState.PaginationNoInternet)
 
                     } else {
-                        renderStateLiveDate.postValue(SearchRenderState.ServerError)
+                        render(SearchRenderState.ServerError)
                     }
                 }
             }

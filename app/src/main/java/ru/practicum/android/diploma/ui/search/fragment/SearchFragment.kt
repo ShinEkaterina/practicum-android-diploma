@@ -214,7 +214,6 @@ class SearchFragment : Fragment() {
     private fun renderServerError() {
         binding?.searchServerError?.isVisible = true
 
-
     }
 
     private fun renderNothingFound() {

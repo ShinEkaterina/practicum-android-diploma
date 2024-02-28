@@ -12,8 +12,8 @@ import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.domain.model.AreasModel
-import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.IndustriesModel
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.util.isConnected
 import java.net.ConnectException
 import java.net.HttpURLConnection.HTTP_OK
@@ -60,14 +60,21 @@ class RetrofitNetworkClient(
         if (!isConnected(context)) {
             return Response().apply { responseCode = NetworkError.NO_CONNECTIVITY.code }
         }
-        return withContext(Dispatchers.IO) {
-            try {
+
+        return try {
+            withContext(Dispatchers.IO) {
                 headHunterService.searchConcreteVacancy(dto.id).apply {
-                    responseCode = NetworkError.UNKNOWN_ERROR.code
+                    responseCode = HTTP_OK
                 }
-            } catch (exception: HttpException) {
-                handleNetworkException(exception, NetworkError.INTERNAL_SERVER_ERROR)
             }
+        } catch (exception: HttpException) {
+            Response().apply { responseCode = exception.code() }
+        } catch (exception: ConnectException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: SocketTimeoutException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: UnknownHostException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
         }
     }
 
