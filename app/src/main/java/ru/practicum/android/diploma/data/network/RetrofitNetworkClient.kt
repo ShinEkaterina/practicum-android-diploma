@@ -18,6 +18,7 @@ import ru.practicum.android.diploma.util.isConnected
 import java.net.ConnectException
 import java.net.HttpURLConnection.HTTP_OK
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class RetrofitNetworkClient(
     private val headHunterService: HeadHunterServiceApi,
@@ -27,34 +28,6 @@ class RetrofitNetworkClient(
     private fun handleNetworkException(e: Exception, error: Error): Response {
         return Response().apply { responseCode = error.code }
     }
-
-    /*    override suspend fun getVacancies(
-            dto: VacanciesSearchByNameRequest
-        ): Response {
-            if (!isConnected(context)) {
-                return Response().apply {
-                    responseCode = NO_INTERNET_RESULT_CODE
-                }
-            }
-            return withContext(Dispatchers.IO) {
-                try {
-                    headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
-                        responseCode = SUCCESS_RESULT_CODE
-                    }
-                } catch (exception: HttpException) {
-                    Response().apply {
-                        responseCode = SERVER_ERROR_RESULT_CODE
-                    }
-                } catch (exception: ConnectException) {
-                    handleNetworkException(exception)
-                }
-            } catch (exception: SocketTimeoutException) {
-                Response().apply {
-                    responseCode = NO_INTERNET_RESULT_CODE
-                }
-            }
-        }
-    }*/
 
     override suspend fun getVacancies(
         dto: VacanciesSearchByNameRequest
@@ -75,6 +48,8 @@ class RetrofitNetworkClient(
         } catch (exception: ConnectException) {
             handleNetworkException(exception, Error.NO_CONNECTIVITY)
         } catch (exception: SocketTimeoutException) {
+            handleNetworkException(exception, Error.NO_CONNECTIVITY)
+        } catch (exception: UnknownHostException) {
             handleNetworkException(exception, Error.NO_CONNECTIVITY)
         }
     }
