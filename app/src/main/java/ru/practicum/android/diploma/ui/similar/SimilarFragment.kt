@@ -20,6 +20,7 @@ import ru.practicum.android.diploma.ui.vacancy.VacancyFragment
 import ru.practicum.android.diploma.util.debounce
 
 class SimilarFragment : Fragment() {
+
     private var _binding: FragmentSimilarVacancyBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<SimilarViewModel>()
@@ -52,7 +53,7 @@ class SimilarFragment : Fragment() {
     }
 
     private fun initialAdapter() {
-        vacancyAdapter = VacanciesAdapter {
+        vacancyAdapter = VacanciesAdapter(arrayListOf()) {
             vacancyClickDebounce?.let { vacancyClickDebounce -> vacancyClickDebounce(it) }
         }
 
@@ -64,7 +65,7 @@ class SimilarFragment : Fragment() {
             )
         }
 
-        vacancyAdapter = VacanciesAdapter {
+        vacancyAdapter = VacanciesAdapter(arrayListOf()) {
             vacancyClickDebounce?.let { vacancyClickDebounce -> vacancyClickDebounce(it) }
         }
         recyclerView = binding.recyclerView
@@ -133,4 +134,5 @@ class SimilarFragment : Fragment() {
             bundleOf(ARGS_VACANCY to vacancyId)
 
     }
+
 }

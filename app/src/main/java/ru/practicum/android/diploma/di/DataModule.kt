@@ -6,6 +6,7 @@ import ru.practicum.android.diploma.data.impl.FilterStorageImpl
 import ru.practicum.android.diploma.data.storage.FilterStorage
 
 val dataModule = module {
+
     single { Gson() }
 
     single<FilterStorage> {
@@ -14,4 +15,5 @@ val dataModule = module {
             gson = get()
         )
     }
+
 }

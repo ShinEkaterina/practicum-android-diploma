@@ -16,9 +16,11 @@ import ru.practicum.android.diploma.data.impl.FiltrationRepositoryImpl
 import ru.practicum.android.diploma.data.impl.VacanciesRepositoryImpl
 import ru.practicum.android.diploma.data.network.HeadHunterServiceApi
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
+import ru.practicum.android.diploma.data.sharing.ExternalNavigatorImpl
 import ru.practicum.android.diploma.domain.api.repository.FavoriteVcRepository
 import ru.practicum.android.diploma.domain.api.repository.FiltrationRepository
 import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
+import ru.practicum.android.diploma.domain.sharing.ExternalNavigator
 import ru.practicum.android.diploma.util.Constant
 
 val repositoryModule = module {
@@ -37,11 +39,19 @@ val repositoryModule = module {
     }
 
     single<VacanciesRepository> {
-        VacanciesRepositoryImpl(networkClient = get())
+        VacanciesRepositoryImpl(
+            networkClient = get()
+        )
     }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(get(), context = get())
+        RetrofitNetworkClient(
+            headHunterService = get(),
+            context = get()
+        )
+    }
+    factory<ExternalNavigator> {
+        ExternalNavigatorImpl(context = get())
     }
 
     single {
@@ -66,7 +76,9 @@ val repositoryModule = module {
         )
     }
 
-    single { VacancyDbConvertor() }
+    single {
+        VacancyDbConvertor()
+    }
 
     // Database
     single {
@@ -76,4 +88,5 @@ val repositoryModule = module {
             "database_2.db"
         ).addMigrations().build()
     }
+
 }

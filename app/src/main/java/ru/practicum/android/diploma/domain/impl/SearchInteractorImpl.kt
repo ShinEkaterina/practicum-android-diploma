@@ -1,26 +1,21 @@
 package ru.practicum.android.diploma.domain.impl
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
 import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
-import ru.practicum.android.diploma.domain.model.ErrorMessage
-import ru.practicum.android.diploma.domain.model.VacancyModel
+import ru.practicum.android.diploma.domain.model.VacanciesModel
 
-class SearchInteractorImpl(private val repository: VacanciesRepository) : SearchInteractor {
-    override fun search(expression: String, page: Int): Flow<Pair<List<VacancyModel>?, ErrorMessage?>> {
-        return repository.search(expression, page).map { result ->
-            when (result) {
-                is Resource.Success -> {
-                    Pair(result.data?.listVacancy, null)
-                }
+class SearchInteractorImpl(
+    private val searchRepository: VacanciesRepository
+) : SearchInteractor {
 
-                is Resource.Error -> {
-                    Pair(null, result.message)
-                }
-            }
-        }
+    override fun getVacancies(
+        vacancyName: String,
+        page: Int,
+        amount: Int
+    ): Flow<Resource<VacanciesModel>> {
+        return searchRepository.getVacancies(vacancyName, page, amount)
     }
 
 }

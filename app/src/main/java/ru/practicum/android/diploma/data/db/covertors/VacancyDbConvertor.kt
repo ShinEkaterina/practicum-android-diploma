@@ -56,7 +56,7 @@ class VacancyDbConvertor {
             city = vacancy.areaName,
             salary = vacancy.salary,
             companyName = vacancy.employerName,
-            logoUrls = null,
+            logoUrls = arrayListOf(vacancy.areaUrl, "", ""),
             details = null
         )
     }

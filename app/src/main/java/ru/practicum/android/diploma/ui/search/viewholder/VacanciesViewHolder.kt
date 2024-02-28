@@ -17,15 +17,18 @@ class VacanciesViewHolder(
     ) {
         binding.vacancyName.text = model.vacancyName
         binding.companyName.text = model.companyName
-        binding.companySalary.text = model.salary
+        binding.companySalary.text = model.salary.ifEmpty { itemView.context.getString(R.string.salary_not_specified) }
 
-        Glide.with(itemView)
-            .load(model.logoUrls)
-            .centerCrop()
-            .fitCenter()
-            .transform(RoundedCorners(Constant.COMPANY_LOGO_RADIUS_12_PX))
-            .placeholder(R.drawable.ic_logo)
-            .into(binding.companyLogo)
+        if (model.logoUrls?.isNotEmpty() == true) {
+            Glide.with(itemView)
+                .load(model.logoUrls[0])
+                .centerCrop()
+                .transform(RoundedCorners(Constant.COMPANY_LOGO_RADIUS_12_PX))
+                .placeholder(R.drawable.ic_logo)
+                .into(binding.companyLogo)
+        } else {
+            binding.companyLogo.setImageResource(R.drawable.ic_logo)
+        }
     }
 
 }

@@ -6,5 +6,5 @@ data class SearchResponse(
     val found: Int?,
     val page: Int?,
     val pages: Int?,
-    val items: List<VacancyDetailedDto>?,
+    val items: List<VacancyDetailedDto>?
 ) : Response()

@@ -6,6 +6,7 @@ import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.storage.FilterStorage
 import ru.practicum.android.diploma.domain.api.repository.FiltrationRepository
+import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 
@@ -23,5 +24,9 @@ class FiltrationRepositoryImpl(
 
     override fun getIndustries(): Flow<Resource<List<IndustriesModel>>> = flow {
         emit(networkClient.getIndustries())
+    }
+
+    override fun getAreas(): Flow<Resource<Map<AreasModel, List<AreasModel>>>> = flow {
+        emit(networkClient.getAreas())
     }
 }
