@@ -12,6 +12,8 @@ sealed interface SearchRenderState {
 
     data object PaginationLoading : SearchRenderState
 
+    data object ServerError : SearchRenderState
+
     data object PaginationNoInternet : SearchRenderState
 
     data class Success(

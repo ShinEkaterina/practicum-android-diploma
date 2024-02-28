@@ -158,6 +158,7 @@ class SearchFragment : Fragment() {
         // Hiding placeholders
         binding?.defaultPlaceholderImage?.isVisible = false
         binding?.searchNoInternet?.isVisible = false
+        binding?.searchServerError?.isVisible = false
         binding?.searchNothingFound?.isVisible = false
         // ---
 
@@ -209,6 +210,11 @@ class SearchFragment : Fragment() {
         binding?.searchFieldSearchImage?.isVisible = true
         binding?.searchFieldClearButton?.isVisible = false
         binding?.defaultPlaceholderImage?.isVisible = true
+    }
+    private fun renderServerError() {
+        binding?.searchServerError?.isVisible = true
+
+
     }
 
     private fun renderNothingFound() {
@@ -271,6 +277,8 @@ class SearchFragment : Fragment() {
             is SearchRenderState.PaginationNoInternet -> renderPaginationNoInternet()
 
             is SearchRenderState.PaginationLoading -> renderPaginationLoading()
+
+            is SearchRenderState.ServerError -> renderServerError()
         }
     }
 

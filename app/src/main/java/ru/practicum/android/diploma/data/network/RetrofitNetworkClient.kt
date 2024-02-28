@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
 import ru.practicum.android.diploma.domain.model.AreasModel
-import ru.practicum.android.diploma.domain.model.Error
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.util.isConnected
 import java.net.ConnectException
@@ -25,8 +25,8 @@ class RetrofitNetworkClient(
     private val context: Context
 ) : NetworkClient {
 
-    private fun handleNetworkException(e: Exception, error: Error): Response {
-        return Response().apply { responseCode = error.code }
+    private fun handleNetworkException(e: Exception, networkError: NetworkError): Response {
+        return Response().apply { responseCode = networkError.code }
     }
 
     override suspend fun getVacancies(
@@ -34,7 +34,7 @@ class RetrofitNetworkClient(
     ): Response {
         if (!isConnected(context)) {
             return Response().apply {
-                responseCode = Error.NO_CONNECTIVITY.code
+                responseCode = NetworkError.NO_CONNECTIVITY.code
             }
         }
         return try {
@@ -44,13 +44,13 @@ class RetrofitNetworkClient(
                 }
             }
         } catch (exception: HttpException) {
-            handleNetworkException(exception, Error.NO_CONNECTIVITY)
+            Response().apply { responseCode = exception.code() }
         } catch (exception: ConnectException) {
-            handleNetworkException(exception, Error.NO_CONNECTIVITY)
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
         } catch (exception: SocketTimeoutException) {
-            handleNetworkException(exception, Error.NO_CONNECTIVITY)
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
         } catch (exception: UnknownHostException) {
-            handleNetworkException(exception, Error.NO_CONNECTIVITY)
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
         }
     }
 
@@ -58,15 +58,15 @@ class RetrofitNetworkClient(
         dto: VacancyDetailedRequest
     ): Response {
         if (!isConnected(context)) {
-            return Response().apply { responseCode = Error.NO_CONNECTIVITY.code }
+            return Response().apply { responseCode = NetworkError.NO_CONNECTIVITY.code }
         }
         return withContext(Dispatchers.IO) {
             try {
                 headHunterService.searchConcreteVacancy(dto.id).apply {
-                    responseCode = Error.UNKNOWN_ERROR.code
+                    responseCode = NetworkError.UNKNOWN_ERROR.code
                 }
             } catch (exception: HttpException) {
-                handleNetworkException(exception, Error.INTERNAL_SERVER_ERROR)
+                handleNetworkException(exception, NetworkError.INTERNAL_SERVER_ERROR)
             }
         }
     }
@@ -75,7 +75,7 @@ class RetrofitNetworkClient(
         dto: VacanciesSimilarRequest
     ): Response {
         if (!isConnected(context)) {
-            return Response().apply { responseCode = Error.NO_CONNECTIVITY.code }
+            return Response().apply { responseCode = NetworkError.NO_CONNECTIVITY.code }
         }
         return withContext(Dispatchers.IO) {
             try {
@@ -83,14 +83,14 @@ class RetrofitNetworkClient(
                     responseCode = HTTP_OK
                 }
             } catch (exception: HttpException) {
-                handleNetworkException(exception, Error.INTERNAL_SERVER_ERROR)
+                handleNetworkException(exception, NetworkError.INTERNAL_SERVER_ERROR)
             }
         }
     }
 
     override suspend fun getIndustries(): Resource<List<IndustriesModel>> {
         if (!isConnected(context)) {
-            return Resource.Error(Error.NO_CONNECTIVITY)
+            return Resource.Error(NetworkError.NO_CONNECTIVITY)
         }
         return withContext(Dispatchers.IO) {
             try {
@@ -101,14 +101,14 @@ class RetrofitNetworkClient(
                         )
                 )
             } catch (exception: HttpException) {
-                Resource.Error(Error.getErrorMessage(exception.message.toString()))
+                Resource.Error(NetworkError.getErrorMessage(exception.message.toString()))
             }
         }
     }
 
     override suspend fun getAreas(): Resource<Map<AreasModel, List<AreasModel>>> {
         if (!isConnected(context)) {
-            return Resource.Error(Error.NO_CONNECTIVITY)
+            return Resource.Error(NetworkError.NO_CONNECTIVITY)
         }
         return withContext(Dispatchers.IO) {
             try {
@@ -119,7 +119,7 @@ class RetrofitNetworkClient(
                         )
                 )
             } catch (exception: HttpException) {
-                Resource.Error(Error.getErrorMessage(exception.message.toString()))
+                Resource.Error(NetworkError.getErrorMessage(exception.message.toString()))
             }
         }
     }

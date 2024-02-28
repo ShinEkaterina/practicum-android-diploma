@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.util.Constant
@@ -49,29 +50,33 @@ class SearchViewModel(
             }
             renderStateLiveDate.postValue(SearchRenderState.Loading)
             currentPage = 0
-            searchInteractor.getVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS).collect { response ->
-                if (response is Resource.Success<*>) {
-                    foundPages = response.data?.pages ?: 0
-                    vacanciesAmount = response.data?.foundAsNumber ?: 0
-                    vacanciesAmountAsString = response.data?.foundAsString ?: "0"
-                    paginationStringRequest = searchString
+            searchInteractor.getVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS)
+                .collect { response ->
+                    if (response is Resource.Success<*>) {
+                        foundPages = response.data?.pages ?: 0
+                        vacanciesAmount = response.data?.foundAsNumber ?: 0
+                        vacanciesAmountAsString = response.data?.foundAsString ?: "0"
+                        paginationStringRequest = searchString
 
-                    if (vacanciesAmount > 0) {
-                        loadedVacancies.clear()
-                        loadedVacancies.addAll(response.data?.vacancies ?: arrayListOf())
+                        if (vacanciesAmount > 0) {
+                            loadedVacancies.clear()
+                            loadedVacancies.addAll(response.data?.vacancies ?: arrayListOf())
 
-                        if (foundPages != 1) {
-                            loadedVacancies.add(null)
+                            if (foundPages != 1) {
+                                loadedVacancies.add(null)
+                            }
+
+                            renderStateLiveDate.postValue(SearchRenderState.Success(true))
+                        } else {
+                            renderStateLiveDate.postValue(SearchRenderState.NothingFound)
                         }
+                    } else if (response is Resource.Error && response.message == NetworkError.NO_CONNECTIVITY) {
+                        renderStateLiveDate.postValue(SearchRenderState.NoInternet)
 
-                        renderStateLiveDate.postValue(SearchRenderState.Success(true))
                     } else {
-                        renderStateLiveDate.postValue(SearchRenderState.NothingFound)
+                        renderStateLiveDate.postValue(SearchRenderState.ServerError)
                     }
-                } else {
-                    renderStateLiveDate.postValue(SearchRenderState.NoInternet)
                 }
-            }
         }
     }
 
@@ -97,8 +102,11 @@ class SearchViewModel(
                         }
 
                         renderStateLiveDate.postValue(SearchRenderState.Success(false))
-                    } else {
+                    } else if (response is Resource.Error && response.message == NetworkError.NO_CONNECTIVITY) {
                         renderStateLiveDate.postValue(SearchRenderState.PaginationNoInternet)
+
+                    } else {
+                        renderStateLiveDate.postValue(SearchRenderState.ServerError)
                     }
                 }
             }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.interactor.SimilarInteractor
-import ru.practicum.android.diploma.domain.model.Error
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
 class SimilarViewModel(
@@ -32,19 +32,19 @@ class SimilarViewModel(
             }
         }
     }
-    private fun processResult(vacancyies: List<VacancyModel>?, errorMessage: Error?) {
+    private fun processResult(vacancyies: List<VacancyModel>?, errorMessage: NetworkError?) {
         if (vacancyies != null) {
             vacanciesList.addAll(vacancyies)
             renderState(SimilarState.Content(vacanciesList))
         }
         when (errorMessage) {
-            Error.INTERNAL_SERVER_ERROR -> {
+            NetworkError.INTERNAL_SERVER_ERROR -> {
                 renderState(SimilarState.ErrorServer)
             }
-            Error.NOT_FOUND -> {
+            NetworkError.NOT_FOUND -> {
                 renderState(SimilarState.NotFound)
             }
-            Error.NO_CONNECTIVITY -> {
+            NetworkError.NO_CONNECTIVITY -> {
                 renderState(SimilarState.NotInternet)
             }
             else -> {
