@@ -42,9 +42,11 @@
             android:background="@drawable/search_field"
             android:drawablePadding="4dp"
             android:hint="@string/input_text"
+        android:textColorHint="@color/gray"
+            android:textColor="@color/black"
             android:maxLines="1"
             android:inputType="text"
-            android:padding="8dp"
+            android:padding="@dimen/margin_8"
             android:textCursorDrawable="@drawable/cursor" />
 
         <ImageView
