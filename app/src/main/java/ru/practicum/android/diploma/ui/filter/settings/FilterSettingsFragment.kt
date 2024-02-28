@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -104,25 +103,26 @@ class FilterSettingsFragment : Fragment() {
         with(binding) {
             if (filterParameters.nameCountry != null) {
                 val nameCountry = filterParameters.nameCountry
-                workPlaceButton.text = nameCountry
+                etPlaceToJob.setText(nameCountry)
                 if (filterParameters.nameRegion != null) {
                     val nameRegion = filterParameters.nameRegion
-                    workPlaceButton.text = "$nameCountry, $nameRegion"
+                    etPlaceToJob.setText("$nameCountry, $nameRegion")
                 }
             }
 
             if (filterParameters.nameIndustry != null) {
-                industryButton.text = filterParameters.nameIndustry
+                etIndustry.setText(filterParameters.nameIndustry)
             }
 
             if (filterParameters.expectedSalary != null) {
-                inputSearchSalary.setText(filterParameters.expectedSalary.toString())
+                etExpectedSalary.setText(filterParameters.expectedSalary.toString())
             }
 
-            //  if (filterParameters.isDoNotShowWithoutSalary) {
-            //      checkBoxShowSalary.setImageResource(R.drawable.ic_check_box_checked)
-            //   } else {
-            //       ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
+            if (filterParameters.isDoNotShowWithoutSalary) {
+                ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_checked)
+            } else {
+                ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
+            }
         }
     }
 
@@ -132,17 +132,13 @@ class FilterSettingsFragment : Fragment() {
                 findNavController().navigateUp()
             }
 
-            //    flPlaceToJob.setOnClickListener {
-            //     Log.i("TEST_REY", "segue to place to job")
-            //    }
-
-            industryButton.setOnClickListener {
+            tiIndustry.setEndIconOnClickListener {
                 findNavController().navigate(
                     R.id.action_filterSettingsFragment_to_industrySelectionFragment
                 )
             }
 
-            checkBoxShowSalary.setOnClickListener {
+            ivDoNotShowWithoutSalary.setOnClickListener {
                 filterParameters = if (filterParameters.isDoNotShowWithoutSalary) {
                     filterParameters.copy(isDoNotShowWithoutSalary = false)
                 } else {
@@ -151,8 +147,8 @@ class FilterSettingsFragment : Fragment() {
                 viewModel.setFilterParameters(filterParameters)
             }
 
-            clearButton.setOnClickListener {
-                inputSearchSalary.setText("")
+            tiExpectedSalary.setEndIconOnClickListener {
+                etExpectedSalary.setText("")
             }
         }
     }
@@ -162,22 +158,22 @@ class FilterSettingsFragment : Fragment() {
         inputMethodManager: InputMethodManager?
     ) {
         with(binding) {
-            inputSearchSalary.addTextChangedListener(simpleTextWatcher)
-            inputSearchSalary.setOnKeyListener { _, i, keyEvent ->
+            etExpectedSalary.addTextChangedListener(simpleTextWatcher)
+            etExpectedSalary.setOnKeyListener { _, i, keyEvent ->
                 if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                    inputSearchSalary.clearFocus()
+                    etExpectedSalary.clearFocus()
                 }
                 false
             }
-            inputSearchSalary.setOnFocusChangeListener { _, hasFocus ->
+            etExpectedSalary.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     inputMethodManager?.hideSoftInputFromWindow(
-                        inputSearchSalary.windowToken,
+                        etExpectedSalary.windowToken,
                         0
                     )
                     viewModel.setFilterParameters(filterParameters)
                 } else {
-                    clearButton.isVisible = filterParameters.expectedSalary != null
+                    tiExpectedSalary.isEndIconVisible = filterParameters.expectedSalary != null
                 }
             }
         }
