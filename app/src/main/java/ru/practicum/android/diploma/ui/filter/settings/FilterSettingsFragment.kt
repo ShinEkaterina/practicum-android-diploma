@@ -253,16 +253,7 @@ class FilterSettingsFragment : Fragment() {
             }
 
             resetButton.setOnClickListener {
-                filterParameters = FilterParameters(
-                    idCountry = null,
-                    nameCountry = null,
-                    idRegion = null,
-                    nameRegion = null,
-                    idIndustry = null,
-                    nameIndustry = null,
-                    expectedSalary = null,
-                    isDoNotShowWithoutSalary = false
-                )
+                filterParameters = viewModel.defaultFilterParameters()
                 viewModel.setFilterParameters(filterParameters)
             }
         }
