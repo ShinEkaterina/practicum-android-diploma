@@ -40,10 +40,6 @@ class VacancyDbConvertor {
             employmentName = vacancy.employmentName,
             experienceName = vacancy.experienceName,
             keySkillsNames = vacancy.keySkillsNames,
-            /*            salaryCurrency = vacancy.salaryCurrency,
-                        salaryFrom = vacancy.salaryFrom,
-                        salaryTo = vacancy.salaryTo,
-                        salaryGross = vacancy.salaryGross,*/
             salary = vacancy.salary,
             scheduleName = vacancy.scheduleName
         )

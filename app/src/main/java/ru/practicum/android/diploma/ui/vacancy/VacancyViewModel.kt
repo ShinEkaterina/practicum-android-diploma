@@ -30,37 +30,6 @@ class VacancyViewModel(
         _vacancyState.postValue(state)
     }
 
-    /*    fun getVacancyDetail(id: String):DetailVacancy {
-            if (id.isNotEmpty()) {
-                viewModelScope.launch {
-                    val isFavorite = favoriteInteractor.checkFavorite(id).firstOrNull() ?: false
-                    if (isFavorite) {
-                        when (val vacancyFromNetwork = vacancyInteractor.getDetailVacancy(id).first()) {
-                            is Resource.Success -> {
-                                vacancyFromNetwork.data?.let {
-                                    favoriteInteractor.update(it)
-                                }
-                                processResult(vacancyFromNetwork)
-                            }
-
-                            is Resource.Error -> {
-                                val vacFavorite = favoriteInteractor.getDetailVacancy(id).first()
-                                if (vacFavorite != null) {
-                                    renderState(VacancyState.Content(vacFavorite))
-                                }
-                            }
-                        }
-                    } else {
-                        vacancyInteractor
-                            .getDetailVacancy(id)
-                            .collect { resource ->
-                                processResult(resource)
-                            }
-                    }
-                }
-            }
-        }*/
-
     fun showVacancyDetail(id: String) {
         if (id.isNotEmpty()) {
             renderState(VacancyState.Loading)
