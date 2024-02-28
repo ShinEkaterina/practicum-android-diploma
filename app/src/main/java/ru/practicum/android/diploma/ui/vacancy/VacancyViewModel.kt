@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.api.interactor.DetailVacancyInteractor
 import ru.practicum.android.diploma.domain.api.interactor.FavoriteInteractor
 import ru.practicum.android.diploma.domain.model.DetailVacancy
-import ru.practicum.android.diploma.domain.model.Error
+import ru.practicum.android.diploma.domain.model.NetworkError
 
 class VacancyViewModel(
     val vacancyInteractor: DetailVacancyInteractor,
@@ -129,11 +129,11 @@ class VacancyViewModel(
 
             is Resource.Error -> {
                 when (result.message) {
-                    Error.INTERNAL_SERVER_ERROR -> {
+                    NetworkError.INTERNAL_SERVER_ERROR -> {
                         renderState(VacancyState.ErrorServer)
                     }
 
-                    Error.NO_CONNECTIVITY -> {
+                    NetworkError.NO_CONNECTIVITY -> {
                         renderState(VacancyState.NotInternet)
                     }
 

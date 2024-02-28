@@ -8,7 +8,7 @@ import java.net.HttpURLConnection.HTTP_FORBIDDEN
 import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
-enum class Error(val code: Int) {
+enum class NetworkError(val code: Int) {
     NO_CONNECTIVITY(HTTP_NO_CONNECTIVITY),
     NOT_FOUND(HTTP_NOT_FOUND),
     UNKNOWN_ERROR(HTTP_UNKNOWN),
@@ -18,7 +18,7 @@ enum class Error(val code: Int) {
     FORBIDDEN(HTTP_FORBIDDEN);
 
     companion object {
-        fun getErrorMessage(exception: String): Error {
+        fun getErrorMessage(exception: String): NetworkError {
             var errorMessage = UNKNOWN_ERROR
             when (exception) {
                 "HTTP 400 " -> errorMessage = BAD_REQUEST
@@ -29,5 +29,11 @@ enum class Error(val code: Int) {
             }
             return errorMessage
         }
+
+        fun getErrorByCode(code: Int): NetworkError {
+            return NetworkError.entries.find { it.code == code } ?: NetworkError.UNKNOWN_ERROR
+
+        }
     }
+
 }

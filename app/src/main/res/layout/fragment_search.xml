@@ -149,6 +149,17 @@
             android:visibility="gone"
             app:drawableTopCompat="@drawable/ic_not_internet" />
 
+        <TextView
+            android:id="@+id/search_server_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            style="@style/TextStyleMedium22_500"
+            android:text="@string/vacancy_server_error"
+            app:drawableTopCompat="@drawable/placeholder_sad"/>
+
         <!--- Loading progressbar -->
         <ProgressBar
             android:id="@+id/search_progress_bar"

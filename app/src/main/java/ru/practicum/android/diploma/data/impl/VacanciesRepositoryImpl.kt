@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
-import ru.practicum.android.diploma.domain.model.Error
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import java.net.HttpURLConnection.HTTP_OK
 
@@ -34,8 +34,10 @@ class VacanciesRepositoryImpl(
                         .convertorToVacanciesModel(response as SearchResponse)
                 )
             )
+        } else if (response.responseCode == NetworkError.NO_CONNECTIVITY.code) {
+            emit(Resource.Error(NetworkError.NO_CONNECTIVITY))
         } else {
-            emit(Resource.Error(Error.INTERNAL_SERVER_ERROR))
+            emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -48,7 +50,7 @@ class VacanciesRepositoryImpl(
                 Convertors().responseToDetailModel(response as VacancyDetailedResponse)
             emit(Resource.Success(information))
         } else {
-            emit(Resource.Error(Error.INTERNAL_SERVER_ERROR))
+            emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -61,16 +63,16 @@ class VacanciesRepositoryImpl(
                 emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
             }
 
-            Error.NO_CONNECTIVITY.code -> {
-                emit(Resource.Error(Error.NO_CONNECTIVITY))
+            NetworkError.NO_CONNECTIVITY.code -> {
+                emit(Resource.Error(NetworkError.NO_CONNECTIVITY))
             }
 
-            Error.NOT_FOUND.code -> {
-                emit(Resource.Error(Error.NOT_FOUND))
+            NetworkError.NOT_FOUND.code -> {
+                emit(Resource.Error(NetworkError.NOT_FOUND))
             }
 
             else -> {
-                emit(Resource.Error(Error.INTERNAL_SERVER_ERROR))
+                emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
             }
         }
     }

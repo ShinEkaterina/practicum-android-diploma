@@ -51,6 +51,7 @@
     <string name="clear_button">Кнопка очистки всего текста, введенного в поле ввода</string>
     <string name="search_button">Кнопка поиска вакансий</string>
     <string name="vacancy_no_internet">Нет интернета</string>
+    <string name="vacancy_server_error">Ошибка сервера</string>
     <string name="vacancy_nothing_found">Не удалось получить\nсписок вакансий</string>
     <string name="salary_not_specified">Зарплата не указана</string>
     <string name="salary_from">от</string>
