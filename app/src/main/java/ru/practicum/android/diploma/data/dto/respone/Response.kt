@@ -6,6 +6,7 @@ open class Response {
     companion object {
         const val NO_RESULT_RESULT_CODE = 0
         const val NO_INTERNET_RESULT_CODE = -1
+        const val UNKNOWN_RESULT_RESULT_CODE = -2
         const val SERVER_ERROR_RESULT_CODE = 500
         const val BAD_REQUEST_RESULT_CODE = 400
         const val SUCCESS_RESULT_CODE = 200
