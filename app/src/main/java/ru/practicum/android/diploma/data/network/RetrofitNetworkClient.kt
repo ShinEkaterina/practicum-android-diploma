@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.data.network
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -16,7 +18,6 @@ import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.ErrorMessage
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.util.Constant
-import ru.practicum.android.diploma.util.isConnected
 
 class RetrofitNetworkClient(
     private val headHunterService: HeadHunterServiceApi,
@@ -38,7 +39,7 @@ class RetrofitNetworkClient(
                 }
             } catch (exception: HttpException) {
                 Response().apply {
-                    responseCode = Constant.SERVER_ERROR
+                    responseCode = exception.code()
                 }
             }
         }
@@ -56,7 +57,7 @@ class RetrofitNetworkClient(
                     responseCode = Constant.SUCCESS_RESULT_CODE
                 }
             } catch (exception: HttpException) {
-                Response().apply { responseCode = Constant.SERVER_ERROR }
+                Response().apply { responseCode = exception.code() }
             }
         }
     }
@@ -73,7 +74,7 @@ class RetrofitNetworkClient(
                     responseCode = Constant.SUCCESS_RESULT_CODE
                 }
             } catch (exception: HttpException) {
-                Response().apply { responseCode = Constant.SERVER_ERROR }
+                Response().apply { responseCode = exception.code() }
             }
         }
     }
@@ -113,5 +114,11 @@ class RetrofitNetworkClient(
             }
         }
     }
-
+    private fun isConnected(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        return capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
+    }
 }
