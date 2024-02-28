@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/industrySelectionToolbar"
+        android:id="@+id/country_toolbars"
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/industry_selection">
+        app:title="@string/region_choice_text">
 
     </androidx.appcompat.widget.Toolbar>
     <FrameLayout
@@ -29,7 +29,7 @@
         android:paddingVertical="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/industrySelectionToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/country_toolbars">
 
         <EditText
             android:id="@+id/input_search_salary"
@@ -42,7 +42,7 @@
             android:cursorVisible="true"
             android:drawablePadding="4dp"
             android:foregroundGravity="center_horizontal"
-            android:hint="@string/industry_selection_field_text"
+            android:hint="Введите регион"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:padding="8dp"
@@ -75,21 +75,21 @@
             app:tint="@color/black" />
     </FrameLayout>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvIndustries"
+        android:id="@+id/industry_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
-        tools:listitem="@layout/industry_item" />
+        tools:listitem="@layout/country_item" />
     <ImageView
         android:visibility="gone"
-        android:id="@+id/ivNotListIndustries"
+        android:id="@+id/server_error_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/todo"
-        android:src="@drawable/ic_not_list"
+        android:src="@drawable/placeholder_cat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +97,7 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/tvNotListIndustries"
+        android:id="@+id/tv_error"
         style="@style/TextStyleMedium22_500"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,8 +107,8 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivNotListIndustries"
-        tools:text="" />
+        app:layout_constraintTop_toBottomOf="@+id/server_error_layout"
+        tools:text="Такого региона нет" />
 
     <ProgressBar
         android:id="@+id/progressBar"
