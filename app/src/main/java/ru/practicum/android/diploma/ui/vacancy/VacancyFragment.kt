@@ -167,9 +167,9 @@ class VacancyFragment : Fragment() {
 
     private fun isEmptyComment(comment: String?): String {
         return if (comment.isNullOrEmpty()) {
-            ""
+            "<br>"
         } else {
-            "<br><br><b>${getString(R.string.contact_comment_text)}</b><br>" + comment + "<br>"
+            "<br><br><b>${getString(R.string.contact_comment_text)}</b><br>" + comment + "<br><br>"
         }
     }
 
