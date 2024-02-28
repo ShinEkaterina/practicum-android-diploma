@@ -194,12 +194,8 @@ class FilterSettingsFragment : Fragment() {
             tiPlaceToJob.setEndIconOnClickListener {
                 if (filterParameters.nameCountry != null) {
                     etPlaceToJob.setText("")
-                    filterParameters = filterParameters.copy(idCountry = null)
-                    filterParameters = filterParameters.copy(nameCountry = null)
-                    filterParameters = filterParameters.copy(idRegion = null)
-                    filterParameters = filterParameters.copy(nameRegion = null)
                     tiPlaceToJob.setEndIconDrawable(R.drawable.ic_item_arrow)
-                    viewModel.setFilterParameters(filterParameters)
+                    viewModel.resetPlaceToJobParameters(filterParameters)
                 }
             }
         }

@@ -82,4 +82,13 @@ class FilterSettingsFragmentViewModel(private val filtrationInteractor: Filtrati
             isDoNotShowWithoutSalary = false
         )
     }
+
+    fun resetPlaceToJobParameters(filterParameters: FilterParameters) {
+        var copyFilterParameters = filterParameters
+        copyFilterParameters = copyFilterParameters.copy(idCountry = null)
+        copyFilterParameters = copyFilterParameters.copy(nameCountry = null)
+        copyFilterParameters = copyFilterParameters.copy(idRegion = null)
+        copyFilterParameters = copyFilterParameters.copy(nameRegion = null)
+        setFilterParameters(copyFilterParameters)
+    }
 }
