@@ -82,8 +82,6 @@
     <string name="empty_list">Список пуст</string>
     <string name="can_not_get_list">Не удалось получить список вакансий</string>
     <string name="server_error">Ошибка сервера</string>
-    <string name="country">Страна</string>
-    <string name="choose_button_text">Выбрать</string>
     <string name="region_moscow_text">Москва</string>
     <string name="job_placeholder_text">Авиаперевозки</string>
     <string name="region_text">Регион</string>
