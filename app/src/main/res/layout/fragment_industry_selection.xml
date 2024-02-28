@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/country_toolbars"
+        android:id="@+id/industrySelectionToolbar"
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -29,7 +29,7 @@
         android:paddingVertical="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/country_toolbars">
+        app:layout_constraintTop_toBottomOf="@+id/industrySelectionToolbar">
 
         <EditText
             android:id="@+id/input_search_salary"
@@ -75,7 +75,7 @@
             app:tint="@color/black" />
     </FrameLayout>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/industry_recycler_view"
+        android:id="@+id/rvIndustries"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -84,12 +84,12 @@
         tools:listitem="@layout/industry_item" />
     <ImageView
         android:visibility="gone"
-        android:id="@+id/server_error_layout"
+        android:id="@+id/ivNotListIndustries"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/todo"
-        android:src="@drawable/placeholder_cat"
+        android:src="@drawable/ic_not_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +97,7 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/tv_error"
+        android:id="@+id/tvNotListIndustries"
         style="@style/TextStyleMedium22_500"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/server_error_layout"
+        app:layout_constraintTop_toBottomOf="@+id/ivNotListIndustries"
         tools:text="" />
 
     <ProgressBar
