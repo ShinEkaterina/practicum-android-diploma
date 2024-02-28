@@ -91,4 +91,11 @@ class FilterSettingsFragmentViewModel(private val filtrationInteractor: Filtrati
         copyFilterParameters = copyFilterParameters.copy(nameRegion = null)
         setFilterParameters(copyFilterParameters)
     }
+
+    fun resetIndustryParameters(filterParameters: FilterParameters) {
+        var copyFilterParameters = filterParameters
+        copyFilterParameters = copyFilterParameters.copy(idIndustry = null)
+        copyFilterParameters = copyFilterParameters.copy(nameIndustry = null)
+        setFilterParameters(copyFilterParameters)
+    }
 }

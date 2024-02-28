@@ -206,10 +206,8 @@ class FilterSettingsFragment : Fragment() {
             tiIndustry.setEndIconOnClickListener {
                 if (filterParameters.nameIndustry != null) {
                     etIndustry.setText("")
-                    filterParameters = filterParameters.copy(idIndustry = null)
-                    filterParameters = filterParameters.copy(nameIndustry = null)
                     tiIndustry.setEndIconDrawable(R.drawable.ic_item_arrow)
-                    viewModel.setFilterParameters(filterParameters)
+                    viewModel.resetIndustryParameters(filterParameters)
                 } else {
                     findNavController().navigate(
                         R.id.action_filterSettingsFragment_to_industrySelectionFragment
