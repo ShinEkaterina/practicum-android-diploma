@@ -11,7 +11,18 @@ import ru.practicum.android.diploma.domain.model.FilterParametersState
 
 class FilterSettingsFragmentViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {
     private val _filterParametersState = MutableLiveData<FilterParametersState>()
+    private var startFilterParameters = FilterParameters()
     val filterParametersState: LiveData<FilterParametersState> = _filterParametersState
+
+    init {
+        viewModelScope.launch {
+            filtrationInteractor
+                .getFilterParametersFromStorage()
+                .collect { filterParams ->
+                    startFilterParameters = filterParams
+                }
+        }
+    }
 
     fun getFilterParameters() {
         _filterParametersState.postValue(FilterParametersState.Updating)
@@ -39,5 +50,9 @@ class FilterSettingsFragmentViewModel(private val filtrationInteractor: Filtrati
                     }
                 }
         }
+    }
+
+    fun getStartFilterParameters(): FilterParameters {
+        return this.startFilterParameters
     }
 }

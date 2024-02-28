@@ -164,6 +164,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_16"
         android:backgroundTint="@color/blue"
+        android:visibility="gone"
         app:cornerRadius="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/reset_button"/>
@@ -171,15 +172,16 @@
         android:id="@+id/reset_button"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/reset_button_text"
         android:backgroundTint="?attr/colorOnSecondary"
         android:fontFamily="@font/ys_display_medium"
         android:textSize="@dimen/font_size_16"
         android:textColor="@color/red"
         android:gravity="center"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

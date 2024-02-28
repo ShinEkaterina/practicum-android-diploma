@@ -68,29 +68,34 @@ class IndustrySelectionFragment : Fragment() {
     }
     @SuppressLint("NotifyDataSetChanged")
     private fun industriesListState(state: IndustriesListState) {
-        when (state) {
-            is IndustriesListState.Loading -> {
-                failedToGetListMessage(false)
-            }
-            is IndustriesListState.Content -> {
-                failedToGetListMessage(false)
-                industriesList.addAll(state.industries)
-                industriesAdapter?.notifyDataSetChanged()
-            }
-            is IndustriesListState.Error -> {
-                failedToGetListMessage(true)
+        with(binding) {
+            when (state) {
+                is IndustriesListState.Loading -> {
+                    failedToGetListMessage(false)
+                    progressBar.isVisible = true
+                }
+
+                is IndustriesListState.Content -> {
+                    failedToGetListMessage(false)
+                    progressBar.isVisible = false
+                    industriesList.addAll(state.industries)
+                    industriesAdapter?.notifyDataSetChanged()
+                }
+
+                is IndustriesListState.Error -> {
+                    failedToGetListMessage(true)
+                    progressBar.isVisible = false
+                }
             }
         }
     }
 
     private fun failedToGetListMessage(isVisible: Boolean) {
-        if (isVisible) {
-            with(binding) {
+        with(binding) {
+            if (isVisible) {
                 ivNotListIndustries.isVisible = true
                 tvNotListIndustries.isVisible = true
-            }
-        } else {
-            with(binding) {
+            } else {
                 ivNotListIndustries.isVisible = false
                 tvNotListIndustries.isVisible = false
             }
