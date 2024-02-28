@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/industry_selection">
+        app:title="@string/region_choice_text">
 
     </androidx.appcompat.widget.Toolbar>
     <FrameLayout
@@ -42,7 +42,7 @@
             android:cursorVisible="true"
             android:drawablePadding="4dp"
             android:foregroundGravity="center_horizontal"
-            android:hint="@string/industry_selection_field_text"
+            android:hint="Введите регион"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:padding="8dp"
@@ -81,7 +81,7 @@
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frame_layout_search"
-        tools:listitem="@layout/industry_item" />
+        tools:listitem="@layout/country_item" />
     <ImageView
         android:visibility="gone"
         android:id="@+id/server_error_layout"
@@ -108,7 +108,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/server_error_layout"
-        tools:text="" />
+        tools:text="Такого региона нет" />
 
     <ProgressBar
         android:id="@+id/progressBar"
