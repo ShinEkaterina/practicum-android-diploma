@@ -99,13 +99,21 @@ class FilterSettingsFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateFilterSettingsScreen(newFilterParameters: FilterParameters) {
         filterParameters = newFilterParameters
         with(binding) {
             resetButton.isVisible = isFilterParametersNotEmpty()
             applyButton.isVisible = isFilterParametersUpdated()
+        }
+        updatePlaceToJobSettingsScreen(filterParameters)
+        updateIndustrySettingsScreen(filterParameters)
+        updateExpectedSalarySettingsScreen(filterParameters)
+        updateIsDoNotShowWithoutSalarySettingsScreen(filterParameters)
+    }
 
+    @SuppressLint("SetTextI18n")
+    private fun updatePlaceToJobSettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
             if (filterParameters.nameCountry != null) {
                 val nameCountry = filterParameters.nameCountry
                 etPlaceToJob.setText(nameCountry)
@@ -118,7 +126,11 @@ class FilterSettingsFragment : Fragment() {
                 etPlaceToJob.setText("")
                 tiPlaceToJob.setEndIconDrawable(R.drawable.ic_item_arrow)
             }
+        }
+    }
 
+    private fun updateIndustrySettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
             if (filterParameters.nameIndustry != null) {
                 etIndustry.setText(filterParameters.nameIndustry)
                 tiIndustry.setEndIconDrawable(R.drawable.ic_clear)
@@ -126,13 +138,21 @@ class FilterSettingsFragment : Fragment() {
                 etIndustry.setText("")
                 tiIndustry.setEndIconDrawable(R.drawable.ic_item_arrow)
             }
+        }
+    }
 
+    private fun updateExpectedSalarySettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
             if (filterParameters.expectedSalary != null) {
                 etExpectedSalary.setText(filterParameters.expectedSalary.toString())
             } else {
                 etExpectedSalary.setText("")
             }
+        }
+    }
 
+    private fun updateIsDoNotShowWithoutSalarySettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
             if (filterParameters.isDoNotShowWithoutSalary) {
                 ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_checked)
             } else {
@@ -142,6 +162,15 @@ class FilterSettingsFragment : Fragment() {
     }
 
     private fun initializationButtonsListener() {
+        backPressedButtonsListener()
+        placeToJobButtonListener()
+        industryButtonListener()
+        expectedSalaryButtonListener()
+        doNotShowWithoutSalaryButtonListener()
+        applyAndResetButtonsListener()
+    }
+
+    private fun backPressedButtonsListener() {
         with(binding) {
             filterToolbars.setNavigationOnClickListener {
                 viewModel.setFilterParameters(viewModel.getStartFilterParameters())
@@ -157,7 +186,11 @@ class FilterSettingsFragment : Fragment() {
                     }
                 }
             )
+        }
+    }
 
+    private fun placeToJobButtonListener() {
+        with(binding) {
             tiPlaceToJob.setEndIconOnClickListener {
                 if (filterParameters.nameCountry != null) {
                     etPlaceToJob.setText("")
@@ -169,7 +202,11 @@ class FilterSettingsFragment : Fragment() {
                     viewModel.setFilterParameters(filterParameters)
                 }
             }
+        }
+    }
 
+    private fun industryButtonListener() {
+        with(binding) {
             tiIndustry.setEndIconOnClickListener {
                 if (filterParameters.nameIndustry != null) {
                     etIndustry.setText("")
@@ -183,13 +220,21 @@ class FilterSettingsFragment : Fragment() {
                     )
                 }
             }
+        }
+    }
 
+    private fun expectedSalaryButtonListener() {
+        with(binding) {
             tiExpectedSalary.setEndIconOnClickListener {
                 etExpectedSalary.setText("")
                 filterParameters = filterParameters.copy(expectedSalary = null)
                 viewModel.setFilterParameters(filterParameters)
             }
+        }
+    }
 
+    private fun doNotShowWithoutSalaryButtonListener() {
+        with(binding) {
             ivDoNotShowWithoutSalary.setOnClickListener {
                 filterParameters = if (filterParameters.isDoNotShowWithoutSalary) {
                     filterParameters.copy(isDoNotShowWithoutSalary = false)
@@ -198,7 +243,11 @@ class FilterSettingsFragment : Fragment() {
                 }
                 viewModel.setFilterParameters(filterParameters)
             }
+        }
+    }
 
+    private fun applyAndResetButtonsListener() {
+        with(binding) {
             applyButton.setOnClickListener {
                 findNavController().navigateUp()
             }
