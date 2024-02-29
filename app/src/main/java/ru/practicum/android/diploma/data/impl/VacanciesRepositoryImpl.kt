@@ -12,45 +12,32 @@ import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
-import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.VacanciesModel
-import ru.practicum.android.diploma.util.Constant
+import java.net.HttpURLConnection.HTTP_OK
 
 class VacanciesRepositoryImpl(
     private val networkClient: NetworkClient
 ) : VacanciesRepository {
-
-    /*override fun getVacancies(
-        expression: String,
-        page: Int
-    ): Flow<Resource<VacanciesModel>> = flow {
-        val response = networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page))
-        when (response.responseCode) {
-            SUCCESS_RESULT_CODE -> {
-                emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
-            }
-
-            else -> {
-                emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
-            }
-        }
-    }*/
 
     override fun getVacancies(
         expression: String,
         page: Int,
         amount: Int
     ): Flow<Resource<VacanciesModel>> = flow {
-        val response = networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
-        if (response.responseCode == Constant.SUCCESS_RESULT_CODE) {
+        val response =
+            networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
+        if (response.responseCode == HTTP_OK) {
             emit(
                 Resource.Success(
                     Convertors()
                         .convertorToVacanciesModel(response as SearchResponse)
                 )
             )
+        } else if (response.responseCode == NetworkError.NO_CONNECTIVITY.code) {
+            emit(Resource.Error(NetworkError.NO_CONNECTIVITY))
         } else {
-            emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+            emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -58,11 +45,12 @@ class VacanciesRepositoryImpl(
         id: String
     ): Flow<Resource<DetailVacancy>> = flow {
         val response = networkClient.getDetailVacancy(VacancyDetailedRequest(id))
-        if (response.responseCode == Constant.SUCCESS_RESULT_CODE) {
-            val information = Convertors().responseToDetailModel(response as VacancyDetailedResponse)
+        if (response.responseCode == HTTP_OK) {
+            val information =
+                Convertors().responseToDetailModel(response as VacancyDetailedResponse)
             emit(Resource.Success(information))
         } else {
-            emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+            emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -71,20 +59,20 @@ class VacanciesRepositoryImpl(
     ): Flow<Resource<VacanciesModel>> = flow {
         val response = networkClient.getSimilarVacancies(VacanciesSimilarRequest(id))
         when (response.responseCode) {
-            Constant.SUCCESS_RESULT_CODE -> {
+            HTTP_OK -> {
                 emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
             }
 
-            Constant.NO_CONNECTIVITY_MESSAGE -> {
-                emit(Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE))
+            NetworkError.NO_CONNECTIVITY.code -> {
+                emit(Resource.Error(NetworkError.NO_CONNECTIVITY))
             }
 
-            Constant.NOT_FOUND -> {
-                emit(Resource.Error(ErrorMessage.NOT_FOUND))
+            NetworkError.NOT_FOUND.code -> {
+                emit(Resource.Error(NetworkError.NOT_FOUND))
             }
 
             else -> {
-                emit(Resource.Error(ErrorMessage.SERVER_ERROR_MESSAGE))
+                emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
             }
         }
     }
