@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.api.interactor.SimilarInteractor
 import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
-import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.VacancyModel
 
 class SimilarInteractorImpl(
@@ -14,7 +14,7 @@ class SimilarInteractorImpl(
 
     override suspend fun getSimilarVacancy(
         id: String
-    ): Flow<Pair<List<VacancyModel>?, ErrorMessage?>> {
+    ): Flow<Pair<List<VacancyModel>?, NetworkError?>> {
         return repository.getSimilarVacancies(id).map { result ->
             when (result) {
                 is Resource.Success -> {
