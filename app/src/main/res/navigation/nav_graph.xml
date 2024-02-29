@@ -48,6 +48,9 @@
         <action
             android:id="@+id/action_filterSettingsFragment_to_industrySelectionFragment"
             app:destination="@id/industrySelectionFragment" />
+        <action
+            android:id="@+id/action_filterSettingsFragment_to_choosingPlaceToJobFragment"
+            app:destination="@id/choosingPlaceToJobFragment" />
     </fragment>
     <fragment
         android:id="@+id/similarVacancy"
@@ -63,4 +66,8 @@
         android:name="ru.practicum.android.diploma.ui.filter.industry.IndustrySelectionFragment"
         android:label="fragment_industry_selection"
         tools:layout="@layout/fragment_industry_selection" />
+    <fragment
+        android:id="@+id/choosingPlaceToJobFragment"
+        android:name="ru.practicum.android.diploma.ui.filter.place.ChoosingPlaceToJobFragment"
+        android:label="ChoosingPlaceToJobFragment" />
 </navigation>

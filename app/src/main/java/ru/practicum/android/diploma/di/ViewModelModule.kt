@@ -4,6 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.ui.favorites.FavoritesViewModel
 import ru.practicum.android.diploma.ui.filter.industry.IndustrySelectionFragmentViewModel
+import ru.practicum.android.diploma.ui.filter.place.ChoosingPlaceToJobViewModel
 import ru.practicum.android.diploma.ui.filter.settings.FilterSettingsFragmentViewModel
 import ru.practicum.android.diploma.ui.search.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.ui.similar.SimilarViewModel
@@ -43,4 +44,7 @@ val viewModelModule = module {
         SimilarViewModel(similarInteractor = get())
     }
 
+    viewModel {
+        ChoosingPlaceToJobViewModel(filtrationInteractor = get())
+    }
 }
