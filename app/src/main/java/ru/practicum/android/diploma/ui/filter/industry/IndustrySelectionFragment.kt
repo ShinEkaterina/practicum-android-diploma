@@ -42,15 +42,13 @@ class IndustrySelectionFragment : Fragment() {
             view,
             savedInstanceState
         )
+        initializationButtonsListener()
         initializationAdapter()
         viewModel.industriesListState.observe(viewLifecycleOwner) {
             industriesListState(it)
         }
 
         viewModel.getIndustries()
-        binding.industrySelectionToolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
     }
 
     override fun onDestroyView() {
@@ -58,39 +56,61 @@ class IndustrySelectionFragment : Fragment() {
         _binding = null
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initializationAdapter() {
-        industriesAdapter = IndustriesAdapter(industriesList) { industry ->
-            viewModel.setFilterParameters(industry)
-            findNavController().navigateUp()
-        }
+        with(binding) {
+            industriesAdapter = IndustriesAdapter(industriesList) { industry ->
+                viewModel.setTempFilterParameters(industry)
+                selectedButton.isVisible = true
+                industriesAdapter?.notifyDataSetChanged()
+            }
 
-        binding.rvIndustries.adapter = industriesAdapter
+            rvIndustries.adapter = industriesAdapter
+        }
+    }
+
+    private fun initializationButtonsListener() {
+        with(binding) {
+            industrySelectionToolbar.setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+
+            selectedButton.setOnClickListener {
+                viewModel.setFilterParameters()
+                findNavController().navigateUp()
+            }
+        }
     }
     @SuppressLint("NotifyDataSetChanged")
     private fun industriesListState(state: IndustriesListState) {
-        when (state) {
-            is IndustriesListState.Loading -> {
-                failedToGetListMessage(false)
-            }
-            is IndustriesListState.Content -> {
-                failedToGetListMessage(false)
-                industriesList.addAll(state.industries)
-                industriesAdapter?.notifyDataSetChanged()
-            }
-            is IndustriesListState.Error -> {
-                failedToGetListMessage(true)
+        with(binding) {
+            when (state) {
+                is IndustriesListState.Loading -> {
+                    failedToGetListMessage(false)
+                    progressBar.isVisible = true
+                }
+
+                is IndustriesListState.Content -> {
+                    failedToGetListMessage(false)
+                    progressBar.isVisible = false
+                    industriesList.addAll(state.industries)
+                    industriesAdapter?.notifyDataSetChanged()
+                }
+
+                is IndustriesListState.Error -> {
+                    failedToGetListMessage(true)
+                    progressBar.isVisible = false
+                }
             }
         }
     }
 
     private fun failedToGetListMessage(isVisible: Boolean) {
-        if (isVisible) {
-            with(binding) {
+        with(binding) {
+            if (isVisible) {
                 ivNotListIndustries.isVisible = true
                 tvNotListIndustries.isVisible = true
-            }
-        } else {
-            with(binding) {
+            } else {
                 ivNotListIndustries.isVisible = false
                 tvNotListIndustries.isVisible = false
             }

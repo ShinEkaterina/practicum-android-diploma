@@ -10,6 +10,7 @@ class IndustriesAdapter(
     private val data: ArrayList<IndustriesModel>,
     private val onClick: (IndustriesModel) -> Unit
 ) : RecyclerView.Adapter<IndustriesViewHolder> () {
+    private var checkedIndustry: IndustriesModel? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -28,7 +29,16 @@ class IndustriesAdapter(
     ) {
         val industry = data[position]
         holder.bind(industry)
+
+        if (checkedIndustry == industry) {
+            holder.setCheckedImage(true)
+        } else {
+            holder.setCheckedImage(false)
+        }
+
         holder.itemView.setOnClickListener {
+            checkedIndustry = industry
+            holder.setCheckedImage(true)
             onClick.invoke(industry)
         }
     }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -98,51 +99,137 @@ class FilterSettingsFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateFilterSettingsScreen(newFilterParameters: FilterParameters) {
         filterParameters = newFilterParameters
         with(binding) {
+            resetButton.isVisible = viewModel.isFilterParametersNotEmpty(filterParameters)
+            applyButton.isVisible = viewModel.isFilterParametersUpdated(filterParameters)
+        }
+        updatePlaceToJobSettingsScreen(filterParameters)
+        updateIndustrySettingsScreen(filterParameters)
+        updateExpectedSalarySettingsScreen(filterParameters)
+        updateIsDoNotShowWithoutSalarySettingsScreen(filterParameters)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updatePlaceToJobSettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
             if (filterParameters.nameCountry != null) {
                 val nameCountry = filterParameters.nameCountry
-                workPlaceButton.text = nameCountry
+                etPlaceToJob.setText(nameCountry)
                 if (filterParameters.nameRegion != null) {
                     val nameRegion = filterParameters.nameRegion
-                    workPlaceButton.text = "$nameCountry, $nameRegion"
+                    etPlaceToJob.setText("$nameCountry, $nameRegion")
                 }
+                tiPlaceToJob.setEndIconDrawable(R.drawable.ic_clear)
+            } else {
+                etPlaceToJob.setText("")
+                tiPlaceToJob.setEndIconDrawable(R.drawable.ic_item_arrow)
             }
+        }
+    }
 
+    private fun updateIndustrySettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
             if (filterParameters.nameIndustry != null) {
-                industryButton.text = filterParameters.nameIndustry
+                etIndustry.setText(filterParameters.nameIndustry)
+                tiIndustry.setEndIconDrawable(R.drawable.ic_clear)
+            } else {
+                etIndustry.setText("")
+                tiIndustry.setEndIconDrawable(R.drawable.ic_item_arrow)
             }
+        }
+    }
 
+    private fun updateExpectedSalarySettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
             if (filterParameters.expectedSalary != null) {
-                inputSearchSalary.setText(filterParameters.expectedSalary.toString())
+                etExpectedSalary.setText(filterParameters.expectedSalary.toString())
+            } else {
+                etExpectedSalary.setText("")
             }
+        }
+    }
 
-            //  if (filterParameters.isDoNotShowWithoutSalary) {
-            //      checkBoxShowSalary.setImageResource(R.drawable.ic_check_box_checked)
-            //   } else {
-            //       ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
+    private fun updateIsDoNotShowWithoutSalarySettingsScreen(filterParameters: FilterParameters) {
+        with(binding) {
+            if (filterParameters.isDoNotShowWithoutSalary) {
+                ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_checked)
+            } else {
+                ivDoNotShowWithoutSalary.setImageResource(R.drawable.ic_check_box_unchecked)
+            }
         }
     }
 
     private fun initializationButtonsListener() {
+        backPressedButtonsListener()
+        placeToJobButtonListener()
+        industryButtonListener()
+        expectedSalaryButtonListener()
+        doNotShowWithoutSalaryButtonListener()
+        applyAndResetButtonsListener()
+    }
+
+    private fun backPressedButtonsListener() {
         with(binding) {
             filterToolbars.setNavigationOnClickListener {
+                viewModel.setFilterParameters(viewModel.getStartFilterParameters())
                 findNavController().navigateUp()
             }
 
-            //    flPlaceToJob.setOnClickListener {
-            //     Log.i("TEST_REY", "segue to place to job")
-            //    }
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        viewModel.setFilterParameters(viewModel.getStartFilterParameters())
+                        findNavController().navigateUp()
+                    }
+                }
+            )
+        }
+    }
 
-            industryButton.setOnClickListener {
-                findNavController().navigate(
-                    R.id.action_filterSettingsFragment_to_industrySelectionFragment
-                )
+    private fun placeToJobButtonListener() {
+        with(binding) {
+            tiPlaceToJob.setEndIconOnClickListener {
+                if (filterParameters.nameCountry != null) {
+                    etPlaceToJob.setText("")
+                    tiPlaceToJob.setEndIconDrawable(R.drawable.ic_item_arrow)
+                    viewModel.resetPlaceToJobParameters(filterParameters)
+                }
             }
+        }
+    }
 
-            checkBoxShowSalary.setOnClickListener {
+    private fun industryButtonListener() {
+        with(binding) {
+            tiIndustry.setEndIconOnClickListener {
+                if (filterParameters.nameIndustry != null) {
+                    etIndustry.setText("")
+                    tiIndustry.setEndIconDrawable(R.drawable.ic_item_arrow)
+                    viewModel.resetIndustryParameters(filterParameters)
+                } else {
+                    findNavController().navigate(
+                        R.id.action_filterSettingsFragment_to_industrySelectionFragment
+                    )
+                }
+            }
+        }
+    }
+
+    private fun expectedSalaryButtonListener() {
+        with(binding) {
+            tiExpectedSalary.setEndIconOnClickListener {
+                etExpectedSalary.setText("")
+                filterParameters = filterParameters.copy(expectedSalary = null)
+                viewModel.setFilterParameters(filterParameters)
+            }
+        }
+    }
+
+    private fun doNotShowWithoutSalaryButtonListener() {
+        with(binding) {
+            ivDoNotShowWithoutSalary.setOnClickListener {
                 filterParameters = if (filterParameters.isDoNotShowWithoutSalary) {
                     filterParameters.copy(isDoNotShowWithoutSalary = false)
                 } else {
@@ -150,9 +237,18 @@ class FilterSettingsFragment : Fragment() {
                 }
                 viewModel.setFilterParameters(filterParameters)
             }
+        }
+    }
 
-            clearButton.setOnClickListener {
-                inputSearchSalary.setText("")
+    private fun applyAndResetButtonsListener() {
+        with(binding) {
+            applyButton.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
+            resetButton.setOnClickListener {
+                filterParameters = viewModel.defaultFilterParameters()
+                viewModel.setFilterParameters(filterParameters)
             }
         }
     }
@@ -162,22 +258,23 @@ class FilterSettingsFragment : Fragment() {
         inputMethodManager: InputMethodManager?
     ) {
         with(binding) {
-            inputSearchSalary.addTextChangedListener(simpleTextWatcher)
-            inputSearchSalary.setOnKeyListener { _, i, keyEvent ->
+            etExpectedSalary.addTextChangedListener(simpleTextWatcher)
+            etExpectedSalary.setOnKeyListener { _, i, keyEvent ->
                 if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                    inputSearchSalary.clearFocus()
+                    etExpectedSalary.clearFocus()
                 }
                 false
             }
-            inputSearchSalary.setOnFocusChangeListener { _, hasFocus ->
+            etExpectedSalary.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     inputMethodManager?.hideSoftInputFromWindow(
-                        inputSearchSalary.windowToken,
+                        etExpectedSalary.windowToken,
                         0
                     )
                     viewModel.setFilterParameters(filterParameters)
+                    tiExpectedSalary.isEndIconVisible = false
                 } else {
-                    clearButton.isVisible = filterParameters.expectedSalary != null
+                    tiExpectedSalary.isEndIconVisible = filterParameters.expectedSalary != null
                 }
             }
         }
@@ -185,7 +282,7 @@ class FilterSettingsFragment : Fragment() {
 
     private fun onTextChangedAction(s: CharSequence?) {
         with(binding) {
-            //     btClearInputExpectedSalary.isVisible = etExpectedSalary.hasFocus() && s?.isEmpty() == false
+            tiExpectedSalary.isEndIconVisible = etExpectedSalary.hasFocus() && s?.isEmpty() == false
             filterParameters = if (s.isNullOrEmpty()) {
                 filterParameters.copy(expectedSalary = null)
             } else {
