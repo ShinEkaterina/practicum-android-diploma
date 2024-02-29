@@ -57,9 +57,10 @@
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:layout_marginEnd="4dp"
-            android:layout_marginVertical="@dimen/padding_4"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:contentDescription="@string/todo"
-            android:padding="8dp"
+            android:padding="12dp"
             android:src="@drawable/ic_search_24"
             app:tint="@color/black" />
     </FrameLayout>
