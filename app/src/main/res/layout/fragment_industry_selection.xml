@@ -43,7 +43,6 @@
             android:foregroundGravity="center_horizontal"
             android:hint="@string/industry_selection_field_text"
             android:textColorHint="@color/gray"
-            android:imeOptions="actionDone"
             android:inputType="text"
             android:paddingStart="16dp"
             android:paddingEnd="56dp"

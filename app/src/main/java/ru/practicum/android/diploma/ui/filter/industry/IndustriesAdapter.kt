@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.filter.industry
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ class IndustriesAdapter(
         return IndustriesViewHolder(view)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(
         holder: IndustriesViewHolder,
         position: Int
@@ -40,6 +42,7 @@ class IndustriesAdapter(
             checkedIndustry = industry
             holder.setCheckedImage(true)
             onClick.invoke(industry)
+            notifyDataSetChanged()
         }
     }
 
