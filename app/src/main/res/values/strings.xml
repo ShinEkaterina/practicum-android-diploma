@@ -98,4 +98,5 @@
     <string name="country">Страна</string>
     <string name="choose_button_text">Выбрать</string>
     <string name="wanted_salary">Ожидаемая зарплата</string>
+    <string name="choosing_place_to_job">Выбор места работы</string>
 </resources>
