@@ -138,6 +138,7 @@ class IndustrySelectionFragment : Fragment() {
                     industriesList.clear()
                     industriesList.addAll(state.industries)
                     industriesAdapter?.notifyDataSetChanged()
+                    llNotIndustry.isVisible = industriesList.isEmpty()
                 }
 
                 is IndustriesListState.Error -> {
@@ -149,15 +150,7 @@ class IndustrySelectionFragment : Fragment() {
     }
 
     private fun failedToGetListMessage(isVisible: Boolean) {
-        with(binding) {
-            if (isVisible) {
-                ivNotListIndustries.isVisible = true
-                tvNotListIndustries.isVisible = true
-            } else {
-                ivNotListIndustries.isVisible = false
-                tvNotListIndustries.isVisible = false
-            }
-        }
+        binding.llNotListIndustries.isVisible = isVisible
     }
 
     private fun searchIndustryEditTextListeners(

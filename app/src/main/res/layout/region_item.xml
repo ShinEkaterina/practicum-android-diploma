@@ -7,7 +7,7 @@
     android:background="?attr/colorPrimaryVariant">
 
     <TextView
-        android:id="@+id/tvIndustryItem"
+        android:id="@+id/tvRegionItem"
         style="@style/TextStyleRegular16_400"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -19,17 +19,15 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="@string/job_placeholder_text" />
+        android:text="@string/region_moscow_text" />
 
     <ImageView
-        android:id="@+id/ivSelectedIndustryItem"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
         android:layout_marginEnd="4dp"
         android:layout_gravity="center_vertical"
-        android:contentDescription="@string/image_status_checkbox_circle"
-        android:src="@drawable/ic_unselected_circle" />
+        android:src="@drawable/ic_item_arrow_48" />
 
 </LinearLayout>
