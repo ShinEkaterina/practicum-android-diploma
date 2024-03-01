@@ -51,6 +51,7 @@
         <item name="itemRippleColor">@color/blue</item>
     </style>
 
+
     <style name="ButtonInsideEditText" parent="Widget.MaterialComponents.Button.UnelevatedButton">
     </style>
 </resources>

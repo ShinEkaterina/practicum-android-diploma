@@ -11,74 +11,93 @@ import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameReques
 import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
 import ru.practicum.android.diploma.data.dto.respone.Response
-import ru.practicum.android.diploma.data.dto.respone.Response.Companion.BAD_REQUEST_RESULT_CODE
-import ru.practicum.android.diploma.data.dto.respone.Response.Companion.NO_INTERNET_RESULT_CODE
-import ru.practicum.android.diploma.data.dto.respone.Response.Companion.SUCCESS_RESULT_CODE
-import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.IndustriesModel
+import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.util.isConnected
+import java.net.ConnectException
+import java.net.HttpURLConnection.HTTP_OK
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class RetrofitNetworkClient(
     private val headHunterService: HeadHunterServiceApi,
     private val context: Context
 ) : NetworkClient {
 
-    override suspend fun doRequest(
-        dto: Any
+    private fun handleNetworkException(e: Exception, networkError: NetworkError): Response {
+        return Response().apply { responseCode = networkError.code }
+    }
+
+    override suspend fun getVacancies(
+        dto: VacanciesSearchByNameRequest
     ): Response {
-        return withContext(Dispatchers.IO) {
-            try {
-                when (dto) {
-                    is VacanciesSearchByNameRequest -> {
-                        headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
-                            responseCode = SUCCESS_RESULT_CODE
-                        }
-                    }
-
-                    else -> {
-                        Response().apply {
-                            responseCode = BAD_REQUEST_RESULT_CODE
-                        }
-                    }
-                }
-            } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
-
+        if (!isConnected(context)) {
+            return Response().apply {
+                responseCode = NetworkError.NO_CONNECTIVITY.code
             }
         }
-    }
-    override suspend fun getDetailVacancy(dto: VacancyDetailedRequest): Response {
-        if (!isConnected(context)) {
-            return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
+        return try {
+            withContext(Dispatchers.IO) {
+                headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
+                    responseCode = HTTP_OK
+                }
+            }
+        } catch (exception: HttpException) {
+            Response().apply { responseCode = exception.code() }
+        } catch (exception: ConnectException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: SocketTimeoutException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: UnknownHostException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
         }
-        return withContext(Dispatchers.IO) {
-            try {
+    }
+
+    override suspend fun getDetailVacancy(
+        dto: VacancyDetailedRequest
+    ): Response {
+        if (!isConnected(context)) {
+            return Response().apply { responseCode = NetworkError.NO_CONNECTIVITY.code }
+        }
+
+        return try {
+            withContext(Dispatchers.IO) {
                 headHunterService.searchConcreteVacancy(dto.id).apply {
-                    responseCode = SUCCESS_RESULT_CODE
+                    responseCode = HTTP_OK
                 }
-            } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
             }
+        } catch (exception: HttpException) {
+            Response().apply { responseCode = exception.code() }
+        } catch (exception: ConnectException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: SocketTimeoutException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: UnknownHostException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
         }
     }
-    override suspend fun getSimilarVacancies(dto: VacanciesSimilarRequest): Response {
+
+    override suspend fun getSimilarVacancies(
+        dto: VacanciesSimilarRequest
+    ): Response {
         if (!isConnected(context)) {
-            return Response().apply { responseCode = NO_INTERNET_RESULT_CODE }
+            return Response().apply { responseCode = NetworkError.NO_CONNECTIVITY.code }
         }
         return withContext(Dispatchers.IO) {
             try {
                 headHunterService.searchSimilarVacancies(dto.id).apply {
-                    responseCode = SUCCESS_RESULT_CODE
+                    responseCode = HTTP_OK
                 }
             } catch (exception: HttpException) {
-                Response().apply { responseCode = exception.code() }
+                handleNetworkException(exception, NetworkError.INTERNAL_SERVER_ERROR)
             }
         }
     }
 
     override suspend fun getIndustries(): Resource<List<IndustriesModel>> {
         if (!isConnected(context)) {
-            return Resource.Error(ErrorMessage.NO_CONNECTIVITY_MESSAGE)
+            return Resource.Error(NetworkError.NO_CONNECTIVITY)
         }
         return withContext(Dispatchers.IO) {
             try {
@@ -89,8 +108,27 @@ class RetrofitNetworkClient(
                         )
                 )
             } catch (exception: HttpException) {
-                Resource.Error(ErrorMessage.getErrorMessage(exception.message.toString()))
+                Resource.Error(NetworkError.getErrorMessage(exception.message.toString()))
             }
         }
     }
+
+    override suspend fun getAreas(): Resource<Map<AreasModel, List<AreasModel>>> {
+        if (!isConnected(context)) {
+            return Resource.Error(NetworkError.NO_CONNECTIVITY)
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                Resource.Success(
+                    Convertors()
+                        .converterAreasResponseToAreasModelList(
+                            headHunterService.getAreas()
+                        )
+                )
+            } catch (exception: HttpException) {
+                Resource.Error(NetworkError.getErrorMessage(exception.message.toString()))
+            }
+        }
+    }
+
 }

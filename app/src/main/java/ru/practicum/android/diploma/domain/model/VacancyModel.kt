@@ -6,9 +6,10 @@ data class VacancyModel(
     val city: String,
     val salary: String,
     val companyName: String?,
-    val logoUrls: String?,
-    val details: Details?
+    val logoUrls: ArrayList<String?>?,
+    val details: Details? = null
 )
+
 data class Details(
     val experience: String,
     val employment: String,

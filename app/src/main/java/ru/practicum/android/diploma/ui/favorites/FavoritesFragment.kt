@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.favorites
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,7 @@ class FavoritesFragment : Fragment() {
     private var onTrackClickDebounce: (VacancyModel) -> Unit = {}
 
     private val adapter = VacanciesAdapter(
+        vacancies = arrayListOf(),
         itemClickListener = { vacancy: VacancyModel -> onTrackClickDebounce(vacancy) }
     )
 
@@ -50,14 +52,14 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        onTrackClickDebounce = debounce<VacancyModel>(
+        onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
             false
-        ) { vavancy ->
+        ) { vacancy ->
             findNavController().navigate(
                 R.id.action_favoritesFragment_to_vacancyFragment3,
-                bundleOf(VacancyFragment.ARGS_VACANCY to vavancy.id)
+                bundleOf(VacancyFragment.ARGS_VACANCY to vacancy.id)
             )
 
         }
@@ -92,7 +94,7 @@ class FavoritesFragment : Fragment() {
     private fun showError() {
         binding.apply {
             rvFavorites.isVisible = false
-            ivPlaceholder.setImageResource(R.drawable.ic_not_faund)
+            ivPlaceholder.setImageResource(R.drawable.ic_not_found)
             tvPlaceholder.text = getString(R.string.can_not_get_list)
             ivPlaceholder.isVisible = true
             tvPlaceholder.isVisible = true
@@ -111,6 +113,7 @@ class FavoritesFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showContent(vacancies: List<VacancyModel>) {
         binding.apply {
             rvFavorites.isVisible = true

@@ -1,9 +1,15 @@
 package ru.practicum.android.diploma.domain.api.interactor
 
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.domain.model.ErrorMessage
-import ru.practicum.android.diploma.domain.model.VacancyModel
+import ru.practicum.android.diploma.Resource
+import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 interface SearchInteractor {
-    fun search(expression: String, page: Int): Flow<Pair<List<VacancyModel>?, ErrorMessage?>>
+
+    fun getVacancies(
+        vacancyName: String,
+        page: Int,
+        amount: Int
+    ): Flow<Resource<VacanciesModel>>
+
 }

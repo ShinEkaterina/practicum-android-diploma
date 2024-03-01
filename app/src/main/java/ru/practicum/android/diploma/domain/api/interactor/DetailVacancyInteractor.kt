@@ -6,4 +6,7 @@ import ru.practicum.android.diploma.domain.model.DetailVacancy
 
 interface DetailVacancyInteractor {
     suspend fun getDetailVacancy(id: String): Flow<Resource<DetailVacancy>>
+    suspend fun call(number: String)
+    suspend fun sendEmail(email: String, name: String)
+    suspend fun shareVacancy(url: String)
 }

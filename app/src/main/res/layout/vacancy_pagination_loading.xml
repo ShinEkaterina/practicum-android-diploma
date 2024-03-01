@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vacancy_pagination_loading_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ProgressBar
+        android:id="@+id/found_vacancies_progress_bar_pagination"
+        android:layout_gravity="center"
+        android:layout_width="@dimen/progress_bar_sizes"
+        android:layout_height="@dimen/progress_bar_sizes"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:indeterminateTint="@color/blue"/>
+
+</FrameLayout>

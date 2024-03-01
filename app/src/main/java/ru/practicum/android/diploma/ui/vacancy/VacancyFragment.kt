@@ -1,7 +1,5 @@
 package ru.practicum.android.diploma.ui.vacancy
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +58,6 @@ class VacancyFragment : Fragment() {
 
         viewModel.getIsFavorite().observe(viewLifecycleOwner) { isFavorite ->
             changeLikeButton(isFavorite)
-
         }
     }
 
@@ -76,21 +73,15 @@ class VacancyFragment : Fragment() {
             if (binding.contactPersonPhoneData.selectionStart != -1 &&
                 binding.contactPersonPhoneData.selectionEnd != -1
             ) {
-                val call = Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.fromParts("tel", phoneNumber, null)
-                )
-                requireContext().startActivity(call)
+                viewModel.call(phoneNumber)
             }
 
         }
+
         binding.contactPersonEmailData.setOnClickListener {
             val emailAddress = binding.contactPersonEmailData.text.toString()
-            val emailIntent = Intent(
-                Intent.ACTION_SENDTO,
-                Uri.parse("mailto:$emailAddress")
-            )
-            requireContext().startActivity(emailIntent)
+            val personName = binding.contactPersonData.text.toString()
+            viewModel.sendEmail(emailAddress, personName)
         }
     }
 
@@ -135,6 +126,9 @@ class VacancyFragment : Fragment() {
             createDiscription(vacancy.description)
             createKeySkills(vacancy.keySkillsNames)
             createContacts(vacancy)
+            binding.buttonShare.setOnClickListener {
+                viewModel.shareVacancy(vacancy.urlVacancy)
+            }
         }
     }
 
@@ -173,9 +167,9 @@ class VacancyFragment : Fragment() {
 
     private fun isEmptyComment(comment: String?): String {
         return if (comment.isNullOrEmpty()) {
-            ""
+            "<br>"
         } else {
-            "<br><br><b>${getString(R.string.contact_comment_text)}</b><br>" + comment + "<br>"
+            "<br><br><b>${getString(R.string.contact_comment_text)}</b><br>" + comment + "<br><br>"
         }
     }
 

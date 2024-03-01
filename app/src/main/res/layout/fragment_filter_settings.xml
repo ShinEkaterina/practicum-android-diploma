@@ -1,112 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimaryVariant"
-    tools:context="ru.practicum.android.diploma.ui.filter.settings.FilterSettingsFragment">
+    android:background="?attr/colorOnSecondary" >
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/filterSettingsToolbar"
+        android:id="@+id/filter_toolbars"
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/filter_settings" />
+        app:title="@string/filtration_settings_text">
+    </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
-        android:id="@+id/flPlaceToJob"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiPlaceToJob"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16"
+        android:textColor="?attr/colorOnPrimary"
+        android:textAppearance="@style/TextStyleRegular16_400"
+        android:hint="@string/place_of_work_text"
+        android:textColorHint="@color/gray"
+        app:hintTextColor="?attr/colorOnPrimary"
+        app:hintTextAppearance="@style/TextStyleRegular12_400"
+        app:endIconDrawable="@drawable/ic_item_arrow"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnPrimary"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterSettingsToolbar">
+        app:layout_constraintTop_toBottomOf="@id/filter_toolbars"
+        tools:ignore="RtlSymmetry">
 
-        <TextView
-            android:id="@+id/tvPlaceToJob"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPlaceToJob"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="20.5dp"
-            android:text="@string/place_to_job"/>
-    </FrameLayout>
+            android:paddingStart="@dimen/margin_16"
+            android:textAppearance="@style/TextStyleRegular16_400"
+            android:background="@android:color/transparent"
+            android:focusable="false"
+            android:cursorVisible="false"
+            android:inputType="textMultiLine|textNoSuggestions"
+            tools:ignore="RtlSymmetry">
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <FrameLayout
-        android:id="@+id/flIndustry"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiIndustry"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnPrimary"
+        android:textAppearance="@style/TextStyleRegular16_400"
+        android:hint="@string/industry"
+        android:textColorHint="@color/gray"
+        app:hintTextColor="?attr/colorOnPrimary"
+        app:hintTextAppearance="@style/TextStyleRegular12_400"
+        app:endIconDrawable="@drawable/ic_item_arrow"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnPrimary"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flPlaceToJob">
+        app:layout_constraintTop_toBottomOf="@id/tiPlaceToJob"
+        tools:ignore="RtlSymmetry">
 
-        <TextView
-            android:id="@+id/tvIndustry"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etIndustry"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="20.5dp"
-            android:text="@string/industry"/>
-    </FrameLayout>
+            android:paddingStart="@dimen/margin_16"
+            android:textAppearance="@style/TextStyleRegular16_400"
+            android:background="@android:color/transparent"
+            android:focusable="false"
+            android:cursorVisible="false"
+            android:inputType="textMultiLine|textNoSuggestions"
+            tools:ignore="RtlSymmetry">
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <FrameLayout
-        android:id="@+id/flExpectedSalary"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiExpectedSalary"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
-        android:layout_height="99dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flIndustry">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:hint="@string/wanted_salary"
+        android:textColorHint="@color/gray"
+        app:endIconDrawable="@drawable/ic_clear"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnPrimary"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:hintTextAppearance="@style/TextStyleRegular12_400"
+        app:hintTextColor="@color/blue"
+        app:expandedHintEnabled="false"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tiIndustry">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etExpectedSalary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginEnd="@dimen/margin_16"
-            android:inputType="number"
+            android:layout_height="wrap_content"
+            android:background="@drawable/expected_salary_edit_text_background"
+            android:textAppearance="@style/TextStyleRegular16_400"
             android:hint="@string/enter_salary"
-            android:maxLength="9"
-            android:lines="1"
-            android:paddingStart="@dimen/margin_16"
-            tools:ignore="RtlSymmetry"
-            android:importantForAutofill="no" />
-
-        <Button
-            android:id="@+id/btClearInputExpectedSalary"
-            style="@style/ButtonInsideEditText"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="38dp"
-            android:layout_marginBottom="38dp"
-            android:layout_marginEnd="20dp"
-            android:layout_gravity="end"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:backgroundTint="?attr/colorPrimaryVariant"
-            android:visibility="gone"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:icon="@drawable/ic_clear_edittext"/>
-    </FrameLayout>
+            android:inputType="number"
+            android:maxLength="8"
+            android:textColor="?attr/colorOnPrimary"
+            android:textColorHint="@color/gray"
+            android:textCursorDrawable="@drawable/cursor" >
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flExpectedSalary">
+        app:layout_constraintTop_toBottomOf="@+id/tiExpectedSalary">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="20.5dp"
+            android:layout_marginTop="24dp"
+            android:textAppearance="@style/TextStyleRegular16_400"
             android:text="@string/do_not_show_without_salary"/>
 
         <ImageView
@@ -114,10 +147,41 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin_18"
-            android:layout_marginEnd="@dimen/margin_18"
+            android:layout_marginEnd="@dimen/margin_16"
             android:layout_gravity="end"
             android:src="@drawable/ic_check_box_unchecked"
             android:contentDescription="@string/image_status_checkbox" />
     </FrameLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/apply_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:text="@string/apply_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_16"
+        android:backgroundTint="@color/blue"
+        android:visibility="gone"
+        app:cornerRadius="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/reset_button"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="@string/reset_button_text"
+        android:backgroundTint="?attr/colorOnSecondary"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="@dimen/font_size_16"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

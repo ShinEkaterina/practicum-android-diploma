@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tbFavorites"
-        tools:listitem="@layout/vacancy_item" />
+        tools:listitem="@layout/vacancy_pagination_loading" />
 
     <ImageView
         android:id="@+id/ivPlaceholder"

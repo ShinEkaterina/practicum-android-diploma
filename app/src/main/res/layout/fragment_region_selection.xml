@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnSecondary">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/regionSelectionToolbar"
+        style="@style/TextStyleToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/region_choice_text">
+
+    </androidx.appcompat.widget.Toolbar>
+    <FrameLayout
+        android:id="@+id/frame_layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/margin_16"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regionSelectionToolbar">
+
+        <EditText
+            android:id="@+id/input_search_region"
+            style="@style/TextStyleMedium16_500"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:autofillHints="todo"
+            android:background="@drawable/search_field"
+            android:cursorVisible="true"
+            android:drawablePadding="4dp"
+            android:foregroundGravity="center_horizontal"
+            android:hint="@string/input_region"
+            android:textColorHint="@color/gray"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingEnd="56dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor" />
+
+        <ImageView
+            android:id="@+id/clear_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:contentDescription="@string/todo"
+            android:padding="12dp"
+            android:src="@drawable/ic_search_24"
+            app:tint="@color/black"  />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRegions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_8"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/region_item" />
+
+
+    <LinearLayout
+        android:id="@+id/llNotListRegions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="122dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_not_list"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            style="@style/TextStyleMedium22_500"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:gravity="center_horizontal"
+            android:text="@string/failed_to_get_list"
+            android:textColor="?attr/colorOnPrimary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llNotRegions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="122dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_not_found"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            style="@style/TextStyleMedium22_500"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:gravity="center_horizontal"
+            android:text="@string/there_is_no_such_region"
+            android:textColor="?attr/colorOnPrimary" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frame_layout_search" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,19 @@
 package ru.practicum.android.diploma
 
-import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.NetworkError
 
-sealed class Resource<T>(val data: T? = null, val message: ErrorMessage? = null) {
-    class Success<T>(data: T) : Resource<T>(data)
-    class Error<T>(message: ErrorMessage, data: T? = null) : Resource<T>(data, message)
+sealed class Resource<T>(
+    val data: T? = null,
+    val message: NetworkError? = null
+) {
+
+    class Success<T>(
+        data: T
+    ) : Resource<T>(data)
+
+    class Error<T>(
+        message: NetworkError,
+        data: T? = null
+    ) : Resource<T>(data, message)
+
 }

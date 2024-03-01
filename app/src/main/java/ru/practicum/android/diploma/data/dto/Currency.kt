@@ -18,8 +18,10 @@ enum class Currency(val code: String, val symbol: String, val description: Strin
     }
 
     companion object {
+
         fun toCurrency(code: String): Currency {
             return entries.find { it.code == code } ?: NONE
         }
+
     }
 }

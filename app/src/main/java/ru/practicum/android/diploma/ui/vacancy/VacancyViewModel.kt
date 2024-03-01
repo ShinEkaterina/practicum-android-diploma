@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.api.interactor.DetailVacancyInteractor
 import ru.practicum.android.diploma.domain.api.interactor.FavoriteInteractor
 import ru.practicum.android.diploma.domain.model.DetailVacancy
-import ru.practicum.android.diploma.domain.model.ErrorMessage
+import ru.practicum.android.diploma.domain.model.NetworkError
 
 class VacancyViewModel(
     val vacancyInteractor: DetailVacancyInteractor,
@@ -29,37 +29,6 @@ class VacancyViewModel(
     private fun renderState(state: VacancyState) {
         _vacancyState.postValue(state)
     }
-
-    /*    fun getVacancyDetail(id: String):DetailVacancy {
-            if (id.isNotEmpty()) {
-                viewModelScope.launch {
-                    val isFavorite = favoriteInteractor.checkFavorite(id).firstOrNull() ?: false
-                    if (isFavorite) {
-                        when (val vacancyFromNetwork = vacancyInteractor.getDetailVacancy(id).first()) {
-                            is Resource.Success -> {
-                                vacancyFromNetwork.data?.let {
-                                    favoriteInteractor.update(it)
-                                }
-                                processResult(vacancyFromNetwork)
-                            }
-
-                            is Resource.Error -> {
-                                val vacFavorite = favoriteInteractor.getDetailVacancy(id).first()
-                                if (vacFavorite != null) {
-                                    renderState(VacancyState.Content(vacFavorite))
-                                }
-                            }
-                        }
-                    } else {
-                        vacancyInteractor
-                            .getDetailVacancy(id)
-                            .collect { resource ->
-                                processResult(resource)
-                            }
-                    }
-                }
-            }
-        }*/
 
     fun showVacancyDetail(id: String) {
         if (id.isNotEmpty()) {
@@ -129,11 +98,11 @@ class VacancyViewModel(
 
             is Resource.Error -> {
                 when (result.message) {
-                    ErrorMessage.SERVER_ERROR_MESSAGE -> {
+                    NetworkError.INTERNAL_SERVER_ERROR -> {
                         renderState(VacancyState.ErrorServer)
                     }
 
-                    ErrorMessage.NO_CONNECTIVITY_MESSAGE -> {
+                    NetworkError.NO_CONNECTIVITY -> {
                         renderState(VacancyState.NotInternet)
                     }
 
@@ -141,8 +110,22 @@ class VacancyViewModel(
                         renderState(VacancyState.Content(vacancy!!))
                     }
                 }
-
             }
+        }
+    }
+    fun call(number: String) {
+        viewModelScope.launch {
+            vacancyInteractor.call(number)
+        }
+    }
+    fun sendEmail(email: String, name: String) {
+        viewModelScope.launch {
+            vacancyInteractor.sendEmail(email, name)
+        }
+    }
+    fun shareVacancy(url: String) {
+        viewModelScope.launch {
+            vacancyInteractor.shareVacancy(url)
         }
     }
 
