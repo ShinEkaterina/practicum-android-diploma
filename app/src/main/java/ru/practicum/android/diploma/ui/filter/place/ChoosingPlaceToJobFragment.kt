@@ -86,27 +86,17 @@ class ChoosingPlaceToJobFragment : Fragment() {
 
     private fun initializationButtonsListener() {
         with(binding) {
-            placeToWorkToolbar.setNavigationOnClickListener {
-                viewModel.setFilterParameters(viewModel.getStartFilterParameters())
-                findNavController().navigateUp()
-            }
-
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        viewModel.setFilterParameters(viewModel.getStartFilterParameters())
-                        findNavController().navigateUp()
-                    }
-                }
-            )
-
+            backPressedButtonsListener()
             tiCountry.setEndIconOnClickListener {
                 if (filterParameters.nameCountry != null) {
                     etCountry.setText("")
                     tiCountry.setEndIconDrawable(R.drawable.ic_item_arrow)
                     filterParameters = filterParameters.copy(idCountry = null)
                     filterParameters = filterParameters.copy(nameCountry = null)
+                } else {
+                    findNavController().navigate(
+                        R.id.action_choosingPlaceToJobFragment_to_countrySelectionFragment
+                    )
                 }
             }
 
@@ -129,6 +119,25 @@ class ChoosingPlaceToJobFragment : Fragment() {
                 viewModel.setFilterParameters(filterParameters)
                 findNavController().navigateUp()
             }
+        }
+    }
+
+    private fun backPressedButtonsListener() {
+        with(binding) {
+            placeToWorkToolbar.setNavigationOnClickListener {
+                viewModel.setFilterParameters(viewModel.getStartFilterParameters())
+                findNavController().navigateUp()
+            }
+
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        viewModel.setFilterParameters(viewModel.getStartFilterParameters())
+                        findNavController().navigateUp()
+                    }
+                }
+            )
         }
     }
 

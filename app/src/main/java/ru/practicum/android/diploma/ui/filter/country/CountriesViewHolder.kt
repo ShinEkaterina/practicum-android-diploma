@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.CountryItemBinding
 import ru.practicum.android.diploma.domain.model.AreasModel
 
-class AreasViewHolder(private val binding: CountryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class CountriesViewHolder(private val binding: CountryItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: AreasModel) {
-        binding.industryCountryText.text = item.name
+        binding.tvCountryItem.text = item.name
     }
 }

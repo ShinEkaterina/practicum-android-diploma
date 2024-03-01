@@ -10,16 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentCountrySelectionBinding
-import ru.practicum.android.diploma.domain.model.AreasListState
 import ru.practicum.android.diploma.domain.model.AreasModel
+import ru.practicum.android.diploma.domain.model.CountriesListState
 
 class CountrySelectionFragment : Fragment() {
     private val viewModel: CountrySelectionViewModel by viewModel()
     private var _binding: FragmentCountrySelectionBinding? = null
     private val binding: FragmentCountrySelectionBinding
         get() = _binding!!
-    private var areasAdapter: AreasAdapter? = null
-    private val areasList = ArrayList<AreasModel>()
+    private var countriesAdapter: CountriesAdapter? = null
+    private val countiesList = ArrayList<AreasModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,53 +42,59 @@ class CountrySelectionFragment : Fragment() {
             view,
             savedInstanceState
         )
-        viewModel.areasListState.observe(viewLifecycleOwner) {
-            areasListState(it)
-        }
-        viewModel.getCountry()
         binding.countryToolbars.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        initializationAdapter()
 
-        areasAdapter = AreasAdapter(areasList) { area ->
-            viewModel.setAreaFilters(area)
-            findNavController().navigateUp()
+        viewModel.countriesListState.observe(viewLifecycleOwner) {
+            countriesListState(it)
         }
-        binding.industryRecyclerView.adapter = areasAdapter
+
+        viewModel.getCountries()
     }
-    @SuppressLint("NotifyDataSetChanged")
-    private fun areasListState(state: AreasListState) {
-        when (state) {
-            is AreasListState.Loading -> {
-                failedToGetListMessage(false)
-            }
-            is AreasListState.Content -> {
-                failedToGetListMessage(false)
-                areasList.addAll(state.areas)
-                areasAdapter?.notifyDataSetChanged()
-            }
-            is AreasListState.Error -> {
-                failedToGetListMessage(true)
-            }
-        }
-    }
-    private fun failedToGetListMessage(isVisible: Boolean) {
-        if (isVisible) {
-            with(binding) {
-                serverErrorLayout.isVisible = true
-                tvError.isVisible = true
-                binding.industryRegionButton.isVisible = false
-            }
-        } else {
-            with(binding) {
-                serverErrorLayout.isVisible = false
-                tvError.isVisible = false
-                binding.industryRegionButton.isVisible = true
-            }
-        }
-    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun countriesListState(state: CountriesListState) {
+        with(binding) {
+            when (state) {
+                is CountriesListState.Loading -> {
+                    failedToGetListMessage(false)
+                    progressBar.isVisible = true
+                }
+
+                is CountriesListState.Content -> {
+                    failedToGetListMessage(false)
+                    progressBar.isVisible = false
+                    countiesList.clear()
+                    countiesList.addAll(state.countries)
+                    countriesAdapter?.notifyDataSetChanged()
+                }
+
+                is CountriesListState.Error -> {
+                    failedToGetListMessage(true)
+                }
+            }
+        }
+    }
+
+    private fun failedToGetListMessage(isVisible: Boolean) {
+        binding.llNotListCountry.isVisible = isVisible
+    }
+
+    private fun initializationAdapter() {
+        with(binding) {
+            countriesAdapter = CountriesAdapter(countiesList) { country ->
+                viewModel.setFilterParameters(country)
+                findNavController().navigateUp()
+            }
+
+            rvRegions.adapter = countriesAdapter
+        }
     }
 }

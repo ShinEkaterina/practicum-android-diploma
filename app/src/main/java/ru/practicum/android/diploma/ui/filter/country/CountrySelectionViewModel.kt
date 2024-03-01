@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.filter.country
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,44 +8,48 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
-import ru.practicum.android.diploma.domain.model.AreasListState
 import ru.practicum.android.diploma.domain.model.AreasModel
+import ru.practicum.android.diploma.domain.model.CountriesListState
 import ru.practicum.android.diploma.domain.model.FilterParameters
 
 class CountrySelectionViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {
-    private val _areasListState = MutableLiveData<AreasListState>()
+    private val _countriesListState = MutableLiveData<CountriesListState>()
     private var filterParameters = FilterParameters()
-    val areasListState: LiveData<AreasListState> = _areasListState
+    private var areasMap = mapOf<AreasModel, List<AreasModel>>()
+    val countriesListState: LiveData<CountriesListState> = _countriesListState
 
     init {
         getFilterParameters()
     }
 
-    fun getCountry() {
+    fun getCountries() {
         viewModelScope.launch {
-            _areasListState.postValue(AreasListState.Loading)
+            _countriesListState.postValue(CountriesListState.Loading)
             filtrationInteractor
                 .getAreas()
                 .collect { result ->
                     when {
                         result.data != null -> {
-//                            _areasListState.postValue(AreasListState.Content(result.data))
+                            areasMap = result.data
+                            _countriesListState.postValue(CountriesListState.Content(getCountriesList()))
                         }
+
                         result.message != null -> {
-                            _areasListState.postValue(AreasListState.Error)
+                            _countriesListState.postValue(CountriesListState.Error)
                         }
                     }
                 }
         }
     }
 
-    fun setAreaFilters(area: AreasModel) {
-        filterParameters = filterParameters.copy(idCountry = area.id)
-        filterParameters = filterParameters.copy(nameCountry = area.name)
+    fun setFilterParameters(country: AreasModel) {
+        filterParameters = filterParameters.copy(idCountry = country.id)
+        filterParameters = filterParameters.copy(nameCountry = country.name)
         viewModelScope.launch(Dispatchers.IO) {
             filtrationInteractor
                 .setFilterParametersToStorage(filterParameters)
                 .collect { isSet ->
+                    Log.i("TEST_REY", "фильтры сохранены?: $isSet")
                 }
         }
     }
@@ -57,5 +62,13 @@ class CountrySelectionViewModel(private val filtrationInteractor: FiltrationInte
                     filterParameters = filterParams
                 }
         }
+    }
+
+    private fun getCountriesList(): List<AreasModel> {
+        val listAreasModel = mutableListOf<AreasModel>()
+        areasMap.forEach { (areasModel, _) ->
+            listAreasModel.add(areasModel)
+        }
+        return listAreasModel
     }
 }
