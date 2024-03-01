@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import ru.practicum.android.diploma.databinding.FragmentCountrySelectionBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.databinding.FragmentCountrySelectionBinding
 import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.AreasListState
 
-
-
-class CountrySelectionFragment():Fragment() {
+class CountrySelectionFragment() :Fragment() {
     private val viewModel: CountrySelectionViewModel by viewModel()
     private var _binding: FragmentCountrySelectionBinding? = null
     private val binding: FragmentCountrySelectionBinding
@@ -44,14 +42,13 @@ class CountrySelectionFragment():Fragment() {
             view,
             savedInstanceState
         )
-        viewModel.areasListState.observe(viewLifecycleOwner){
+        viewModel.areasListState.observe(viewLifecycleOwner) {
             areasListState(it)
         }
         viewModel.getCountry()
         binding.countryToolbars.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-
 
         areasAdapter = AreasAdapter(areasList) { area ->
             viewModel.setAreaFilters(area)
@@ -60,7 +57,7 @@ class CountrySelectionFragment():Fragment() {
         binding.industryRecyclerView.adapter = areasAdapter
     }
     @SuppressLint("NotifyDataSetChanged")
-    private fun areasListState (state: AreasListState) {
+    private fun areasListState(state: AreasListState) {
         when (state) {
             is AreasListState.Loading -> {
                 failedToGetListMessage(false)
@@ -78,7 +75,7 @@ class CountrySelectionFragment():Fragment() {
     private fun failedToGetListMessage(isVisible: Boolean) {
         if (isVisible) {
             with(binding) {
-               serverErrorLayout .isVisible = true
+                serverErrorLayout.isVisible = true
                 tvError.isVisible = true
                 binding.industryRegionButton.isVisible = false
             }
