@@ -196,6 +196,10 @@ class FilterSettingsFragment : Fragment() {
                     etPlaceToJob.setText("")
                     tiPlaceToJob.setEndIconDrawable(R.drawable.ic_item_arrow)
                     viewModel.resetPlaceToJobParameters(filterParameters)
+                } else {
+                    findNavController().navigate(
+                        R.id.action_filterSettingsFragment_to_choosingPlaceToJobFragment
+                    )
                 }
             }
         }
