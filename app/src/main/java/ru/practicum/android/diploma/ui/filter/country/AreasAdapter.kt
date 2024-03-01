@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.CountryItemBinding
 import ru.practicum.android.diploma.domain.model.AreasModel
 
-class AreasAdapter(private val data: ArrayList<AreasModel>, private val onClick: (AreasModel) -> Unit) : RecyclerView.Adapter<AreasViewHolder> () {
+class AreasAdapter(
+    private val data: ArrayList<AreasModel>,
+    private val onClick: (AreasModel) -> Unit
+) : RecyclerView.Adapter<AreasViewHolder> () {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreasViewHolder {
         val view = CountryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AreasViewHolder(view)
