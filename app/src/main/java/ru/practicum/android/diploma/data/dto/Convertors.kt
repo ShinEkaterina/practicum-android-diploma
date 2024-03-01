@@ -208,7 +208,8 @@ class Convertors {
 
     private fun createAreasList(
         nestedAreasList: List<AreasModel>?,
-        parentId: String): List<AreasModel> {
+        parentId: String
+    ): List<AreasModel> {
         val listAreasModel = mutableListOf<AreasModel>()
         nestedAreasList?.forEach {
             if (it.areas?.isEmpty() == true) {
