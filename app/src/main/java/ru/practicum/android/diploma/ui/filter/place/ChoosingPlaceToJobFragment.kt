@@ -145,9 +145,4 @@ class ChoosingPlaceToJobFragment : Fragment() {
         filterParameters = filterParameters.copy(idRegion = null)
         filterParameters = filterParameters.copy(nameRegion = null)
     }
-
-    private fun resetCountryFilterParameters() {
-        filterParameters = filterParameters.copy(idCountry = null)
-        filterParameters = filterParameters.copy(nameCountry = null)
-    }
 }
