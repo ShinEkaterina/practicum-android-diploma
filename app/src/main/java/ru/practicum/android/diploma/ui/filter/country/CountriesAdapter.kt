@@ -6,16 +6,23 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.CountryItemBinding
 import ru.practicum.android.diploma.domain.model.AreasModel
 
-class AreasAdapter(
+class CountriesAdapter(
     private val data: ArrayList<AreasModel>,
     private val onClick: (AreasModel) -> Unit
-) : RecyclerView.Adapter<AreasViewHolder> () {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreasViewHolder {
-        val view = CountryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AreasViewHolder(view)
+) : RecyclerView.Adapter<CountriesViewHolder> () {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CountriesViewHolder {
+        val view = CountryItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return CountriesViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: AreasViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CountriesViewHolder, position: Int) {
         val area = data[position]
         holder.bind(area)
         holder.itemView.setOnClickListener {

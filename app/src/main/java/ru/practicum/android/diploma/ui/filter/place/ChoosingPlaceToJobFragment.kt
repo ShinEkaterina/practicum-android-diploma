@@ -107,6 +107,10 @@ class ChoosingPlaceToJobFragment : Fragment() {
                     tiCountry.setEndIconDrawable(R.drawable.ic_item_arrow)
                     filterParameters = filterParameters.copy(idCountry = null)
                     filterParameters = filterParameters.copy(nameCountry = null)
+                } else {
+                    findNavController().navigate(
+                        R.id.action_choosingPlaceToJobFragment_to_countrySelectionFragment
+                    )
                 }
             }
 

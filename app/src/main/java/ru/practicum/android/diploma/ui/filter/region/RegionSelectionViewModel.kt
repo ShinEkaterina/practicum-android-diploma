@@ -85,8 +85,16 @@ class RegionSelectionViewModel(private val filtrationInteractor: FiltrationInter
 
     private fun getRegionsList(): List<AreasModel> {
         val listAreasModel = mutableListOf<AreasModel>()
-        areasMap.forEach { (_, areasModels) ->
-            listAreasModel.addAll(areasModels)
+        if (filterParameters.nameCountry == null) {
+            areasMap.forEach { (_, areasModels) ->
+                listAreasModel.addAll(areasModels)
+            }
+        } else {
+            areasMap.forEach { (areasModel, areasModels) ->
+                if (areasModel.name == filterParameters.nameCountry) {
+                    listAreasModel.addAll(areasModels)
+                }
+            }
         }
         return listAreasModel.sortedBy { it.name }
     }
