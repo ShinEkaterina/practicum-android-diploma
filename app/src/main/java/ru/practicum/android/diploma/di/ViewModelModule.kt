@@ -44,10 +44,10 @@ val viewModelModule = module {
     viewModel {
         SimilarViewModel(similarInteractor = get())
     }
-    
+
     viewModel {
         CountrySelectionViewModel(filtrationInteractor = get())
-    }   
+    }
 
     viewModel {
         ChoosingPlaceToJobViewModel(filtrationInteractor = get())

@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentCountrySelectionBinding
-import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.AreasListState
+import ru.practicum.android.diploma.domain.model.AreasModel
 
-class CountrySelectionFragment() :Fragment() {
+class CountrySelectionFragment : Fragment() {
     private val viewModel: CountrySelectionViewModel by viewModel()
     private var _binding: FragmentCountrySelectionBinding? = null
     private val binding: FragmentCountrySelectionBinding
