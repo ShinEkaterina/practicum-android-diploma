@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
-import ru.practicum.android.diploma.domain.model.CountriesListState
 import ru.practicum.android.diploma.domain.model.AreasModel
+import ru.practicum.android.diploma.domain.model.CountriesListState
 import ru.practicum.android.diploma.domain.model.FilterParameters
 
 class CountrySelectionViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {

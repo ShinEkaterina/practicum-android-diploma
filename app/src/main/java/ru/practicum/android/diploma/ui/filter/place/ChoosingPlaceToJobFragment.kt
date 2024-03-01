@@ -86,21 +86,7 @@ class ChoosingPlaceToJobFragment : Fragment() {
 
     private fun initializationButtonsListener() {
         with(binding) {
-            placeToWorkToolbar.setNavigationOnClickListener {
-                viewModel.setFilterParameters(viewModel.getStartFilterParameters())
-                findNavController().navigateUp()
-            }
-
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        viewModel.setFilterParameters(viewModel.getStartFilterParameters())
-                        findNavController().navigateUp()
-                    }
-                }
-            )
-
+            backPressedButtonsListener()
             tiCountry.setEndIconOnClickListener {
                 if (filterParameters.nameCountry != null) {
                     etCountry.setText("")
@@ -136,8 +122,32 @@ class ChoosingPlaceToJobFragment : Fragment() {
         }
     }
 
+    private fun backPressedButtonsListener() {
+        with(binding) {
+            placeToWorkToolbar.setNavigationOnClickListener {
+                viewModel.setFilterParameters(viewModel.getStartFilterParameters())
+                findNavController().navigateUp()
+            }
+
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        viewModel.setFilterParameters(viewModel.getStartFilterParameters())
+                        findNavController().navigateUp()
+                    }
+                }
+            )
+        }
+    }
+
     private fun resetRegionFilterParameters() {
         filterParameters = filterParameters.copy(idRegion = null)
         filterParameters = filterParameters.copy(nameRegion = null)
+    }
+
+    private fun resetCountryFilterParameters() {
+        filterParameters = filterParameters.copy(idCountry = null)
+        filterParameters = filterParameters.copy(nameCountry = null)
     }
 }
