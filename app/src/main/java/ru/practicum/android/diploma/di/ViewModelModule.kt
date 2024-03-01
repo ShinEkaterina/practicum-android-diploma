@@ -47,6 +47,7 @@ val viewModelModule = module {
     
     viewModel {
         CountrySelectionViewModel(filtrationInteractor = get())
+    }   
 
     viewModel {
         ChoosingPlaceToJobViewModel(filtrationInteractor = get())
