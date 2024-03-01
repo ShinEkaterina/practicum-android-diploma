@@ -100,4 +100,7 @@
     <string name="choose_button_text">Выбрать</string>
     <string name="wanted_salary">Ожидаемая зарплата</string>
     <string name="choosing_place_to_job">Выбор места работы</string>
+    <string name="input_region">Введите регион</string>
+    <string name="there_is_no_such_region">Такого региона нет</string>
+    <string name="there_is_no_such_industry">Такой отрасли нет</string>
 </resources>

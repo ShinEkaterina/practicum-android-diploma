@@ -37,7 +37,8 @@ class RootActivity : AppCompatActivity() {
                 R.id.vacancyFragment3,
                 R.id.similarVacancy,
                 R.id.industrySelectionFragment,
-                R.id.choosingPlaceToJobFragment -> {
+                R.id.choosingPlaceToJobFragment,
+                R.id.regionSelectionFragment -> {
                     binding?.bottomNavigationView?.isVisible = false
                 }
 

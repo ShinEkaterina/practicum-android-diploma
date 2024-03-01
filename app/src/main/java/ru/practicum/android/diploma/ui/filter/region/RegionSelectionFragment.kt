@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.filter.industry
+package ru.practicum.android.diploma.ui.filter.region
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,24 +15,24 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentIndustrySelectionBinding
-import ru.practicum.android.diploma.domain.model.IndustriesListState
-import ru.practicum.android.diploma.domain.model.IndustriesModel
+import ru.practicum.android.diploma.databinding.FragmentRegionSelectionBinding
+import ru.practicum.android.diploma.domain.model.AreasModel
+import ru.practicum.android.diploma.domain.model.RegionsListState
 
-class IndustrySelectionFragment : Fragment() {
-    private val viewModel: IndustrySelectionFragmentViewModel by viewModel()
-    private var _binding: FragmentIndustrySelectionBinding? = null
-    private val binding: FragmentIndustrySelectionBinding
+class RegionSelectionFragment : Fragment() {
+    private val viewModel: RegionSelectionViewModel by viewModel()
+    private var _binding: FragmentRegionSelectionBinding? = null
+    private val binding: FragmentRegionSelectionBinding
         get() = _binding!!
-    private var industriesAdapter: IndustriesAdapter? = null
-    private val industriesList = ArrayList<IndustriesModel>()
+    private var regionsAdapter: RegionsAdapter? = null
+    private val regionsList = ArrayList<AreasModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentIndustrySelectionBinding.inflate(
+        _binding = FragmentRegionSelectionBinding.inflate(
             inflater,
             container,
             false
@@ -50,11 +50,11 @@ class IndustrySelectionFragment : Fragment() {
         )
         initializationButtonsListener()
         initializationAdapter()
-        viewModel.industriesListState.observe(viewLifecycleOwner) {
-            industriesListState(it)
+        viewModel.regionsListState.observe(viewLifecycleOwner) {
+            regionsListState(it)
         }
 
-        viewModel.getIndustries()
+        viewModel.getRegions()
 
         val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
@@ -82,7 +82,7 @@ class IndustrySelectionFragment : Fragment() {
             }
         }
 
-        searchIndustryEditTextListeners(
+        searchRegionsEditTextListeners(
             simpleTextWatcher,
             inputMethodManager
         )
@@ -93,54 +93,49 @@ class IndustrySelectionFragment : Fragment() {
         _binding = null
     }
 
-    private fun initializationAdapter() {
-        with(binding) {
-            industriesAdapter = IndustriesAdapter(industriesList) { industry ->
-                viewModel.setTempFilterParameters(industry)
-                selectedButton.isVisible = true
-            }
-
-            rvIndustries.adapter = industriesAdapter
-        }
-    }
-
     private fun initializationButtonsListener() {
         with(binding) {
-            industrySelectionToolbar.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-
-            selectedButton.setOnClickListener {
-                viewModel.setFilterParameters()
+            regionSelectionToolbar.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
 
             clearButton.isEnabled = false
             clearButton.setOnClickListener {
-                inputSearchIndustry.setText("")
+                inputSearchRegion.setText("")
             }
         }
     }
 
+    private fun initializationAdapter() {
+        with(binding) {
+            regionsAdapter = RegionsAdapter(regionsList) { region ->
+                viewModel.setFilterParameters(region)
+                findNavController().navigateUp()
+            }
+
+            rvRegions.adapter = regionsAdapter
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
-    private fun industriesListState(state: IndustriesListState) {
+    private fun regionsListState(state: RegionsListState) {
         with(binding) {
             when (state) {
-                is IndustriesListState.Loading -> {
+                is RegionsListState.Loading -> {
                     failedToGetListMessage(false)
                     progressBar.isVisible = true
                 }
 
-                is IndustriesListState.Content -> {
+                is RegionsListState.Content -> {
                     failedToGetListMessage(false)
                     progressBar.isVisible = false
-                    industriesList.clear()
-                    industriesList.addAll(state.industries)
-                    industriesAdapter?.notifyDataSetChanged()
-                    llNotIndustry.isVisible = industriesList.isEmpty()
+                    regionsList.clear()
+                    regionsList.addAll(state.regions)
+                    regionsAdapter?.notifyDataSetChanged()
+                    llNotRegions.isVisible = regionsList.isEmpty()
                 }
 
-                is IndustriesListState.Error -> {
+                is RegionsListState.Error -> {
                     failedToGetListMessage(true)
                     progressBar.isVisible = false
                 }
@@ -149,25 +144,25 @@ class IndustrySelectionFragment : Fragment() {
     }
 
     private fun failedToGetListMessage(isVisible: Boolean) {
-        binding.llNotListIndustries.isVisible = isVisible
+        binding.llNotListRegions.isVisible = isVisible
     }
 
-    private fun searchIndustryEditTextListeners(
+    private fun searchRegionsEditTextListeners(
         simpleTextWatcher: TextWatcher,
         inputMethodManager: InputMethodManager?
     ) {
         with(binding) {
-            inputSearchIndustry.addTextChangedListener(simpleTextWatcher)
-            inputSearchIndustry.setOnKeyListener { _, i, keyEvent ->
+            inputSearchRegion.addTextChangedListener(simpleTextWatcher)
+            inputSearchRegion.setOnKeyListener { _, i, keyEvent ->
                 if (i == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_UP) {
-                    inputSearchIndustry.clearFocus()
+                    inputSearchRegion.clearFocus()
                 }
                 false
             }
-            inputSearchIndustry.setOnFocusChangeListener { _, hasFocus ->
+            inputSearchRegion.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     inputMethodManager?.hideSoftInputFromWindow(
-                        inputSearchIndustry.windowToken,
+                        inputSearchRegion.windowToken,
                         0
                     )
                     clearButton.setImageResource(R.drawable.ic_search_24)
