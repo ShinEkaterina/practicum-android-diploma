@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.FilterParametersState
-import ru.practicum.android.diploma.domain.model.IndustriesModel
 
 class ChoosingPlaceToJobViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {
     private val _filterParametersState = MutableLiveData<FilterParametersState>()
