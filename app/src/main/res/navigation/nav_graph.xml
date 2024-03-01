@@ -69,5 +69,13 @@
     <fragment
         android:id="@+id/choosingPlaceToJobFragment"
         android:name="ru.practicum.android.diploma.ui.filter.place.ChoosingPlaceToJobFragment"
-        android:label="ChoosingPlaceToJobFragment" />
+        android:label="ChoosingPlaceToJobFragment" >
+        <action
+            android:id="@+id/action_choosingPlaceToJobFragment_to_regionSelectionFragment"
+            app:destination="@id/regionSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/regionSelectionFragment"
+        android:name="ru.practicum.android.diploma.ui.filter.region.RegionSelectionFragment"
+        android:label="RegionSelectionFragment" />
 </navigation>

@@ -160,14 +160,14 @@ class Convertors {
     fun converterAreasResponseToAreasModelList(response: List<AreasResponse>): Map<AreasModel, List<AreasModel>> {
         val mapAreasModel = mutableMapOf<AreasModel, List<AreasModel>>()
         response.forEach {
-            mapAreasModel.put(
-                AreasModel(
-                    id = it.id,
-                    parentId = null,
-                    name = it.name,
-                    areas = null
-                ),
-                createAreasList(it.areas)
+            mapAreasModel[AreasModel(
+                id = it.id,
+                parentId = null,
+                name = it.name,
+                areas = null
+            )] = createAreasList(
+                it.areas,
+                it.id
             )
         }
         return mapAreasModel
@@ -206,20 +206,25 @@ class Convertors {
         return listIndustriesModel
     }
 
-    private fun createAreasList(nestedAreasList: List<AreasModel>?): List<AreasModel> {
+    private fun createAreasList(
+        nestedAreasList: List<AreasModel>?,
+        parentId: String): List<AreasModel> {
         val listAreasModel = mutableListOf<AreasModel>()
         nestedAreasList?.forEach {
             if (it.areas?.isEmpty() == true) {
                 listAreasModel.add(
                     AreasModel(
                         id = it.id,
-                        parentId = it.parentId,
+                        parentId = parentId,
                         name = it.name,
                         areas = null
                     )
                 )
             } else {
-                listAreasModel.addAll(createAreasList(it.areas))
+                listAreasModel.addAll(createAreasList(
+                    it.areas,
+                    parentId
+                ))
             }
         }
         return listAreasModel.sortedBy { it.name }

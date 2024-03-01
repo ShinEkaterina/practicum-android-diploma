@@ -93,7 +93,6 @@ class IndustrySelectionFragment : Fragment() {
         _binding = null
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun initializationAdapter() {
         with(binding) {
             industriesAdapter = IndustriesAdapter(industriesList) { industry ->

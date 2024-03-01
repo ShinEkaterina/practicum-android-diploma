@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -64,6 +65,7 @@ class ChoosingPlaceToJobFragment : Fragment() {
     private fun updateChoosingPlaceToJobScreen(newFilterParameters: FilterParameters) {
         filterParameters = newFilterParameters
         with(binding) {
+            selectedButton.isVisible = filterParameters.nameRegion != null
             if (filterParameters.nameCountry != null) {
                 etCountry.setText(filterParameters.nameCountry)
                 tiCountry.setEndIconDrawable(R.drawable.ic_clear)
@@ -84,10 +86,20 @@ class ChoosingPlaceToJobFragment : Fragment() {
 
     private fun initializationButtonsListener() {
         with(binding) {
-            selectedButton.isVisible = filterParameters.nameRegion != null
             placeToWorkToolbar.setNavigationOnClickListener {
+                viewModel.setFilterParameters(viewModel.getStartFilterParameters())
                 findNavController().navigateUp()
             }
+
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        viewModel.setFilterParameters(viewModel.getStartFilterParameters())
+                        findNavController().navigateUp()
+                    }
+                }
+            )
 
             tiCountry.setEndIconOnClickListener {
                 if (filterParameters.nameCountry != null) {
@@ -104,10 +116,18 @@ class ChoosingPlaceToJobFragment : Fragment() {
                     tiRegion.setEndIconDrawable(R.drawable.ic_item_arrow)
                     filterParameters = filterParameters.copy(idRegion = null)
                     filterParameters = filterParameters.copy(nameRegion = null)
+                } else {
+                    findNavController().navigate(
+                        R.id.action_choosingPlaceToJobFragment_to_regionSelectionFragment
+                    )
                 }
             }
 
             selectedButton.setOnClickListener {
+                if (filterParameters.idCountry == null) {
+                    filterParameters = filterParameters.copy(idRegion = null)
+                    filterParameters = filterParameters.copy(nameRegion = null)
+                }
                 viewModel.setFilterParameters(filterParameters)
                 findNavController().navigateUp()
             }

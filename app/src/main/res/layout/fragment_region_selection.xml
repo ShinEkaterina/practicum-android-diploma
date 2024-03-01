@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/regionSelectionToolbar">
 
         <EditText
-            android:id="@+id/input_search_salary"
+            android:id="@+id/input_search_region"
             style="@style/TextStyleMedium16_500"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -74,25 +74,9 @@
         app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/selected_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/region_item" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/selected_button"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginStart="@dimen/margin_16"
-        android:layout_marginEnd="@dimen/margin_16"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/blue"
-        android:text="@string/choose_button_text"
-        android:textColor="@color/white"
-        android:textSize="@dimen/font_size_16"
-        app:cornerRadius="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/llNotListRegions"

@@ -8,10 +8,22 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.FilterParametersState
+import ru.practicum.android.diploma.domain.model.IndustriesModel
 
 class ChoosingPlaceToJobViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {
     private val _filterParametersState = MutableLiveData<FilterParametersState>()
+    private var startFilterParameters = FilterParameters()
     val filterParametersState: LiveData<FilterParametersState> = _filterParametersState
+
+    init {
+        viewModelScope.launch {
+            filtrationInteractor
+                .getFilterParametersFromStorage()
+                .collect { filterParams ->
+                    startFilterParameters = filterParams
+                }
+        }
+    }
 
     fun getFilterParameters() {
         _filterParametersState.postValue(FilterParametersState.Updating)
@@ -39,5 +51,9 @@ class ChoosingPlaceToJobViewModel(private val filtrationInteractor: FiltrationIn
                     }
                 }
         }
+    }
+
+    fun getStartFilterParameters(): FilterParameters {
+        return this.startFilterParameters
     }
 }
