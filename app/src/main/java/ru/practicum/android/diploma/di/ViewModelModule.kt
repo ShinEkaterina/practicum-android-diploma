@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.ui.favorites.FavoritesViewModel
+import ru.practicum.android.diploma.ui.filter.country.CountrySelectionViewModel
 import ru.practicum.android.diploma.ui.filter.industry.IndustrySelectionFragmentViewModel
 import ru.practicum.android.diploma.ui.filter.settings.FilterSettingsFragmentViewModel
 import ru.practicum.android.diploma.ui.search.viewholder.SearchViewModel
@@ -36,5 +37,8 @@ val viewModelModule = module {
     }
     viewModel {
         SimilarViewModel(similarInteractor = get())
+    }
+    viewModel {
+        CountrySelectionViewModel(filtrationInteractor = get())
     }
 }
