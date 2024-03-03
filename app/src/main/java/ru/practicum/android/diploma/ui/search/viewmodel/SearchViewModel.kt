@@ -153,12 +153,8 @@ class SearchViewModel(
         }
         val filters = HashMap<String, String>()
 
-        filter?.idCountry?.let {
-            filters["country"] = filter?.idCountry!!
-        }
-
         filter?.idRegion?.let {
-            filters["region"] = filter?.idRegion!!
+            filters["area"] = filter?.idRegion!!
         }
 
         filter?.idIndustry?.let {
