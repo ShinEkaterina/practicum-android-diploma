@@ -4,6 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.respone.AreasResponse
 import ru.practicum.android.diploma.data.dto.respone.IndustriesResponse
@@ -16,13 +17,10 @@ interface HeadHunterServiceApi {
     suspend fun searchVacancies(
         @Query("text") name: String,
         @Query("page") page: Int,
-        @Query("per_page") amount: Int
+        @Query("per_page") amount: Int,
+        @QueryMap filter: HashMap<String, String>
     ): SearchResponse
 
-    @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Practicum HHit (krinova258@mail.ru)"
-    )
     @GET("/vacancies/{id}/similar_vacancies")
     suspend fun searchSimilarVacancies(
         @Path("id") id: String,

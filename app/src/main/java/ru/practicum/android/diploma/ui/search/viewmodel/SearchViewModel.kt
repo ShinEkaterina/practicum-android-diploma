@@ -8,7 +8,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.Resource
+import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
+import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
@@ -17,10 +19,13 @@ import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
     private val searchInteractor: SearchInteractor,
+    private val filtrationInteractor: FiltrationInteractor
 ) : ViewModel() {
 
     private val renderStateLiveDate = MutableLiveData<SearchRenderState>()
     fun observeRenderState(): LiveData<SearchRenderState> = renderStateLiveDate
+
+    private var filter: FilterParameters? = null
 
     private var currentPage = 0
 
@@ -47,7 +52,7 @@ class SearchViewModel(
             }
             renderStateLiveDate.postValue(SearchRenderState.Loading)
             currentPage = 0
-            searchInteractor.getVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS)
+            searchInteractor.getVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS, getFilter())
                 .collect { response ->
                     if (response is Resource.Success<*>) {
                         foundPages = response.data?.pages ?: 0
@@ -89,7 +94,8 @@ class SearchViewModel(
                 searchInteractor.getVacancies(
                     paginationStringRequest,
                     currentPage++,
-                    Constant.PER_PAGE_ITEMS
+                    Constant.PER_PAGE_ITEMS,
+                    getFilter()
                 ).collect { response ->
                     if (response is Resource.Success<*>) {
                         loadedVacancies.removeLast()
@@ -137,5 +143,34 @@ class SearchViewModel(
             renderStateLiveDate.postValue(SearchRenderState.Default)
         }
     }
+    private fun getFilter(): HashMap<String, String> {
+        viewModelScope.launch {
+            filtrationInteractor
+                .getFilterParametersFromStorage()
+                .collect { filterParams ->
+                    filter = filterParams
+                }
+        }
+        val filters = HashMap<String, String>()
 
+        filter?.idCountry?.let {
+            filters["country"] = filter?.idCountry!!
+        }
+
+        filter?.idRegion?.let {
+            filters["region"] = filter?.idRegion!!
+        }
+
+        filter?.idIndustry?.let {
+            filters["industry"] = filter?.idIndustry!!
+        }
+
+        filter?.expectedSalary?.let {
+            filters["salary"] = filter?.expectedSalary.toString()
+        }
+        filter?.isDoNotShowWithoutSalary?.let {
+            filters["only_with_salary"] = filter?.isDoNotShowWithoutSalary.toString()
+        }
+        return filters
+    }
 }

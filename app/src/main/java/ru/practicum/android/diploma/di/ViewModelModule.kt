@@ -29,7 +29,8 @@ val viewModelModule = module {
 
     viewModel {
         SearchViewModel(
-            searchInteractor = get()
+            searchInteractor = get(),
+            filtrationInteractor = get()
         )
     }
 

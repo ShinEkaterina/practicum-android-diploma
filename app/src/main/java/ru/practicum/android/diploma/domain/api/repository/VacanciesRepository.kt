@@ -10,7 +10,8 @@ interface VacanciesRepository {
     fun getVacancies(
         expression: String,
         page: Int,
-        amount: Int
+        amount: Int,
+        filter: HashMap<String, String>
     ): Flow<Resource<VacanciesModel>>
 
     fun getDetailVacancy(

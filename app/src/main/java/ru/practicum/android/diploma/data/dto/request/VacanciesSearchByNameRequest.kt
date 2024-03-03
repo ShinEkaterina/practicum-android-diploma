@@ -5,5 +5,6 @@ import ru.practicum.android.diploma.util.Constant.PER_PAGE_ITEMS
 data class VacanciesSearchByNameRequest(
     val name: String,
     val page: Int,
-    val amount: Int = PER_PAGE_ITEMS
+    val amount: Int = PER_PAGE_ITEMS,
+    val filter: HashMap<String, String>
 )
