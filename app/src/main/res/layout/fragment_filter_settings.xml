@@ -101,7 +101,7 @@
         android:textColorHint="@color/gray"
         app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="custom"
-        app:endIconTint="?attr/colorOnPrimary"
+        app:endIconTint="@color/black"
         app:boxStrokeWidth="@dimen/box_stroke_width_0"
         app:boxStrokeWidthFocused="@dimen/box_stroke_width_0"
         app:hintTextAppearance="@style/TextStyleRegular12_400"
@@ -120,7 +120,7 @@
             android:hint="@string/enter_salary"
             android:inputType="number"
             android:maxLength="8"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="@color/black"
             android:textColorHint="@color/gray"
             android:textCursorDrawable="@drawable/cursor" >
         </com.google.android.material.textfield.TextInputEditText>
@@ -159,6 +159,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/layout_size_60"
         android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
         android:layout_marginBottom="@dimen/margin_8"
         android:backgroundTint="@color/blue"
         android:text="@string/apply_text"
