@@ -41,6 +41,7 @@
             android:cursorVisible="true"
             android:drawablePadding="@dimen/padding_4"
             android:foregroundGravity="center_horizontal"
+            android:textColor="@color/black"
             android:hint="@string/industry_selection_field_text"
             android:textColorHint="@color/gray"
             android:inputType="text"

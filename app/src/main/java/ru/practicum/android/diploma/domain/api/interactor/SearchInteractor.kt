@@ -9,7 +9,8 @@ interface SearchInteractor {
     fun getVacancies(
         vacancyName: String,
         page: Int,
-        amount: Int
+        amount: Int,
+        filter: HashMap<String, String>
     ): Flow<Resource<VacanciesModel>>
 
 }

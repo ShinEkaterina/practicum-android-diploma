@@ -39,7 +39,7 @@ class RetrofitNetworkClient(
         }
         return try {
             withContext(Dispatchers.IO) {
-                headHunterService.searchVacancies(dto.name, dto.page, dto.amount).apply {
+                headHunterService.searchVacancies(dto.name, dto.page, dto.amount, dto.filter).apply {
                     responseCode = HTTP_OK
                 }
             }
