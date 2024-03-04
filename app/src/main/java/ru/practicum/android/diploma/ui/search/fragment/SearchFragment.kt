@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -63,6 +64,14 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        setFragmentResultListener("apply_filter") { _, bundle ->
+            val selectedSort = bundle.getBoolean("apply_filter")
+            if(selectedSort) {
+                viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
+            }
+            else return@setFragmentResultListener
+        }
 
         viewModel.observeRenderState().observe(viewLifecycleOwner) { state ->
             render(state)
