@@ -28,13 +28,15 @@ class RootActivity : AppCompatActivity() {
 
         binding?.bottomNavigationView.let {
             it?.setupWithNavController(navController)
-            it?.selectedItemId = R.id.searchFragment2
         }
 
         // Панель меню не отображается для фрагмента вакансий и фильтров
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.filterFragment, R.id.vacancyFragment3 -> {
+                R.id.filterSettingsFragment,
+                R.id.vacancyFragment3,
+                R.id.similarVacancy,
+                R.id.industrySelectionFragment -> {
                     binding?.bottomNavigationView?.isVisible = false
                 }
 

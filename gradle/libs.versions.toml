@@ -3,6 +3,7 @@
 java = "VERSION_1_8"
 
 # Build constants
+loggingInterceptor = "4.11.0"
 minSdk = "26"
 compileSdk = "34"
 retrofit = "2.9.0"
@@ -13,10 +14,12 @@ glide = "4.15.1"
 # Detekt
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
+kotlin = "1.9.22"
 
 [libraries]
 
 # Detekt
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 staticAnalysis-detektCli = { module = "io.gitlab.arturbosch.detekt:detekt-cli", version.ref = "detekt" }
 staticAnalysis-detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
@@ -67,3 +70,5 @@ uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
 uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
 
 [bundles]
+[plugins]
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
