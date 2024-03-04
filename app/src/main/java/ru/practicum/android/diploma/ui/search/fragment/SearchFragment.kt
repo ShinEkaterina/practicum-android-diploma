@@ -67,10 +67,9 @@ class SearchFragment : Fragment() {
 
         setFragmentResultListener("apply_filter") { _, bundle ->
             val selectedSort = bundle.getBoolean("apply_filter")
-            if(selectedSort) {
+            if (selectedSort) {
                 viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
             }
-            else return@setFragmentResultListener
         }
 
         viewModel.observeRenderState().observe(viewLifecycleOwner) { state ->

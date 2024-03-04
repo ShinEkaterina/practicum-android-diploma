@@ -82,7 +82,6 @@ class FilterSettingsFragment : Fragment() {
                 // Обязательный метод интерфейса
             }
         }
-
         expectedSalaryEditTextListeners(
             simpleTextWatcher,
             inputMethodManager
@@ -255,7 +254,6 @@ class FilterSettingsFragment : Fragment() {
                     bundleOf("apply_filter" to true)
                 )
             }
-
             resetButton.setOnClickListener {
                 filterParameters = viewModel.defaultFilterParameters()
                 viewModel.setFilterParameters(filterParameters)
