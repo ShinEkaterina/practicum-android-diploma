@@ -31,13 +31,15 @@
             android:layout_marginEnd="@dimen/margin_16"
             android:inputType="text"
             android:hint="@string/input_industry"
+            android:textColorHint="?attr/searchSalaryFieldText"
             android:lines="1"
             android:maxLength="25"
+            android:background="@drawable/search_field"
             android:paddingStart="@dimen/margin_16"
             android:importantForAutofill="no"
             tools:ignore="RtlSymmetry" />
 
-        <Button
+        <ImageView
             android:id="@+id/btSearchAndClearInputIndustry"
             style="@style/ButtonInsideEditText"
             android:layout_width="48dp"
@@ -48,10 +50,11 @@
             android:layout_gravity="end"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:backgroundTint="?attr/searchField"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
-            app:icon="@drawable/ic_search_edittext"/>
+            android:src="@drawable/ic_search_edittext"
+            android:contentDescription="TODO" />
     </FrameLayout>
 
     <FrameLayout
@@ -91,6 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"
+                android:textSize="@dimen/font_size_22"
+                android:textColor="?attr/colorOnPrimary"
                 android:layout_marginTop="16dp"
                 android:visibility="visible"
                 android:text="@string/failed_to_get_list" />

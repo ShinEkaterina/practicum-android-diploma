@@ -54,4 +54,6 @@
 
     <style name="ButtonInsideEditText" parent="Widget.MaterialComponents.Button.UnelevatedButton">
     </style>
+    <attr name="searchField" format="color"/>
+    <attr name="searchSalaryFieldText" format="color"/>
 </resources>
