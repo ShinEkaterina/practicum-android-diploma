@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -85,7 +86,6 @@ class FavoritesFragment : Fragment() {
     private fun showLoading() {
         binding.apply {
             rvFavorites.isVisible = false
-            ivPlaceholder.isVisible = false
             tvPlaceholder.isVisible = false
             loadingIndicator.isVisible = true
         }
@@ -94,9 +94,8 @@ class FavoritesFragment : Fragment() {
     private fun showError() {
         binding.apply {
             rvFavorites.isVisible = false
-            ivPlaceholder.setImageResource(R.drawable.ic_not_found)
+            tvPlaceholder.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_not_found, 0, 0)
             tvPlaceholder.text = getString(R.string.can_not_get_list)
-            ivPlaceholder.isVisible = true
             tvPlaceholder.isVisible = true
             loadingIndicator.isVisible = false
         }
@@ -105,9 +104,9 @@ class FavoritesFragment : Fragment() {
     private fun showEmpty() {
         binding.apply {
             rvFavorites.isVisible = false
-            ivPlaceholder.setImageResource(R.drawable.ic_nothing_in_favorites)
+            tvPlaceholder.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_nothing_in_favorites, 0, 0)
+
             tvPlaceholder.text = getString(R.string.empty_list)
-            ivPlaceholder.isVisible = true
             tvPlaceholder.isVisible = true
             loadingIndicator.isVisible = false
         }
@@ -117,7 +116,6 @@ class FavoritesFragment : Fragment() {
     private fun showContent(vacancies: List<VacancyModel>) {
         binding.apply {
             rvFavorites.isVisible = true
-            ivPlaceholder.isVisible = false
             tvPlaceholder.isVisible = false
             loadingIndicator.isVisible = false
         }
@@ -134,6 +132,6 @@ class FavoritesFragment : Fragment() {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 100L
-        const val ARGS_VACANCY_ID = "VACANCY_ID"
     }
+
 }
