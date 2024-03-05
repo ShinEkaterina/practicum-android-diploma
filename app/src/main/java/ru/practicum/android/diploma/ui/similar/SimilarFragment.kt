@@ -119,6 +119,8 @@ class SimilarFragment : Fragment() {
         recyclerView?.visibility = VISIBLE
         binding.recyclerView.visibility = VISIBLE
         binding.noInternetPlaceholder.visibility = GONE
+
+        vacancyAdapter?.vacancies?.clear()
         vacancyAdapter?.vacancies?.addAll(data)
     }
 
