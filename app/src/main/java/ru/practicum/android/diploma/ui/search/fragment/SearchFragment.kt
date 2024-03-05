@@ -70,7 +70,7 @@ class SearchFragment : Fragment() {
         setFragmentResultListener("apply_filter") { _, bundle ->
             val selectedSort = bundle.getBoolean("apply_filter")
             applyFilter = if (selectedSort) {
-                viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
+                viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString(), false)
                 true
             } else {
                 false
@@ -119,7 +119,6 @@ class SearchFragment : Fragment() {
                     }
                 }
             }
-
         })
 
         binding?.foundVacanciesList?.itemAnimator = null
@@ -139,12 +138,14 @@ class SearchFragment : Fragment() {
                 start: Int,
                 count: Int,
                 after: Int
-            ) { /* cannot be removed */
+            ) {
+                /* cannot be removed */
             }
 
             override fun afterTextChanged(
                 str: Editable?
-            ) { /* cannot be removed */
+            ) {
+                /* cannot be removed */
             }
 
             override fun onTextChanged(
@@ -235,7 +236,6 @@ class SearchFragment : Fragment() {
 
     private fun renderServerError() {
         binding?.searchServerError?.isVisible = true
-
     }
 
     private fun renderNothingFound() {
@@ -302,5 +302,4 @@ class SearchFragment : Fragment() {
             is SearchRenderState.ServerError -> renderServerError()
         }
     }
-
 }
