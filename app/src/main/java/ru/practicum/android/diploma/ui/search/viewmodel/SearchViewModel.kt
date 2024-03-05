@@ -143,7 +143,7 @@ class SearchViewModel(
             renderStateLiveDate.postValue(SearchRenderState.Default)
         }
     }
-    private fun getFilter(): HashMap<String, String> {
+    fun getFilter(): HashMap<String, String> {
         viewModelScope.launch {
             filtrationInteractor
                 .getFilterParametersFromStorage()
