@@ -16,7 +16,7 @@ sealed interface SearchRenderState {
 
     data object PaginationNoInternet : SearchRenderState
 
-    data class Success(
+    class Success(
         var resetScroll: Boolean
     ) : SearchRenderState
 
