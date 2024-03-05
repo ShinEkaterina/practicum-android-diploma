@@ -65,7 +65,8 @@ class SearchFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (viewModel.getFilter().isNotEmpty()) applyFilter = true
+        applyFilter = viewModel.isFilterParametersNotEmpty()
+
         setFragmentResultListener("apply_filter") { _, bundle ->
             val selectedSort = bundle.getBoolean("apply_filter")
             applyFilter = if (selectedSort) {
