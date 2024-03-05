@@ -46,6 +46,12 @@ class SearchViewModel(
         coroutineScope = viewModelScope,
         useLastParam = true
     ) { searchString ->
+        searchRequest(searchString)
+    }
+
+    private suspend fun searchRequest(
+        searchString: String?
+    ) {
         if (searchString != null) {
             if (loadingPaginationJob?.isCompleted == false) {
                 loadingPaginationJob?.cancel()
@@ -134,11 +140,18 @@ class SearchViewModel(
     }
 
     fun startVacanciesSearch(
-        searchString: String
+        searchString: String,
+        isDebounce: Boolean = true
     ) {
         currentPage = 0
         if (searchString.isNotEmpty()) {
-            searchDebounce(searchString)
+            if (isDebounce) {
+                searchDebounce(searchString)
+            } else {
+                viewModelScope.launch {
+                    searchRequest(searchString)
+                }
+            }
         } else {
             loadingPaginationJob?.cancel()
             searchDebounce(null)
