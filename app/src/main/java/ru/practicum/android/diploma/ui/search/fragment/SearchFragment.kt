@@ -65,7 +65,10 @@ class SearchFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (viewModel.getFilter().isNotEmpty()) applyFilter = true
+        if (viewModel.getFilter().isNotEmpty()) {
+            applyFilter = true
+        }
+
         setFragmentResultListener("apply_filter") { _, bundle ->
             val selectedSort = bundle.getBoolean("apply_filter")
             applyFilter = if (selectedSort) {
@@ -208,6 +211,7 @@ class SearchFragment : Fragment() {
         state: SearchRenderState.Success
     ) {
         if (state.resetScroll) {
+            state.resetScroll = false
             binding?.foundVacanciesList?.scrollToPosition(0)
         }
 
