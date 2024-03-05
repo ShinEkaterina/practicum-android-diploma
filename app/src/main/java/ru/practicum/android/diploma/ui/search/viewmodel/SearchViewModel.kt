@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.NetworkError
+import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.util.Constant
@@ -60,31 +61,38 @@ class SearchViewModel(
             currentPage = 0
             searchInteractor.getVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS, getFilter())
                 .collect { response ->
-                    if (response is Resource.Success<*>) {
-                        foundPages = response.data?.pages ?: 0
-                        vacanciesAmount = response.data?.foundAsNumber ?: 0
-                        vacanciesAmountAsString = response.data?.foundAsString ?: "0"
-                        paginationStringRequest = searchString
-
-                        if (vacanciesAmount > 0) {
-                            loadedVacancies.clear()
-                            loadedVacancies.addAll(response.data?.vacancies ?: arrayListOf())
-
-                            if (foundPages != 1) {
-                                loadedVacancies.add(null)
-                            }
-
-                            renderStateLiveDate.postValue(SearchRenderState.Success(true))
-                        } else {
-                            renderStateLiveDate.postValue(SearchRenderState.NothingFound)
-                        }
-                    } else if (response is Resource.Error && response.message == NetworkError.NO_CONNECTIVITY) {
-                        renderStateLiveDate.postValue(SearchRenderState.NoInternet)
-
-                    } else {
-                        renderStateLiveDate.postValue(SearchRenderState.ServerError)
-                    }
+                    responseHandler(searchString, response)
                 }
+        }
+    }
+
+    private fun responseHandler(
+        searchString: String,
+        response: Resource<VacanciesModel>
+    ) {
+        if (response is Resource.Success<*>) {
+            foundPages = response.data?.pages ?: 0
+            vacanciesAmount = response.data?.foundAsNumber ?: 0
+            vacanciesAmountAsString = response.data?.foundAsString ?: "0"
+            paginationStringRequest = searchString
+
+            if (vacanciesAmount > 0) {
+                loadedVacancies.clear()
+                loadedVacancies.addAll(response.data?.vacancies ?: arrayListOf())
+
+                if (foundPages != 1) {
+                    loadedVacancies.add(null)
+                }
+
+                renderStateLiveDate.postValue(SearchRenderState.Success(true))
+            } else {
+                renderStateLiveDate.postValue(SearchRenderState.NothingFound)
+            }
+        } else if (response is Resource.Error && response.message == NetworkError.NO_CONNECTIVITY) {
+            renderStateLiveDate.postValue(SearchRenderState.NoInternet)
+
+        } else {
+            renderStateLiveDate.postValue(SearchRenderState.ServerError)
         }
     }
 
