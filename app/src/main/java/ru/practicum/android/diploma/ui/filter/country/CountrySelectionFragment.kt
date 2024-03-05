@@ -78,6 +78,7 @@ class CountrySelectionFragment : Fragment() {
 
                 is CountriesListState.Error -> {
                     failedToGetListMessage(true)
+                    progressBar.isVisible = false
                 }
             }
         }
