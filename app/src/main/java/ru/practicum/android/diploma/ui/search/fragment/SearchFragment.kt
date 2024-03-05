@@ -49,7 +49,7 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModel()
 
     private var watcher: TextWatcher? = null
-
+    private var applyFilter: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,8 +67,11 @@ class SearchFragment : Fragment() {
 
         setFragmentResultListener("apply_filter") { _, bundle ->
             val selectedSort = bundle.getBoolean("apply_filter")
-            if (selectedSort) {
+            applyFilter = if (selectedSort) {
                 viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString())
+                true
+            } else {
+                false
             }
         }
 
@@ -122,17 +125,25 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (applyFilter) {
+            binding?.filterButton?.setBackgroundResource(R.drawable.ic_filter_apply)
+        } else {
+            binding?.filterButton?.setBackgroundResource(R.drawable.ic_filter)
+        }
+
         watcher = object : TextWatcher {
             override fun beforeTextChanged(
                 str: CharSequence?,
                 start: Int,
                 count: Int,
                 after: Int
-            ) { /* cannot be removed */ }
+            ) { /* cannot be removed */
+            }
 
             override fun afterTextChanged(
                 str: Editable?
-            ) { /* cannot be removed */ }
+            ) { /* cannot be removed */
+            }
 
             override fun onTextChanged(
                 searchText: CharSequence?,
@@ -219,6 +230,7 @@ class SearchFragment : Fragment() {
         binding?.searchFieldClearButton?.isVisible = false
         binding?.defaultPlaceholderImage?.isVisible = true
     }
+
     private fun renderServerError() {
         binding?.searchServerError?.isVisible = true
 

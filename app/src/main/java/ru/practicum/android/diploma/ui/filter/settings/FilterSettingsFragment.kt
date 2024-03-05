@@ -249,14 +249,25 @@ class FilterSettingsFragment : Fragment() {
         with(binding) {
             applyButton.setOnClickListener {
                 findNavController().navigateUp()
-                setFragmentResult(
-                    "apply_filter",
-                    bundleOf("apply_filter" to true)
-                )
+                if (viewModel.isFilterParametersNotEmpty(filterParameters)) {
+                    setFragmentResult(
+                        APPLY,
+                        bundleOf(APPLY to true)
+                    )
+                } else {
+                    setFragmentResult(
+                        APPLY,
+                        bundleOf(APPLY to false)
+                    )
+                }
             }
             resetButton.setOnClickListener {
                 filterParameters = viewModel.defaultFilterParameters()
                 viewModel.setFilterParameters(filterParameters)
+                setFragmentResult(
+                    APPLY,
+                    bundleOf(APPLY to false)
+                )
             }
         }
     }
@@ -297,5 +308,8 @@ class FilterSettingsFragment : Fragment() {
                 filterParameters.copy(expectedSalary = s.toString().toInt())
             }
         }
+    }
+    companion object {
+        const val APPLY = "apply_filter"
     }
 }
