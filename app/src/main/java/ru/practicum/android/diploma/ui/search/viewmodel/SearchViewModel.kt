@@ -82,7 +82,9 @@ class SearchViewModel(
         }
     }
 
-    private fun render(s: SearchRenderState) {
+    private fun render(
+        s: SearchRenderState
+    ) {
         renderStateLiveDate.postValue(s)
     }
 
