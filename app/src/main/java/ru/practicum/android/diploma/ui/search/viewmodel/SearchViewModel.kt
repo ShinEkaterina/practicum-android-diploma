@@ -66,15 +66,22 @@ class SearchViewModel(
         }
     }
 
+    private fun onResponseInitializations(
+        searchString: String,
+        response: Resource<VacanciesModel>
+    ) {
+        foundPages = response.data?.pages ?: 0
+        vacanciesAmount = response.data?.foundAsNumber ?: 0
+        vacanciesAmountAsString = response.data?.foundAsString ?: "0"
+        paginationStringRequest = searchString
+    }
+
     private fun responseHandler(
         searchString: String,
         response: Resource<VacanciesModel>
     ) {
         if (response is Resource.Success<*>) {
-            foundPages = response.data?.pages ?: 0
-            vacanciesAmount = response.data?.foundAsNumber ?: 0
-            vacanciesAmountAsString = response.data?.foundAsString ?: "0"
-            paginationStringRequest = searchString
+            onResponseInitializations(searchString, response)
 
             if (vacanciesAmount > 0) {
                 loadedVacancies.clear()
