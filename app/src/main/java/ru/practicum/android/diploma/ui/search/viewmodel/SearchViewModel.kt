@@ -199,4 +199,20 @@ class SearchViewModel(
         }
         return filters
     }
+    fun isFilterParametersNotEmpty(): Boolean {
+        viewModelScope.launch {
+            filtrationInteractor
+                .getFilterParametersFromStorage()
+                .collect { filterParams ->
+                    filter = filterParams
+                }
+        }
+        return filter?.idCountry != null ||
+            filter?.nameCountry != null ||
+            filter?.idRegion != null ||
+            filter?.idIndustry != null ||
+            filter?.nameIndustry != null ||
+            filter?.expectedSalary != null ||
+            filter?.isDoNotShowWithoutSalary == true
+    }
 }
