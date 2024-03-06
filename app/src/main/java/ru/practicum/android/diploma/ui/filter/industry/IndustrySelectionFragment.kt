@@ -176,19 +176,19 @@ class IndustrySelectionFragment : Fragment() {
                 }
                 false
             }
-/*            inputSearchIndustry.setOnFocusChangeListener { _, hasFocus ->
+            inputSearchIndustry.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     inputMethodManager?.hideSoftInputFromWindow(
                         inputSearchIndustry.windowToken,
                         0
                     )
-                    clearButton.setImageResource(R.drawable.ic_search_24)
-                    clearButton.isEnabled = false
-                } else {
+                    /*             clearButton.setImageResource(R.drawable.ic_search_24)
+                                 clearButton.isEnabled = false*/
+                } /*else {
                     clearButton.setImageResource(R.drawable.ic_clear_24)
                     clearButton.isEnabled = true
-                }
-            }*/
+                }*/
+            }
         }
     }
 }
