@@ -25,6 +25,7 @@ android {
         buildConfigField(type = "String", name = "HH_ACCESS_TOKEN", value = "\"${developProperties.hhAccessToken}\"")
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
