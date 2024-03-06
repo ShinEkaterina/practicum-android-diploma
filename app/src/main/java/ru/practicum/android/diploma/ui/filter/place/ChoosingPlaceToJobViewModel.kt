@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.filter.settings
+package ru.practicum.android.diploma.ui.filter.place
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.FilterParametersState
 
-class FilterSettingsFragmentViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {
+class ChoosingPlaceToJobViewModel(private val filtrationInteractor: FiltrationInteractor) : ViewModel() {
     private val _filterParametersState = MutableLiveData<FilterParametersState>()
     private var startFilterParameters = FilterParameters()
     val filterParametersState: LiveData<FilterParametersState> = _filterParametersState
@@ -54,48 +54,5 @@ class FilterSettingsFragmentViewModel(private val filtrationInteractor: Filtrati
 
     fun getStartFilterParameters(): FilterParameters {
         return this.startFilterParameters
-    }
-
-    fun isFilterParametersNotEmpty(filterParameters: FilterParameters): Boolean {
-        return filterParameters.idCountry != null ||
-            filterParameters.nameCountry != null ||
-            filterParameters.idRegion != null ||
-            filterParameters.idIndustry != null ||
-            filterParameters.nameIndustry != null ||
-            filterParameters.expectedSalary != null ||
-            filterParameters.isDoNotShowWithoutSalary
-    }
-
-    fun isFilterParametersUpdated(filterParameters: FilterParameters): Boolean {
-        return this.startFilterParameters != filterParameters
-    }
-
-    fun defaultFilterParameters(): FilterParameters {
-        return FilterParameters(
-            idCountry = null,
-            nameCountry = null,
-            idRegion = null,
-            nameRegion = null,
-            idIndustry = null,
-            nameIndustry = null,
-            expectedSalary = null,
-            isDoNotShowWithoutSalary = false
-        )
-    }
-
-    fun resetPlaceToJobParameters(filterParameters: FilterParameters) {
-        var copyFilterParameters = filterParameters
-        copyFilterParameters = copyFilterParameters.copy(idCountry = null)
-        copyFilterParameters = copyFilterParameters.copy(nameCountry = null)
-        copyFilterParameters = copyFilterParameters.copy(idRegion = null)
-        copyFilterParameters = copyFilterParameters.copy(nameRegion = null)
-        setFilterParameters(copyFilterParameters)
-    }
-
-    fun resetIndustryParameters(filterParameters: FilterParameters) {
-        var copyFilterParameters = filterParameters
-        copyFilterParameters = copyFilterParameters.copy(idIndustry = null)
-        copyFilterParameters = copyFilterParameters.copy(nameIndustry = null)
-        setFilterParameters(copyFilterParameters)
     }
 }

@@ -34,6 +34,7 @@ class SimilarViewModel(
     }
     private fun processResult(vacancyies: List<VacancyModel>?, errorMessage: NetworkError?) {
         if (vacancyies != null) {
+            vacanciesList.clear()
             vacanciesList.addAll(vacancyies)
             renderState(SimilarState.Content(vacanciesList))
         }

@@ -8,7 +8,7 @@
     android:background="?attr/colorOnSecondary">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/industrySelectionToolbar"
+        android:id="@+id/regionSelectionToolbar"
         style="@style/TextStyleToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -17,9 +17,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/industry_selection">
-    </androidx.appcompat.widget.Toolbar>
+        app:title="@string/region_choice_text">
 
+    </androidx.appcompat.widget.Toolbar>
     <FrameLayout
         android:id="@+id/frame_layout_search"
         android:layout_width="match_parent"
@@ -27,11 +27,11 @@
         android:paddingHorizontal="@dimen/padding_16"
         android:paddingVertical="@dimen/padding_8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/industrySelectionToolbar"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regionSelectionToolbar">
 
         <EditText
-            android:id="@+id/input_search_industry"
+            android:id="@+id/input_search_region"
             style="@style/TextStyleMedium16_500"
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_size_56"
@@ -41,10 +41,10 @@
             android:cursorVisible="true"
             android:drawablePadding="@dimen/padding_4"
             android:foregroundGravity="center_horizontal"
-            android:textColor="@color/black"
-            android:hint="@string/industry_selection_field_text"
+            android:hint="@string/input_region"
             android:textColorHint="@color/gray"
             android:inputType="text"
+            android:textColor="@color/black"
             android:paddingStart="@dimen/padding_16"
             android:paddingEnd="@dimen/padding_56"
             android:maxLines="1"
@@ -62,11 +62,11 @@
             android:contentDescription="@string/todo"
             android:padding="@dimen/padding_12"
             android:src="@drawable/ic_search_24"
-            app:tint="@color/black" />
+            app:tint="@color/black"  />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvIndustries"
+        android:id="@+id/rvRegions"
         android:layout_width="match_parent"
         android:layout_height="@dimen/layout_size_0"
         android:layout_marginTop="@dimen/margin_8"
@@ -75,28 +75,12 @@
         app:layout_constraintTop_toBottomOf="@+id/frame_layout_search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/selected_button"
-        tools:listitem="@layout/industry_item" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/selected_button"
-        style="@style/TextStyleMedium16_500"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_size_60"
-        android:layout_marginStart="@dimen/margin_16"
-        android:layout_marginEnd="@dimen/margin_16"
-        android:layout_marginBottom="@dimen/margin_24"
-        android:backgroundTint="@color/blue"
-        android:text="@string/choose_button_text"
-        android:textColor="@color/white"
-        app:cornerRadius="@dimen/radius_12"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"/>
+        tools:listitem="@layout/region_item" />
+
 
     <LinearLayout
-        android:id="@+id/llNotListIndustries"
+        android:id="@+id/llNotListRegions"
         android:layout_width="match_parent"
         android:layout_height="@dimen/layout_size_0"
         android:orientation="vertical"
@@ -127,7 +111,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llNotIndustry"
+        android:id="@+id/llNotRegions"
         android:layout_width="match_parent"
         android:layout_height="@dimen/layout_size_0"
         android:orientation="vertical"
@@ -153,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_16"
             android:gravity="center_horizontal"
-            android:text="@string/there_is_no_such_industry"
+            android:text="@string/there_is_no_such_region"
             android:textColor="?attr/colorOnPrimary" />
     </LinearLayout>
 

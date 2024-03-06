@@ -13,9 +13,10 @@ class SearchInteractorImpl(
     override fun getVacancies(
         vacancyName: String,
         page: Int,
-        amount: Int
+        amount: Int,
+        filter: HashMap<String, String>
     ): Flow<Resource<VacanciesModel>> {
-        return searchRepository.getVacancies(vacancyName, page, amount)
+        return searchRepository.getVacancies(vacancyName, page, amount, filter)
     }
 
 }

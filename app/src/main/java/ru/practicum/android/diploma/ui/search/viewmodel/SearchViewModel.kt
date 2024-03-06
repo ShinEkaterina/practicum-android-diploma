@@ -8,8 +8,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.Resource
+import ru.practicum.android.diploma.domain.api.interactor.FiltrationInteractor
 import ru.practicum.android.diploma.domain.api.interactor.SearchInteractor
+import ru.practicum.android.diploma.domain.model.FilterParameters
 import ru.practicum.android.diploma.domain.model.NetworkError
+import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
 import ru.practicum.android.diploma.ui.search.fragment.sate.SearchRenderState
 import ru.practicum.android.diploma.util.Constant
@@ -17,10 +20,13 @@ import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
     private val searchInteractor: SearchInteractor,
+    private val filtrationInteractor: FiltrationInteractor
 ) : ViewModel() {
 
     private val renderStateLiveDate = MutableLiveData<SearchRenderState>()
     fun observeRenderState(): LiveData<SearchRenderState> = renderStateLiveDate
+
+    private var filter: FilterParameters? = null
 
     private var currentPage = 0
 
@@ -41,43 +47,65 @@ class SearchViewModel(
         coroutineScope = viewModelScope,
         useLastParam = true
     ) { searchString ->
+        searchRequest(searchString)
+    }
+
+    private suspend fun searchRequest(
+        searchString: String?
+    ) {
         if (searchString != null) {
             if (loadingPaginationJob?.isCompleted == false) {
                 loadingPaginationJob?.cancel()
             }
             renderStateLiveDate.postValue(SearchRenderState.Loading)
             currentPage = 0
-            searchInteractor.getVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS)
+            searchInteractor.getVacancies(searchString, currentPage++, Constant.PER_PAGE_ITEMS, getFilter())
                 .collect { response ->
-                    if (response is Resource.Success<*>) {
-                        foundPages = response.data?.pages ?: 0
-                        vacanciesAmount = response.data?.foundAsNumber ?: 0
-                        vacanciesAmountAsString = response.data?.foundAsString ?: "0"
-                        paginationStringRequest = searchString
-
-                        if (vacanciesAmount > 0) {
-                            loadedVacancies.clear()
-                            loadedVacancies.addAll(response.data?.vacancies ?: arrayListOf())
-
-                            if (foundPages != 1) {
-                                loadedVacancies.add(null)
-                            }
-
-                            renderStateLiveDate.postValue(SearchRenderState.Success(true))
-                        } else {
-                            renderStateLiveDate.postValue(SearchRenderState.NothingFound)
-                        }
-                    } else if (response is Resource.Error && response.message == NetworkError.NO_CONNECTIVITY) {
-                        renderStateLiveDate.postValue(SearchRenderState.NoInternet)
-
-                    } else {
-                        renderStateLiveDate.postValue(SearchRenderState.ServerError)
-                    }
+                    responseHandler(searchString, response)
                 }
         }
     }
 
-    private fun render(s: SearchRenderState) {
+    private fun onResponseInitializations(
+        searchString: String,
+        response: Resource<VacanciesModel>
+    ) {
+        foundPages = response.data?.pages ?: 0
+        vacanciesAmount = response.data?.foundAsNumber ?: 0
+        vacanciesAmountAsString = response.data?.foundAsString ?: "0"
+        paginationStringRequest = searchString
+    }
+
+    private fun responseHandler(
+        searchString: String,
+        response: Resource<VacanciesModel>
+    ) {
+        if (response is Resource.Success<*>) {
+            onResponseInitializations(searchString, response)
+
+            if (vacanciesAmount > 0) {
+                loadedVacancies.clear()
+                loadedVacancies.addAll(response.data?.vacancies ?: arrayListOf())
+
+                if (foundPages != 1) {
+                    loadedVacancies.add(null)
+                }
+
+                renderStateLiveDate.postValue(SearchRenderState.Success(true))
+            } else {
+                renderStateLiveDate.postValue(SearchRenderState.NothingFound)
+            }
+        } else if (response is Resource.Error && response.message == NetworkError.NO_CONNECTIVITY) {
+            renderStateLiveDate.postValue(SearchRenderState.NoInternet)
+
+        } else {
+            renderStateLiveDate.postValue(SearchRenderState.ServerError)
+        }
+    }
+
+    private fun render(
+        s: SearchRenderState
+    ) {
         renderStateLiveDate.postValue(s)
     }
 
@@ -89,7 +117,8 @@ class SearchViewModel(
                 searchInteractor.getVacancies(
                     paginationStringRequest,
                     currentPage++,
-                    Constant.PER_PAGE_ITEMS
+                    Constant.PER_PAGE_ITEMS,
+                    getFilter()
                 ).collect { response ->
                     if (response is Resource.Success<*>) {
                         loadedVacancies.removeLast()
@@ -126,16 +155,64 @@ class SearchViewModel(
     }
 
     fun startVacanciesSearch(
-        searchString: String
+        searchString: String,
+        isDebounce: Boolean = true
     ) {
         currentPage = 0
         if (searchString.isNotEmpty()) {
-            searchDebounce(searchString)
+            if (isDebounce) {
+                searchDebounce(searchString)
+            } else {
+                viewModelScope.launch {
+                    searchRequest(searchString)
+                }
+            }
         } else {
             loadingPaginationJob?.cancel()
             searchDebounce(null)
             renderStateLiveDate.postValue(SearchRenderState.Default)
         }
     }
+    fun getFilter(): HashMap<String, String> {
+        viewModelScope.launch {
+            filtrationInteractor
+                .getFilterParametersFromStorage()
+                .collect { filterParams ->
+                    filter = filterParams
+                }
+        }
+        val filters = HashMap<String, String>()
 
+        filter?.idRegion?.let {
+            filters["area"] = filter?.idRegion!!
+        }
+
+        filter?.idIndustry?.let {
+            filters["industry"] = filter?.idIndustry!!
+        }
+
+        filter?.expectedSalary?.let {
+            filters["salary"] = filter?.expectedSalary.toString()
+        }
+        filter?.isDoNotShowWithoutSalary?.let {
+            filters["only_with_salary"] = filter?.isDoNotShowWithoutSalary.toString()
+        }
+        return filters
+    }
+    fun isFilterParametersNotEmpty(): Boolean {
+        viewModelScope.launch {
+            filtrationInteractor
+                .getFilterParametersFromStorage()
+                .collect { filterParams ->
+                    filter = filterParams
+                }
+        }
+        return filter?.idCountry != null ||
+            filter?.nameCountry != null ||
+            filter?.idRegion != null ||
+            filter?.idIndustry != null ||
+            filter?.nameIndustry != null ||
+            filter?.expectedSalary != null ||
+            filter?.isDoNotShowWithoutSalary == true
+    }
 }

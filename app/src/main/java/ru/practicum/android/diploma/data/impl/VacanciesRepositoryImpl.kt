@@ -23,10 +23,11 @@ class VacanciesRepositoryImpl(
     override fun getVacancies(
         expression: String,
         page: Int,
-        amount: Int
+        amount: Int,
+        filter: HashMap<String, String>
     ): Flow<Resource<VacanciesModel>> = flow {
         val response =
-            networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount))
+            networkClient.getVacancies(VacanciesSearchByNameRequest(expression, page, amount, filter))
         if (response.responseCode == HTTP_OK) {
             emit(
                 Resource.Success(
