@@ -45,6 +45,8 @@ class CountrySelectionViewModel(private val filtrationInteractor: FiltrationInte
     fun setFilterParameters(country: AreasModel) {
         filterParameters = filterParameters.copy(idCountry = country.id)
         filterParameters = filterParameters.copy(nameCountry = country.name)
+        filterParameters = filterParameters.copy(idRegion = null)
+        filterParameters = filterParameters.copy(nameRegion = null)
         viewModelScope.launch(Dispatchers.IO) {
             filtrationInteractor
                 .setFilterParametersToStorage(filterParameters)
