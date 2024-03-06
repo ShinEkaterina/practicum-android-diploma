@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/vacancy_pagination_loading" />
+        tools:listitem="@layout/vacancy_item" />
 
     <FrameLayout
         android:visibility="visible"
