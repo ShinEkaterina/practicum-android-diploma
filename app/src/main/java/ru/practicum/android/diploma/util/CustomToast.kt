@@ -14,19 +14,19 @@ fun showToast(
     layoutInflater: LayoutInflater,
     message: String
 ) {
-    val successPlaylistAddSnackbar = Snackbar.make(fragment.requireView(), "", Snackbar.LENGTH_LONG)
-    val customSuccessPlaylistAddSnackbar = layoutInflater.inflate(R.layout.custom_toast, null)
+    val successSnackbar = Snackbar.make(fragment.requireView(), "", Snackbar.LENGTH_LONG)
+    val customSuccessSnackbar = layoutInflater.inflate(R.layout.custom_toast, null)
 
-    val snackbarContent = customSuccessPlaylistAddSnackbar?.findViewById<TextView>(R.id.custom_toast_content)
+    val snackbarContent = customSuccessSnackbar?.findViewById<TextView>(R.id.custom_toast_content)
 
     snackbarContent?.text = message
 
-    successPlaylistAddSnackbar.view.setBackgroundColor(Color.TRANSPARENT)
+    successSnackbar.view.setBackgroundColor(Color.TRANSPARENT)
 
-    val snackbarLayout = successPlaylistAddSnackbar.view as Snackbar.SnackbarLayout
+    val snackbarLayout = successSnackbar.view as Snackbar.SnackbarLayout
 
     snackbarLayout.setPadding(0, 0, 0, 0)
-    snackbarLayout.addView(customSuccessPlaylistAddSnackbar, 0)
+    snackbarLayout.addView(customSuccessSnackbar, 0)
 
-    successPlaylistAddSnackbar.show()
+    successSnackbar.show()
 }
