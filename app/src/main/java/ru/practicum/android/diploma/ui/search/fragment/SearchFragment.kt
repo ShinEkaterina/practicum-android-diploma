@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -31,6 +30,7 @@ import ru.practicum.android.diploma.ui.search.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancy.VacancyFragment
 import ru.practicum.android.diploma.util.Constant
 import ru.practicum.android.diploma.util.debounce
+import ru.practicum.android.diploma.util.showToast
 
 class SearchFragment : Fragment() {
 
@@ -70,11 +70,7 @@ class SearchFragment : Fragment() {
         setFragmentResultListener("apply_filter") { _, bundle ->
             val selectedSort = bundle.getBoolean("apply_filter")
             viewModel.startVacanciesSearch(binding?.inputSearchForm?.text.toString(), false)
-            applyFilter = if (selectedSort) {
-                true
-            } else {
-                false
-            }
+            applyFilter = selectedSort
         }
 
         viewModel.observeRenderState().observe(viewLifecycleOwner) { state ->
@@ -250,7 +246,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun renderPaginationNoInternet() {
-        Toast.makeText(requireContext(), getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show()
+        showToast(this, layoutInflater, getString(R.string.no_internet_connection))
         viewModel.loadedVacancies.removeLast()
         vacanciesAdapter?.notifyItemRemoved(viewModel.loadedVacancies.size)
         Handler(Looper.getMainLooper()).postDelayed(1) {
