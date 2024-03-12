@@ -56,7 +56,8 @@ class IndustrySelectionFragment : Fragment() {
 
         viewModel.getIndustries()
 
-        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputMethodManager =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(
@@ -69,12 +70,23 @@ class IndustrySelectionFragment : Fragment() {
             }
 
             override fun onTextChanged(
-                s: CharSequence?,
+                searchText: CharSequence?,
                 start: Int,
                 before: Int,
                 count: Int
             ) {
-                viewModel.filter(s.toString())
+                if (searchText.isNullOrEmpty()) {
+                    binding.apply {
+                        clearButton.setImageResource(R.drawable.ic_search_24)
+                        clearButton.isEnabled = false
+                    }
+                } else {
+                    binding.apply {
+                        clearButton.setImageResource(R.drawable.ic_clear_24)
+                        clearButton.isEnabled = true
+                    }
+                }
+                viewModel.filter(searchText.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -170,12 +182,12 @@ class IndustrySelectionFragment : Fragment() {
                         inputSearchIndustry.windowToken,
                         0
                     )
-                    clearButton.setImageResource(R.drawable.ic_search_24)
-                    clearButton.isEnabled = false
-                } else {
+                    /*             clearButton.setImageResource(R.drawable.ic_search_24)
+                                 clearButton.isEnabled = false*/
+                } /*else {
                     clearButton.setImageResource(R.drawable.ic_clear_24)
                     clearButton.isEnabled = true
-                }
+                }*/
             }
         }
     }

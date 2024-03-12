@@ -40,7 +40,8 @@ class RootActivity : AppCompatActivity() {
                 R.id.choosingPlaceToJobFragment,
                 R.id.detailEmployer,
                 R.id.openVacanciesFragment,
-                R.id.regionSelectionFragment -> {
+                R.id.regionSelectionFragment,
+                R.id.countrySelectionFragment -> {
                     binding?.bottomNavigationView?.isVisible = false
                 }
 
