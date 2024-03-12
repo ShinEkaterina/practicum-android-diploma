@@ -8,11 +8,13 @@ import ru.practicum.android.diploma.data.dto.field.KeySkillsDto
 import ru.practicum.android.diploma.data.dto.field.PhonesDto
 import ru.practicum.android.diploma.data.dto.field.SalaryDto
 import ru.practicum.android.diploma.data.dto.respone.AreasResponse
+import ru.practicum.android.diploma.data.dto.respone.EmployerRespone
 import ru.practicum.android.diploma.data.dto.respone.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.model.AreasModel
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.domain.model.EmployerModel
 import ru.practicum.android.diploma.domain.model.IndustriesModel
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import ru.practicum.android.diploma.domain.model.VacancyModel
@@ -34,7 +36,10 @@ class Convertors {
 
     private fun getEmployerLogoUrl(employer: EmployerDto?): String =
         employer?.logoUrls?.logoUrl240 ?: ""
-
+    private fun getEmployerLogo(employer: EmployerRespone?): String =
+        employer?.logoUrls?.logoUrlOrigin ?: ""
+    private fun getEmployerOpenVacancy(employer: EmployerRespone?): Int =
+        employer?.openVacancies ?: 0
     private fun getReadableNumber(number: Int?): String {
         if (number == null) return "0"
 
@@ -69,6 +74,7 @@ class Convertors {
             contactsName = getContactsName(response.contacts),
             contactsPhones = getContactsPhones(response.contacts),
             description = response.description,
+            employerId = response.employer?.id,
             employerName = getEmployerName(response.employer),
             employmentName = response.employment?.name ?: "",
             experienceName = response.experience.name ?: "",
@@ -78,6 +84,18 @@ class Convertors {
             scheduleName = response.schedule?.name ?: "",
             address = response.address?.raw ?: "",
             urlVacancy = response.urlVacancies
+        )
+    }
+
+    fun responseToEmployer(response: EmployerRespone): EmployerModel {
+        return EmployerModel(
+            id = response.id,
+            area = response.area?.name,
+            logoUrl = getEmployerLogo(response),
+            description = response.description,
+            name = response.name,
+            site = response.site,
+            openVacancies = getEmployerOpenVacancy(response)
         )
     }
 
@@ -222,10 +240,12 @@ class Convertors {
                     )
                 )
             } else {
-                listAreasModel.addAll(createAreasList(
-                    it.areas,
-                    parentId
-                ))
+                listAreasModel.addAll(
+                    createAreasList(
+                        it.areas,
+                        parentId
+                    )
+                )
             }
         }
         return listAreasModel.sortedBy { it.name }

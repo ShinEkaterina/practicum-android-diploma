@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.domain.api.repository
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.domain.model.EmployerModel
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 
 interface VacanciesRepository {
@@ -19,6 +20,12 @@ interface VacanciesRepository {
     ): Flow<Resource<DetailVacancy>>
 
     fun getSimilarVacancies(
+        id: String
+    ): Flow<Resource<VacanciesModel>>
+    fun getEmployer(
+        id: String
+    ): Flow<Resource<EmployerModel>>
+    fun getOpenVacancies(
         id: String
     ): Flow<Resource<VacanciesModel>>
 

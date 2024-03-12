@@ -7,6 +7,7 @@ import retrofit2.HttpException
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Convertors
+import ru.practicum.android.diploma.data.dto.request.EmployerRequest
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
@@ -77,6 +78,29 @@ class RetrofitNetworkClient(
             handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
         }
     }
+    override suspend fun getEmployer(
+        dto: EmployerRequest
+    ): Response {
+        if (!isConnected(context)) {
+            return Response().apply { responseCode = NetworkError.NO_CONNECTIVITY.code }
+        }
+
+        return try {
+            withContext(Dispatchers.IO) {
+                headHunterService.getEmployer(dto.id).apply {
+                    responseCode = HTTP_OK
+                }
+            }
+        } catch (exception: HttpException) {
+            Response().apply { responseCode = exception.code() }
+        } catch (exception: ConnectException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: SocketTimeoutException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        } catch (exception: UnknownHostException) {
+            handleNetworkException(exception, NetworkError.NO_CONNECTIVITY)
+        }
+    }
 
     override suspend fun getSimilarVacancies(
         dto: VacanciesSimilarRequest
@@ -87,6 +111,22 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 headHunterService.searchSimilarVacancies(dto.id).apply {
+                    responseCode = HTTP_OK
+                }
+            } catch (exception: HttpException) {
+                handleNetworkException(exception, NetworkError.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+    override suspend fun getOpenVacancies(
+        dto: VacanciesSimilarRequest
+    ): Response {
+        if (!isConnected(context)) {
+            return Response().apply { responseCode = NetworkError.NO_CONNECTIVITY.code }
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                headHunterService.getOpenVacancies(dto.id).apply {
                     responseCode = HTTP_OK
                 }
             } catch (exception: HttpException) {

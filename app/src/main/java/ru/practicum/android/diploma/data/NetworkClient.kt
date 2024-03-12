@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data
 
 import ru.practicum.android.diploma.Resource
+import ru.practicum.android.diploma.data.dto.request.EmployerRequest
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
@@ -25,5 +26,11 @@ interface NetworkClient {
     ): Response
 
     suspend fun getAreas(): Resource<Map<AreasModel, List<AreasModel>>>
+    suspend fun getEmployer(
+        dto: EmployerRequest
+    ): Response
+    suspend fun getOpenVacancies(
+        dto: VacanciesSimilarRequest
+    ): Response
 
 }

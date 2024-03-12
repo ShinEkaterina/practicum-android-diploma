@@ -9,5 +9,8 @@ interface SimilarInteractor {
     suspend fun getSimilarVacancy(
         id: String
     ): Flow<Pair<List<VacancyModel>?, NetworkError?>>
+    suspend fun getOpenVacancy(
+        id: String
+    ): Flow<Pair<List<VacancyModel>?, NetworkError?>>
 
 }

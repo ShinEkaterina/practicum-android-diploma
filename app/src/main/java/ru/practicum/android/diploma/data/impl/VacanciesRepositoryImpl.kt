@@ -5,13 +5,16 @@ import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.Resource
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Convertors
+import ru.practicum.android.diploma.data.dto.request.EmployerRequest
 import ru.practicum.android.diploma.data.dto.request.VacanciesSearchByNameRequest
 import ru.practicum.android.diploma.data.dto.request.VacanciesSimilarRequest
 import ru.practicum.android.diploma.data.dto.request.VacancyDetailedRequest
+import ru.practicum.android.diploma.data.dto.respone.EmployerRespone
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
 import ru.practicum.android.diploma.domain.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.domain.model.EmployerModel
 import ru.practicum.android.diploma.domain.model.NetworkError
 import ru.practicum.android.diploma.domain.model.VacanciesModel
 import java.net.HttpURLConnection.HTTP_OK
@@ -54,11 +57,45 @@ class VacanciesRepositoryImpl(
             emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
         }
     }
+    override fun getEmployer(
+        id: String
+    ): Flow<Resource<EmployerModel>> = flow {
+        val response = networkClient.getEmployer(EmployerRequest(id))
+        if (response.responseCode == HTTP_OK) {
+            val information =
+                Convertors().responseToEmployer(response as EmployerRespone)
+            emit(Resource.Success(information))
+        } else {
+            emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
+        }
+    }
 
     override fun getSimilarVacancies(
         id: String
     ): Flow<Resource<VacanciesModel>> = flow {
         val response = networkClient.getSimilarVacancies(VacanciesSimilarRequest(id))
+        when (response.responseCode) {
+            HTTP_OK -> {
+                emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))
+            }
+
+            NetworkError.NO_CONNECTIVITY.code -> {
+                emit(Resource.Error(NetworkError.NO_CONNECTIVITY))
+            }
+
+            NetworkError.NOT_FOUND.code -> {
+                emit(Resource.Error(NetworkError.NOT_FOUND))
+            }
+
+            else -> {
+                emit(Resource.Error(NetworkError.INTERNAL_SERVER_ERROR))
+            }
+        }
+    }
+    override fun getOpenVacancies(
+        id: String
+    ): Flow<Resource<VacanciesModel>> = flow {
+        val response = networkClient.getOpenVacancies(VacanciesSimilarRequest(id))
         when (response.responseCode) {
             HTTP_OK -> {
                 emit(Resource.Success(Convertors().convertorToSearchList(response as SearchResponse)))

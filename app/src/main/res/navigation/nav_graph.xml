@@ -42,6 +42,9 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@anim/anim_in_left"
             app:popExitAnim="@anim/anim_out_right" />
+        <action
+            android:id="@+id/action_vacancyFragment3_to_detailEmployer"
+            app:destination="@id/detailEmployer" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -121,4 +124,22 @@
         android:id="@+id/countrySelectionFragment"
         android:name="ru.practicum.android.diploma.ui.filter.country.CountrySelectionFragment"
         android:label="CountrySelectionFragment" />
+    <fragment
+        android:id="@+id/detailEmployer"
+        android:name="ru.practicum.android.diploma.ui.employer.EmployerFragment"
+        android:label="fragment_detail_employer"
+        tools:layout="@layout/fragment_detail_employer" >
+        <action
+            android:id="@+id/action_detailEmployer_to_openVacanciesFragment"
+            app:destination="@id/openVacanciesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/openVacanciesFragment"
+        android:name="ru.practicum.android.diploma.ui.similar.OpenVacanciesFragment"
+        android:label="fragment_open_vacancies"
+        tools:layout="@layout/fragment_open_vacancies" >
+        <action
+            android:id="@+id/action_openVacanciesFragment_to_vacancyFragment3"
+            app:destination="@id/vacancyFragment3" />
+    </fragment>
 </navigation>

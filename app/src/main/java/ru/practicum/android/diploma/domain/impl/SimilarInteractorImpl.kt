@@ -27,5 +27,20 @@ class SimilarInteractorImpl(
             }
         }
     }
+    override suspend fun getOpenVacancy(
+        id: String
+    ): Flow<Pair<List<VacancyModel>?, NetworkError?>> {
+        return repository.getOpenVacancies(id).map { result ->
+            when (result) {
+                is Resource.Success -> {
+                    Pair(result.data?.vacancies, null)
+                }
+
+                is Resource.Error -> {
+                    Pair(null, result.message)
+                }
+            }
+        }
+    }
 
 }
