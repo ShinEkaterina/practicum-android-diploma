@@ -44,7 +44,11 @@
             app:popExitAnim="@anim/anim_out_right" />
         <action
             android:id="@+id/action_vacancyFragment3_to_detailEmployer"
-            app:destination="@id/detailEmployer" />
+            app:destination="@id/detailEmployer"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@anim/anim_in_left"
+            app:popExitAnim="@anim/anim_out_right" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -131,7 +135,11 @@
         tools:layout="@layout/fragment_detail_employer" >
         <action
             android:id="@+id/action_detailEmployer_to_openVacanciesFragment"
-            app:destination="@id/openVacanciesFragment" />
+            app:destination="@id/openVacanciesFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@anim/anim_in_left"
+            app:popExitAnim="@anim/anim_out_right" />
     </fragment>
     <fragment
         android:id="@+id/openVacanciesFragment"
@@ -140,6 +148,10 @@
         tools:layout="@layout/fragment_open_vacancies" >
         <action
             android:id="@+id/action_openVacanciesFragment_to_vacancyFragment3"
-            app:destination="@id/vacancyFragment3" />
+            app:destination="@id/vacancyFragment3"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@anim/anim_in_left"
+            app:popExitAnim="@anim/anim_out_right" />
     </fragment>
 </navigation>

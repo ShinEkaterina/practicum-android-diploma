@@ -26,13 +26,15 @@ interface HeadHunterServiceApi {
     suspend fun searchSimilarVacancies(
         @Path("id") id: String,
     ): SearchResponse
+
     @GET("/employers/{id}")
     suspend fun getEmployer(
         @Path("id") id: String,
     ): EmployerRespone
-    @GET("/vacancies?employer_id={id}")
+
+    @GET("/vacancies")
     suspend fun getOpenVacancies(
-        @Query("id") id: String,
+        @Query("employer_id") id: String,
     ): SearchResponse
 
     @Headers(
