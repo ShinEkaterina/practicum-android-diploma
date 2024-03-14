@@ -32,6 +32,18 @@ class SimilarViewModel(
             }
         }
     }
+    fun getOpenVacancies(id: String) {
+        if (id.isNotEmpty()) {
+            renderState(SimilarState.Loading)
+            viewModelScope.launch {
+                similarInteractor
+                    .getOpenVacancy(id)
+                    .collect { pair ->
+                        processResult(pair.first, pair.second)
+                    }
+            }
+        }
+    }
     private fun processResult(vacancyies: List<VacancyModel>?, errorMessage: NetworkError?) {
         if (vacancyies != null) {
             vacanciesList.clear()

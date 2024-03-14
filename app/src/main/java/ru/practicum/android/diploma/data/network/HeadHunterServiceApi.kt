@@ -7,6 +7,7 @@ import retrofit2.http.Query
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.respone.AreasResponse
+import ru.practicum.android.diploma.data.dto.respone.EmployerRespone
 import ru.practicum.android.diploma.data.dto.respone.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.respone.SearchResponse
 import ru.practicum.android.diploma.data.dto.respone.VacancyDetailedResponse
@@ -24,6 +25,16 @@ interface HeadHunterServiceApi {
     @GET("/vacancies/{id}/similar_vacancies")
     suspend fun searchSimilarVacancies(
         @Path("id") id: String,
+    ): SearchResponse
+
+    @GET("/employers/{id}")
+    suspend fun getEmployer(
+        @Path("id") id: String,
+    ): EmployerRespone
+
+    @GET("/vacancies")
+    suspend fun getOpenVacancies(
+        @Query("employer_id") id: String,
     ): SearchResponse
 
     @Headers(

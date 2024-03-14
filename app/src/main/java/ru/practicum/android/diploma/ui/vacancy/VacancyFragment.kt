@@ -16,11 +16,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.model.DetailVacancy
+import ru.practicum.android.diploma.ui.employer.EmployerFragment
 import ru.practicum.android.diploma.ui.similar.SimilarFragment
 
 class VacancyFragment : Fragment() {
 
     private var vacancyId: String? = null
+    private var employerId: String? = null
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VacancyViewModel by viewModel<VacancyViewModel>()
@@ -52,6 +54,15 @@ class VacancyFragment : Fragment() {
                 )
             }
         }
+        binding.cardViewCompany.setOnClickListener {
+            if (employerId != null) {
+                findNavController().navigate(
+                    R.id.action_vacancyFragment3_to_detailEmployer,
+                    EmployerFragment.createArgs(employerId!!)
+                )
+            }
+        }
+
         binding.buttonAddToFavorites.setOnClickListener {
             viewModel.onFavoriteClicked()
         }
@@ -98,7 +109,7 @@ class VacancyFragment : Fragment() {
         with(binding) {
             jobName.text = vacancy.name
             jobSalary.text = vacancy.salary
-
+            employerId = vacancy.employerId
             Glide.with(requireContext())
                 .load(vacancy.areaUrl)
                 .placeholder(R.drawable.ic_logo)
@@ -223,6 +234,7 @@ class VacancyFragment : Fragment() {
             noInternetPlaceholder.visibility = GONE
         }
     }
+
     private fun connectionError() {
         with(binding) {
             progressBar.visibility = GONE

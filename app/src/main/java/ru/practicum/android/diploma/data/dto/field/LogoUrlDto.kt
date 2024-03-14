@@ -7,5 +7,6 @@ data class LogoUrlDto(
     val logoUrl90: String = "",
     @SerializedName("240")
     val logoUrl240: String = "",
+    @SerializedName("original")
     val logoUrlOrigin: String
 )

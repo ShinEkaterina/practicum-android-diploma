@@ -10,6 +10,7 @@ data class DetailVacancy(
     val contactsPhones: List<Pair<String, String>> = listOf(),
     val description: String,
     val employerName: String = "",
+    val employerId: String? = "",
     val employmentName: String = "",
     val experienceName: String = "",
     val keySkillsNames: List<String> = listOf(),
