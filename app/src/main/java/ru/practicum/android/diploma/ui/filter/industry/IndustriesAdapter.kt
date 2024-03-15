@@ -32,11 +32,7 @@ class IndustriesAdapter(
         val industry = data[position]
         holder.bind(industry)
 
-        if (checkedIndustry == industry) {
-            holder.setCheckedImage(true)
-        } else {
-            holder.setCheckedImage(false)
-        }
+        holder.setCheckedImage(checkedIndustry == industry)
 
         holder.itemView.setOnClickListener {
             checkedIndustry = industry
