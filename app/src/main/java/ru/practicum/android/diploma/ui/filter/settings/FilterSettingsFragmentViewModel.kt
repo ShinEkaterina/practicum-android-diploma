@@ -85,17 +85,21 @@ class FilterSettingsFragmentViewModel(private val filtrationInteractor: Filtrati
 
     fun resetPlaceToJobParameters(filterParameters: FilterParameters) {
         var copyFilterParameters = filterParameters
-        copyFilterParameters = copyFilterParameters.copy(idCountry = null)
-        copyFilterParameters = copyFilterParameters.copy(nameCountry = null)
-        copyFilterParameters = copyFilterParameters.copy(idRegion = null)
-        copyFilterParameters = copyFilterParameters.copy(nameRegion = null)
+        copyFilterParameters = copyFilterParameters.copy(
+            idCountry = null,
+            nameCountry = null,
+            idRegion = null,
+            nameRegion = null
+        )
         setFilterParameters(copyFilterParameters)
     }
 
     fun resetIndustryParameters(filterParameters: FilterParameters) {
         var copyFilterParameters = filterParameters
-        copyFilterParameters = copyFilterParameters.copy(idIndustry = null)
-        copyFilterParameters = copyFilterParameters.copy(nameIndustry = null)
+        copyFilterParameters = copyFilterParameters.copy(
+            idIndustry = null,
+            nameIndustry = null
+        )
         setFilterParameters(copyFilterParameters)
     }
 }

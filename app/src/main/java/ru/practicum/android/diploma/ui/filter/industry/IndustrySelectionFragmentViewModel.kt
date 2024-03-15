@@ -44,8 +44,10 @@ class IndustrySelectionFragmentViewModel(private val filtrationInteractor: Filtr
     }
 
     fun setTempFilterParameters(industry: IndustriesModel) {
-        filterParameters = filterParameters.copy(idIndustry = industry.id)
-        filterParameters = filterParameters.copy(nameIndustry = industry.name)
+        filterParameters = filterParameters.copy(
+            idIndustry = industry.id,
+            nameIndustry = industry.name
+        )
     }
 
     fun setFilterParameters() {

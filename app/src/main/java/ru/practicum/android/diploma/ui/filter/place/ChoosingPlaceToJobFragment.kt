@@ -65,7 +65,7 @@ class ChoosingPlaceToJobFragment : Fragment() {
     private fun updateChoosingPlaceToJobScreen(newFilterParameters: FilterParameters) {
         filterParameters = newFilterParameters
         with(binding) {
-            selectedButton.isVisible = filterParameters.nameRegion != null
+            selectedButton.isVisible = filterParameters.nameRegion != null || filterParameters.nameCountry != null
             if (filterParameters.nameCountry != null) {
                 etCountry.setText(filterParameters.nameCountry)
                 tiCountry.setEndIconDrawable(R.drawable.ic_clear)
@@ -91,8 +91,10 @@ class ChoosingPlaceToJobFragment : Fragment() {
                 if (filterParameters.nameCountry != null) {
                     etCountry.setText("")
                     tiCountry.setEndIconDrawable(R.drawable.ic_item_arrow)
-                    filterParameters = filterParameters.copy(idCountry = null)
-                    filterParameters = filterParameters.copy(nameCountry = null)
+                    filterParameters = filterParameters.copy(
+                        idCountry = null,
+                        nameCountry = null
+                    )
                 } else {
                     findNavController().navigate(
                         R.id.action_choosingPlaceToJobFragment_to_countrySelectionFragment
@@ -142,7 +144,9 @@ class ChoosingPlaceToJobFragment : Fragment() {
     }
 
     private fun resetRegionFilterParameters() {
-        filterParameters = filterParameters.copy(idRegion = null)
-        filterParameters = filterParameters.copy(nameRegion = null)
+        filterParameters = filterParameters.copy(
+            idRegion = null,
+            nameRegion = null
+        )
     }
 }
